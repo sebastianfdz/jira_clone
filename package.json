@@ -18,7 +18,10 @@
     "@trpc/server": "^10.18.0",
     "next": "^13.2.4",
     "react": "18.2.0",
+    "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
+    "react-hook-form": "^7.43.9",
+    "react-icons": "^4.8.0",
     "superjson": "1.12.2",
     "zod": "^3.21.4"
   },
