@@ -11,8 +11,120 @@ datasource db {
     relationMode = "prisma"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Project {
+    id              String    @id @default(uuid())
+    name            String
+    key             String    @unique
+    projectLead     String
+    defaultAssignee String
+    imageUrl        String?
+    admin           String
+    createdAt       DateTime  @default(now())
+    updatedAt       DateTime  @updatedAt
+    deletedAt       DateTime?
+    epics           Epic[]
+    sprints         Sprint[]
+}
+
+model Epic {
+    id          String    @id @default(uuid())
+    name        String
+    description String    @default("")
+    projectId   String
+    color       String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    deletedAt   DateTime?
+    comments    Comment[]
+    logs        Log[]
+    issues      Issue[]
+    Project     Project   @relation(fields: [projectId], references: [id])
+
+    @@index([projectId])
+}
+
+enum IssueType {
+    BUG
+    TASK
+    STORY
+}
+
+model Issue {
+    id          String    @id @default(uuid())
+    name        String
+    description String    @default("")
+    status      String    @default("BACKLOG")
+    reporter    String
+    assignee    String
+    createdAt   DateTime  @default(now())
+    updatedAt   DateTime  @updatedAt
+    deletedAt   DateTime?
+    comments    Comment[]
+    logs        Log[]
+    type        IssueType @default(TASK)
+    Epic        Epic?     @relation(fields: [epicId], references: [id])
+    Sprint      Sprint?   @relation(fields: [sprintId], references: [id])
+    epicId      String?
+    sprintId    String?
+
+    @@index([epicId])
+    @@index([sprintId])
+}
+
+enum SprintStatus {
+    ACTIVE
+    PENDING
+    CLOSED
+}
+
+model Sprint {
+    id          String       @id @default(uuid())
+    name        String
+    description String       @default("")
+    projectId   String
+    startDate   DateTime
+    endDate     DateTime
+    createdAt   DateTime     @default(now())
+    updatedAt   DateTime     @updatedAt
+    deletedAt   DateTime?
+    status      SprintStatus @default(PENDING)
+    issues      Issue[]
+    Project     Project      @relation(fields: [projectId], references: [id])
+
+    @@index([projectId])
+}
+
+model Comment {
+    id        String    @id @default(uuid())
+    content   String
+    author    String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    epicId    String?
+    issueId   String?
+    logId     String?
+    Epic      Epic?     @relation(fields: [epicId], references: [id])
+    Issue     Issue?    @relation(fields: [issueId], references: [id])
+
+    @@index([author])
+    @@index([epicId])
+    @@index([issueId])
+}
+
+model Log {
+    id        String    @id @default(uuid())
+    content   String
+    author    String
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+    deletedAt DateTime?
+    epicId    String?
+    issueId   String?
+    Epic      Epic?     @relation(fields: [epicId], references: [id])
+    Issue     Issue?    @relation(fields: [issueId], references: [id])
+
+    @@index([author])
+    @@index([epicId])
+    @@index([issueId])
 }
