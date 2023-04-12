@@ -16,7 +16,7 @@ model Project {
     name            String
     key             String    @unique
     projectLead     String
-    defaultAssignee String
+    defaultAssignee String?
     imageUrl        String?
     admin           String
     createdAt       DateTime  @default(now())
