@@ -7,12 +7,12 @@ export const Issue: React.FC<{
 }> = ({ id, index }) => {
   return (
     <Fragment>
-      <Draggable draggableId={id} index={index}>
-        {(provided, snapshot) => (
+      <Draggable draggableId={id + id} index={index}>
+        {({ innerRef, dragHandleProps, draggableProps }, snapshot) => (
           <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
+            ref={innerRef}
+            {...draggableProps}
+            {...dragHandleProps}
             className="border bg-gray-500"
           >
             <h3>Issue</h3>

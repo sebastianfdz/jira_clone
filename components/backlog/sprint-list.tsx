@@ -3,7 +3,7 @@ import { Droppable } from "react-beautiful-dnd";
 import { Issue } from "./issue";
 
 export const SprintList: React.FC<{ id: string }> = ({ id }) => {
-  const issues = [{ id: "1" }];
+  const issues = [{ id: id }];
   return (
     <Fragment>
       <div>Sprint List</div>
@@ -15,9 +15,11 @@ export const SprintList: React.FC<{ id: string }> = ({ id }) => {
             className="border bg-gray-200"
           >
             {issues.map((issue, index) => (
-              <Issue key={issue.id} index={index} {...issue} />
+              <Fragment key={issue.id}>
+                <Issue index={index} {...issue} />
+                {placeholder}
+              </Fragment>
             ))}
-            {placeholder}
           </div>
         )}
       </Droppable>
