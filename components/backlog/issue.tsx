@@ -18,46 +18,62 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { FaChevronDown } from "react-icons/fa";
-import { SelectViewport } from "@radix-ui/react-select";
+import { SelectSeparator, SelectViewport } from "@radix-ui/react-select";
+import { NotImplemented } from "@/components/not-implemented";
 
 const StatusSelect = () => {
-  const [selected, setSelected] = useState("status_1");
+  const statuses = [
+    { value: "TODO", color: "#52525b" },
+    { value: "IN PROGRESS", color: "#1e40af" },
+    { value: "DONE", color: "#15803d" },
+  ];
+  const [selected, setSelected] = useState("TODO");
   return (
     <Select onValueChange={setSelected}>
-      <SelectTrigger className="mx-2 flex items-center rounded-md bg-blue-700 bg-opacity-30 px-2 text-white  focus:ring-2">
-        <SelectValue
-          placeholder="dropdown ph"
-          className="w-full bg-transparent text-white"
-        >
+      <SelectTrigger
+        style={{
+          backgroundColor:
+            statuses.find((status) => status.value == selected)?.color ??
+            "#1e40af",
+        }}
+        className="mx-2 flex items-center gap-x-1 rounded-md bg-opacity-30 px-1.5 text-sm font-semibold text-white focus:ring-2"
+      >
+        <SelectValue className="w-full bg-transparent text-white">
           {selected}
         </SelectValue>
         <SelectIcon>
-          <FaChevronDown />
+          <FaChevronDown className="text-xs" />
         </SelectIcon>
       </SelectTrigger>
       <SelectPortal className="">
         <SelectContent>
-          <SelectViewport className="top-10 w-52 rounded-md border border-gray-300 bg-white py-2 shadow-md">
+          <SelectViewport className="top-10 w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
             <SelectGroup>
-              <SelectItem
-                value="status_1"
-                className="border-l-2 border-transparent pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50"
-              >
-                STATUS 1
-              </SelectItem>
-              <SelectItem
-                value="status_2"
-                className="border-l-2 border-transparent pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50"
-              >
-                STATUS 2
-              </SelectItem>
-              <SelectItem
-                value="status_3"
-                className="border-l-2 border-transparent pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50"
-              >
-                STATUS 3
-              </SelectItem>
+              {statuses.map((status) => (
+                <SelectItem
+                  key={status.value}
+                  value={status.value}
+                  className={clsx(
+                    "border-l-[3px] border-transparent py-1 pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50"
+                  )}
+                >
+                  <span
+                    style={{ color: status.color }}
+                    className={clsx(
+                      "rounded-md bg-opacity-30 px-2 font-semibold"
+                    )}
+                  >
+                    {status.value}
+                  </span>
+                </SelectItem>
+              ))}
             </SelectGroup>
+            <SelectSeparator className="mt-2 h-[1px] bg-gray-300" />
+            <NotImplemented feature="workflow">
+              <button className="w-full border py-4 pl-5 text-left text-sm font-medium hover:cursor-default hover:bg-zinc-100">
+                View Workflow
+              </button>
+            </NotImplemented>
           </SelectViewport>
         </SelectContent>
       </SelectPortal>
@@ -79,25 +95,28 @@ export const Issue: React.FC<{
             {...dragHandleProps}
             className={clsx(
               isDragging ? "bg-blue-100" : "bg-white",
-              "group flex items-center justify-between border border-gray-300  p-3 hover:bg-gray-50"
+              "group flex items-center justify-between border border-gray-300  px-3 py-1.5 hover:bg-gray-50"
             )}
           >
             <div className="flex items-center justify-between gap-x-2">
-              <IssueIcon issueType="task" />
-              <IssueIcon issueType="story" />
-              <IssueIcon issueType="bug" />
+              <IssueIcon issueType={index % 2 == 0 ? "task" : "story"} />
+              {/* <IssueIcon issueType="story" />
+              <IssueIcon issueType="bug" /> */}
               <div className="text-gray-600">SP2023-128</div>
               <div>Add environment variables in production</div>
               <Button className="invisible w-0 px-0 group-hover:visible group-hover:w-fit group-hover:bg-transparent group-hover:px-1.5 group-hover:hover:bg-gray-200">
                 <MdEdit className="text-sm" />
               </Button>
-              <div className="spa rounded-[3px] bg-indigo-500 bg-opacity-30 px-2 text-sm font-bold tracking-wide text-indigo-700">
+              <div className="rounded-[3px] bg-indigo-500 bg-opacity-30 px-2 text-xs font-bold text-indigo-700">
                 EPIC-LABEL
               </div>
             </div>
             <div className="relative flex items-center justify-between">
-              <ChildrenTreeIcon className="mx-2 text-gray-600" />
-              <div>[status_dd_button]</div>
+              <NotImplemented feature="child issues">
+                <button>
+                  <ChildrenTreeIcon className="mx-2 text-gray-600" />
+                </button>
+              </NotImplemented>
               <StatusSelect />
               <Avatar
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
