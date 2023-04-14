@@ -1,24 +1,20 @@
 import React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import clsx from "clsx";
-import { RxChevronDown } from "react-icons/rx";
 import "./styles.css";
 
 type TriggerProps = React.ComponentProps<typeof AccordionPrimitive.Trigger>;
+type TriggerRef = React.ElementRef<typeof AccordionPrimitive.Trigger>;
 
-const AccordionTrigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
+const AccordionTrigger = React.forwardRef<TriggerRef, TriggerProps>(
   ({ children, className, ...props }, forwardedRef) => (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
-        className={clsx(
-          "flex h-48 flex-1 items-center justify-between bg-blue-500 p-2",
-          className
-        )}
-        {...props}
         ref={forwardedRef}
+        className={clsx("", className)}
+        {...props}
       >
         {children}
-        <div className="text-black">hola</div>
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   )
@@ -27,15 +23,16 @@ const AccordionTrigger = React.forwardRef<HTMLButtonElement, TriggerProps>(
 AccordionTrigger.displayName = "AccordionTrigger";
 
 type ContentProps = React.ComponentProps<typeof AccordionPrimitive.Content>;
+type ContentRef = React.ElementRef<typeof AccordionPrimitive.Content>;
 
-const AccordionContent = React.forwardRef<HTMLDivElement, ContentProps>(
+const AccordionContent = React.forwardRef<ContentRef, ContentProps>(
   ({ children, className, ...props }, forwardedRef) => (
     <AccordionPrimitive.Content
-      className={clsx("AccordionContent", className)}
+      className={clsx("", className)}
       {...props}
       ref={forwardedRef}
     >
-      <div className="AccordionContentText">{children}</div>
+      <div className="">{children}</div>
     </AccordionPrimitive.Content>
   )
 );
@@ -43,11 +40,12 @@ const AccordionContent = React.forwardRef<HTMLDivElement, ContentProps>(
 AccordionContent.displayName = "AccordionContent";
 
 type ItemProps = React.ComponentProps<typeof AccordionPrimitive.Item>;
+type ItemRef = React.ElementRef<typeof AccordionPrimitive.Item>;
 
-const AccordionItem = React.forwardRef<HTMLDivElement, ItemProps>(
+const AccordionItem = React.forwardRef<ItemRef, ItemProps>(
   ({ children, className, ...props }, forwardedRef) => (
     <AccordionPrimitive.Item
-      className={clsx("AccordionItem", className)}
+      className={clsx("", className)}
       {...props}
       ref={forwardedRef}
     >
@@ -55,9 +53,22 @@ const AccordionItem = React.forwardRef<HTMLDivElement, ItemProps>(
     </AccordionPrimitive.Item>
   )
 );
-
 AccordionItem.displayName = "AccordionItem";
 
-const Accordion = AccordionPrimitive.Root;
+type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root>;
+type AccordionRef = React.ElementRef<typeof AccordionPrimitive.Root>;
+
+const Accordion = React.forwardRef<AccordionRef, AccordionProps>(
+  ({ children, className, ...props }, forwardedRef) => (
+    <AccordionPrimitive.Root
+      className={clsx("", className)}
+      {...props}
+      ref={forwardedRef}
+    >
+      {children}
+    </AccordionPrimitive.Root>
+  )
+);
+Accordion.displayName = "Accordion";
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
