@@ -20,7 +20,7 @@ const NotImplemented: React.FC<{ children: ReactNode; feature?: string }> = ({
             <h1 className="text-lg font-semibold">Not implemented</h1>
             <p className="max-w-32 flex text-sm text-gray-500">
               {feature
-                ? `This is a simplified Jira Clone. The ${feature} feature is not implemented`
+                ? `This is a simplified Jira Clone. The ${feature} feature is not implemented.`
                 : "This is a simplified Jira Clone. This feature is not implemented."}
             </p>
             <div className="mt-2 flex items-center gap-x-2">
