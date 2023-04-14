@@ -173,13 +173,14 @@ const SelectItem = React.forwardRef<SelectItemRef, SelectItemProps>(
   ({ children, className, ...props }, forwardedRef) => {
     return (
       <SelectPrimitive.Item
-        className={clsx("[&[data-state=checked]]:bg-zinc-100 ", className)}
+        className={clsx(
+          "border-l-[3px] border-transparent [&[data-state=checked]]:border-blue-600 [&[data-state=checked]]:bg-zinc-100",
+          className
+        )}
         {...props}
         ref={forwardedRef}
       >
-        <SelectPrimitive.ItemText>
-          <span className="my-2  bg-blue-700 bg-opacity-30">{children}</span>
-        </SelectPrimitive.ItemText>
+        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
         {/* <SelectPrimitive.ItemIndicator className="bg-blue-500">
           {children}
         </SelectPrimitive.ItemIndicator> */}
