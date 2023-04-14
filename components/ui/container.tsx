@@ -11,7 +11,7 @@ export const Container: React.FC<{
       className={clsx(
         screen
           ? "item flex h-screen w-screen items-center justify-center"
-          : "max-w-9xl mx-auto px-4 sm:p-2 lg:p-4",
+          : "max-w-9xl mx-auto px-4 sm:px-6 sm:py-4 lg:px-8",
         className
       )}
     >
