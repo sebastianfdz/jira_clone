@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { IssueIcon } from "../issue-icon";
 import { Button } from "../ui/button";
@@ -7,6 +7,63 @@ import clsx from "clsx";
 import { BsThreeDots } from "react-icons/bs";
 import { Avatar } from "@/components/avatar";
 import { ChildrenTreeIcon } from "../icons";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectIcon,
+  SelectItem,
+  SelectPortal,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { FaChevronDown } from "react-icons/fa";
+import { SelectViewport } from "@radix-ui/react-select";
+
+const StatusSelect = () => {
+  const [selected, setSelected] = useState("status_1");
+  return (
+    <Select onValueChange={setSelected}>
+      <SelectTrigger className="mx-2 flex items-center rounded-md bg-blue-700 bg-opacity-30 px-2 text-white  focus:ring-2">
+        <SelectValue
+          placeholder="dropdown ph"
+          className="w-full bg-transparent text-white"
+        >
+          {selected}
+        </SelectValue>
+        <SelectIcon>
+          <FaChevronDown />
+        </SelectIcon>
+      </SelectTrigger>
+      <SelectPortal className="">
+        <SelectContent>
+          <SelectViewport className="top-10 w-52 rounded-md border border-gray-300 bg-white py-2 shadow-md">
+            <SelectGroup>
+              <SelectItem
+                value="status_1"
+                className="border-l-2 border-transparent pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50"
+              >
+                STATUS 1
+              </SelectItem>
+              <SelectItem
+                value="status_2"
+                className="border-l-2 border-transparent pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50"
+              >
+                STATUS 2
+              </SelectItem>
+              <SelectItem
+                value="status_3"
+                className="border-l-2 border-transparent pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50"
+              >
+                STATUS 3
+              </SelectItem>
+            </SelectGroup>
+          </SelectViewport>
+        </SelectContent>
+      </SelectPortal>
+    </Select>
+  );
+};
 
 export const Issue: React.FC<{
   id: string;
@@ -38,9 +95,10 @@ export const Issue: React.FC<{
                 EPIC-LABEL
               </div>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="relative flex items-center justify-between">
               <ChildrenTreeIcon className="mx-2 text-gray-600" />
               <div>[status_dd_button]</div>
+              <StatusSelect />
               <Avatar
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                 alt=""
