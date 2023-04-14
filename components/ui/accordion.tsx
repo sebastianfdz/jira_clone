@@ -55,20 +55,6 @@ const AccordionItem = React.forwardRef<ItemRef, ItemProps>(
 );
 AccordionItem.displayName = "AccordionItem";
 
-type AccordionProps = React.ComponentProps<typeof AccordionPrimitive.Root>;
-type AccordionRef = React.ElementRef<typeof AccordionPrimitive.Root>;
-
-const Accordion = React.forwardRef<AccordionRef, AccordionProps>(
-  ({ children, className, ...props }, forwardedRef) => (
-    <AccordionPrimitive.Root
-      className={clsx("", className)}
-      {...props}
-      ref={forwardedRef}
-    >
-      {children}
-    </AccordionPrimitive.Root>
-  )
-);
-Accordion.displayName = "Accordion";
+const Accordion = AccordionPrimitive.Root;
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
