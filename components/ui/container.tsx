@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { type ReactNode } from "react";
 
-export const Container: React.FC<{
+const Container: React.FC<{
   className?: string;
   children: ReactNode;
   screen?: boolean;
@@ -19,3 +19,5 @@ export const Container: React.FC<{
     </div>
   );
 };
+
+export { Container };
