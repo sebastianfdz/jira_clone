@@ -10,6 +10,7 @@ import {
 import { FaChevronRight } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
+import clsx from "clsx";
 
 const SprintListHeader = () => {
   return (
@@ -27,14 +28,19 @@ const SprintListHeader = () => {
               10 Mar - 17 Mar (20 issues)
             </div>
           </div>
-          <div className="flex items-center gap-x-3">
+          <div className="flex items-center gap-x-2">
             <Fragment>
-              {[2, 4, 2].map((num, index) => (
+              {[2, 32, 5].map((el, index) => (
                 <span
                   key={index}
-                  className="flex h-5 items-center justify-center rounded-full bg-blue-500 px-1.5 py-0.5 text-sm font-semibold text-white"
+                  className={clsx(
+                    index == 0 && "bg-zinc-300 text-black",
+                    index == 1 && "bg-blue-700 text-white",
+                    index == 2 && "bg-green-700 text-white",
+                    "flex h-5 items-center justify-center rounded-full px-1.5 py-0.5 text-sm font-semibold"
+                  )}
                 >
-                  {num}
+                  {el}
                 </span>
               ))}
             </Fragment>
@@ -61,14 +67,14 @@ const SprintListIssues: React.FC<{ sprintId: string; issues: Issue[] }> = ({
     <AccordionContent>
       <Droppable key={sprintId} droppableId={sprintId}>
         {({ droppableProps, innerRef, placeholder }) => (
-          <div {...droppableProps} ref={innerRef}>
-            {issues.map((issue, index) => (
-              <Fragment key={issue.id}>
-                <Issue index={index} {...issue} />
-                {placeholder}
-              </Fragment>
-            ))}
-          </div>
+          <Fragment>
+            <div {...droppableProps} ref={innerRef}>
+              {issues.map((issue, index) => (
+                <Issue key={issue.id} index={index} {...issue} />
+              ))}
+            </div>
+            {placeholder}
+          </Fragment>
         )}
       </Droppable>
     </AccordionContent>
@@ -76,7 +82,7 @@ const SprintListIssues: React.FC<{ sprintId: string; issues: Issue[] }> = ({
 };
 
 export const SprintList: React.FC<{ id: string }> = ({ id }) => {
-  const issues = [{ id: id }];
+  const issues = [1, 2, 3, 4, 5].map((num) => ({ id: `issue-${id}-${num}` }));
   return (
     <Fragment>
       <Accordion
