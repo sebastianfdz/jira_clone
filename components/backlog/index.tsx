@@ -39,7 +39,9 @@ export const Backlog: React.FC<{
         {isBrowser ? (
           <Fragment>
             {sprints.map((sprint) => (
-              <SprintList key={sprint.id} {...sprint} />
+              <div key={sprint.id} className="my-3">
+                <SprintList {...sprint} />
+              </div>
             ))}
             <BacklogList />
           </Fragment>
