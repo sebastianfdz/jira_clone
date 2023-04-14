@@ -20,3 +20,7 @@ export const insertItemIntoArray = (
   arrClone.splice(index, 0, item);
   return arrClone;
 };
+
+export const capitalize = (str: string) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
