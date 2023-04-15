@@ -23,15 +23,14 @@ const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
             aria-hidden
           />
           <div className="flex items-center">
-            <div className="text-semibold">SP2023</div>
-            <div className="text-semibold">Sprint 5</div>
+            <div className="text-semibold">Backlog</div>
             <div className="ml-3 font-normal text-gray-500">
-              10 Mar - 17 Mar (20 issues)
+              ({issues.length} issues)
             </div>
           </div>
         </Fragment>
       </AccordionTrigger>
-      <div className="flex items-center gap-x-2 p-2">
+      <div className="flex items-center gap-x-2 py-2">
         <IssueStatusCount statusCount={statusCount} />
         <Button>
           <span className="whitespace-nowrap">Create Sprint</span>
