@@ -18,10 +18,10 @@ const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
     <AccordionTrigger className="flex w-full items-center justify-between py-2 pl-2 font-medium [&[data-state=open]>svg]:rotate-90">
       <Fragment>
         <FaChevronRight
-          className="mr-2 text-sm text-black transition-transform"
+          className="mr-2 text-xs text-black transition-transform"
           aria-hidden
         />
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full items-center justify-between text-sm">
           <div className="flex items-center">
             <div className="text-semibold">Backlog</div>
             <div className="ml-3 font-normal text-gray-500">
@@ -75,7 +75,7 @@ export const BacklogList: React.FC<{ id: string }> = ({ id }) => {
   ];
   return (
     <Fragment>
-      <Accordion className="rounded-md  px-3 py-2" type="single" collapsible>
+      <Accordion className="rounded-md pl-2" type="single" collapsible>
         <AccordionItem value={`sprint-${id}`}>
           <BacklogListHeader issues={issues} />
           <IssueList sprintId={id} issues={issues} />

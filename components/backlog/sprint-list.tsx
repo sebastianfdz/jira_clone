@@ -19,10 +19,10 @@ const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
     <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium [&[data-state=open]>svg]:rotate-90">
       <Fragment>
         <FaChevronRight
-          className="mr-2 text-sm text-black transition-transform"
+          className="mr-2 text-xs text-black transition-transform"
           aria-hidden
         />
-        <div className="flex w-full items-center justify-between ">
+        <div className="flex w-full items-center justify-between text-sm ">
           <div className="flex items-center">
             <div className="text-semibold">SP2023</div>
             <div className="text-semibold">Sprint 5</div>
@@ -81,7 +81,7 @@ export const SprintList: React.FC<{ id: string }> = ({ id }) => {
   return (
     <Fragment>
       <Accordion
-        className="rounded-lg bg-zinc-100 px-3 py-1"
+        className="rounded-lg bg-zinc-100 pl-2"
         type="single"
         collapsible
       >

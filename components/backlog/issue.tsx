@@ -51,7 +51,7 @@ const StatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
             statuses.find((status) => status.value == selected)?.color ??
             "#1e40af",
         }}
-        className="mx-2 flex items-center gap-x-1 rounded-md bg-opacity-30 px-1.5 text-sm font-semibold text-white focus:ring-2"
+        className="mx-2 flex items-center gap-x-1 rounded-md bg-opacity-30 px-1.5 py-0.5 text-xs font-semibold text-white focus:ring-2"
       >
         <SelectValue className="w-full bg-transparent text-white">
           {selected}
@@ -75,7 +75,7 @@ const StatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
                   <span
                     style={{ color: status.color }}
                     className={clsx(
-                      "rounded-md bg-opacity-30 px-2 font-semibold"
+                      "rounded-md bg-opacity-30 px-2 text-xs font-semibold"
                     )}
                   >
                     {status.value}
@@ -112,7 +112,7 @@ export const Issue: React.FC<{
             {...dragHandleProps}
             className={clsx(
               isDragging ? "bg-blue-100" : "bg-white",
-              "group  flex items-center justify-between border-[0.3px] border-gray-300  px-3 py-1.5 hover:bg-gray-50"
+              "group flex items-center justify-between border-[0.3px] border-gray-300 px-3  py-1.5 text-sm hover:bg-gray-50"
             )}
           >
             <div className="flex items-center justify-between gap-x-2">
