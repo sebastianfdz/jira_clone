@@ -1,18 +1,20 @@
-import { Fragment } from "react";
-import { Droppable } from "react-beautiful-dnd";
-import { Issue } from "./issue";
+import { Fragment, useState } from "react";
+import { type IssueType } from "./issue";
 import {
   Accordion,
-  AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@radix-ui/react-accordion";
 import { FaChevronRight } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
-import clsx from "clsx";
+import { IssueList } from "./issue-list";
+import { getIssueCountByStatus } from "@/utils/helpers";
+import { IssueStatusCount } from "./issue-status-count";
 
-const SprintListHeader = () => {
+const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
+  const [statusCount] = useState(() => getIssueCountByStatus(issues));
+
   return (
     <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium [&[data-state=open]>svg]:rotate-90">
       <Fragment>
@@ -29,21 +31,7 @@ const SprintListHeader = () => {
             </div>
           </div>
           <div className="flex items-center gap-x-2">
-            <Fragment>
-              {[2, 32, 5].map((el, index) => (
-                <span
-                  key={index}
-                  className={clsx(
-                    index == 0 && "bg-zinc-300 text-black",
-                    index == 1 && "bg-blue-700 text-white",
-                    index == 2 && "bg-green-700 text-white",
-                    "flex h-5 items-center justify-center rounded-full px-1.5 py-0.5 text-sm font-semibold"
-                  )}
-                >
-                  {el}
-                </span>
-              ))}
-            </Fragment>
+            <IssueStatusCount statusCount={statusCount} />
             <Button>Complete Sprint</Button>
             <Button>
               <BsThreeDots className="sm:text-xl" />
@@ -55,44 +43,51 @@ const SprintListHeader = () => {
   );
 };
 
-type Issue = {
-  id: string;
-};
-
-const SprintListIssues: React.FC<{ sprintId: string; issues: Issue[] }> = ({
-  sprintId,
-  issues,
-}) => {
-  return (
-    <AccordionContent>
-      <Droppable key={sprintId} droppableId={sprintId}>
-        {({ droppableProps, innerRef, placeholder }) => (
-          <Fragment>
-            <div {...droppableProps} ref={innerRef}>
-              {issues.map((issue, index) => (
-                <Issue key={issue.id} index={index} {...issue} />
-              ))}
-            </div>
-            {placeholder}
-          </Fragment>
-        )}
-      </Droppable>
-    </AccordionContent>
-  );
-};
-
 export const SprintList: React.FC<{ id: string }> = ({ id }) => {
-  const issues = [1, 2, 3, 4, 5].map((num) => ({ id: `issue-${id}-${num}` }));
+  const issues: IssueType[] = [
+    {
+      id: `issue-1-${id}`,
+      name: "Issue 1",
+      description: "This is a description",
+      status: "TODO",
+      assignee: "assignee_id",
+      type: "STORY",
+    },
+    {
+      id: `issue-2-${id}`,
+      name: "Issue 2",
+      description: "This is a description",
+      status: "IN_PROGRESS",
+      assignee: "assignee_id",
+      type: "TASK",
+    },
+    {
+      id: `issue-3-${id}`,
+      name: "Issue 3",
+      description: "This is a description",
+      status: "IN_PROGRESS",
+      assignee: "assignee_id",
+      type: "TASK",
+    },
+    {
+      id: `issue-4-${id}`,
+      name: "Issue 4",
+      description: "This is a description",
+      status: "DONE",
+      assignee: "assignee_id",
+      type: "BUG",
+    },
+  ];
   return (
     <Fragment>
       <Accordion
-        className="rounded-md bg-zinc-100 px-3 py-2"
+        className="rounded-lg bg-zinc-100 px-3 py-1"
         type="single"
         collapsible
       >
         <AccordionItem value={`sprint-${id}`}>
-          <SprintListHeader />
-          <SprintListIssues sprintId={id} issues={issues} />
+          <SprintListHeader issues={issues} />
+          <IssueList sprintId={id} issues={issues} />
         </AccordionItem>
       </Accordion>
     </Fragment>
