@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 h1 {
-    @apply text-2xl font-bold my-1;
+    @apply text-xl font-semibold my-1;
 }
