@@ -1,7 +1,6 @@
 import React from "react";
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
 import clsx from "clsx";
-import "./styles.css";
 
 type TriggerProps = React.ComponentProps<typeof AccordionPrimitive.Trigger>;
 type TriggerRef = React.ElementRef<typeof AccordionPrimitive.Trigger>;
