@@ -78,6 +78,7 @@ export const SprintList: React.FC<{ id: string }> = ({ id }) => {
       type: "BUG",
     },
   ];
+
   return (
     <Fragment>
       <Accordion
