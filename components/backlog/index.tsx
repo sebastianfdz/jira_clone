@@ -34,7 +34,7 @@ export const Backlog: React.FC<{
 
   return (
     <Container>
-      <h1>Backlog component for project {project.name}</h1>
+      <h1>Backlog</h1>
       <DragDropContext onDragEnd={onDragEnd}>
         {isBrowser ? (
           <Fragment>
@@ -43,7 +43,7 @@ export const Backlog: React.FC<{
                 <SprintList {...sprint} />
               </div>
             ))}
-            <BacklogList />
+            <BacklogList id={"backlog"} />
           </Fragment>
         ) : null}
       </DragDropContext>
