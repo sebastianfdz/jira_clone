@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { type IssueType } from "./issue";
 import {
   Accordion,
@@ -73,10 +73,24 @@ export const BacklogList: React.FC<{ id: string }> = ({ id }) => {
       type: "BUG",
     },
   ];
+
+  const [openAccordion, setOpenAccordion] = useState("");
+
+  useEffect(() => {
+    // Open accordion on mount in order for DND to work.
+    setOpenAccordion(`backlog-${id}`);
+  }, [id]);
+
   return (
     <Fragment>
-      <Accordion className="rounded-md pl-2" type="single" collapsible>
-        <AccordionItem value={`sprint-${id}`}>
+      <Accordion
+        className="rounded-md pl-2"
+        type="single"
+        value={openAccordion}
+        onValueChange={setOpenAccordion}
+        collapsible
+      >
+        <AccordionItem value={`backlog-${id}`}>
           <BacklogListHeader issues={issues} />
           <IssueList sprintId={id} issues={issues} />
         </AccordionItem>
