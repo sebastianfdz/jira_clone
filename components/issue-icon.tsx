@@ -2,9 +2,10 @@ import { type ReactNode } from "react";
 import { BsBookmarkFill, BsFillRecordFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
 import clsx from "clsx";
+import { type IssueType } from "./backlog/issue";
 
 type IssueIconProps = {
-  issueType: "task" | "story" | "bug";
+  issueType: IssueType["type"];
 };
 
 const Icon: React.FC<{ children: ReactNode; className?: string }> = ({
@@ -43,9 +44,9 @@ const BugIcon = () => {
 };
 
 const IssueIcon: React.FC<IssueIconProps> = ({ issueType }) => {
-  if (issueType === "task") return <TaskIcon />;
-  if (issueType === "story") return <StoryIcon />;
-  if (issueType === "bug") return <BugIcon />;
+  if (issueType === "TASK") return <TaskIcon />;
+  if (issueType === "STORY") return <StoryIcon />;
+  if (issueType === "BUG") return <BugIcon />;
   return null;
 };
 
