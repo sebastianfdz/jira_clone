@@ -1,3 +1,6 @@
+import { type IssueType } from "@/components/backlog/issue";
+import { type IsseCountType } from "./types";
+
 export const moveItemWithinArray = (
   arr: unknown[],
   item: unknown,
@@ -23,4 +26,14 @@ export const insertItemIntoArray = (
 
 export const capitalize = (str: string) => {
   return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
+export const getIssueCountByStatus = (issues: IssueType[]) => {
+  return issues.reduce((acc, issue) => {
+    if (!acc[issue.status]) {
+      acc[issue.status] = 0;
+    }
+    acc[issue.status]++;
+    return acc;
+  }, {} as IsseCountType);
 };
