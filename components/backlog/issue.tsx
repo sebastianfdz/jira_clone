@@ -21,15 +21,30 @@ import { FaChevronDown } from "react-icons/fa";
 import { SelectSeparator, SelectViewport } from "@radix-ui/react-select";
 import { NotImplemented } from "@/components/not-implemented";
 
-const StatusSelect = () => {
+export type IssueType = {
+  id: string;
+  name: string;
+  description: string;
+  status: "TODO" | "IN_PROGRESS" | "DONE";
+  type: "TASK" | "STORY" | "BUG";
+  assignee?: string;
+};
+
+const StatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
+  currentStatus,
+}) => {
   const statuses = [
     { value: "TODO", color: "#52525b" },
     { value: "IN PROGRESS", color: "#1e40af" },
     { value: "DONE", color: "#15803d" },
   ];
-  const [selected, setSelected] = useState("TODO");
+  const [selected, setSelected] = useState(currentStatus ?? "TODO");
   return (
-    <Select onValueChange={setSelected}>
+    <Select
+      onValueChange={
+        setSelected as React.Dispatch<React.SetStateAction<string>>
+      }
+    >
       <SelectTrigger
         style={{
           backgroundColor:
@@ -83,8 +98,10 @@ const StatusSelect = () => {
 
 export const Issue: React.FC<{
   id: string;
+  type: IssueType["type"];
+  status: IssueType["status"];
   index: number;
-}> = ({ id, index }) => {
+}> = ({ id, index, type, status }) => {
   return (
     <Fragment>
       <Draggable draggableId={id} index={index}>
@@ -99,9 +116,7 @@ export const Issue: React.FC<{
             )}
           >
             <div className="flex items-center justify-between gap-x-2">
-              <IssueIcon issueType={index % 2 == 0 ? "task" : "story"} />
-              {/* <IssueIcon issueType="story" />
-              <IssueIcon issueType="bug" /> */}
+              <IssueIcon issueType={type} />
               <div className="text-gray-600">SP2023-128</div>
               <div>Add environment variables in production</div>
               <Button className="invisible w-0 px-0 group-hover:visible group-hover:w-fit group-hover:bg-transparent group-hover:px-1.5 group-hover:hover:bg-gray-200">
@@ -117,7 +132,7 @@ export const Issue: React.FC<{
                   <ChildrenTreeIcon className="mx-2 text-gray-600" />
                 </button>
               </NotImplemented>
-              <StatusSelect />
+              <StatusSelect currentStatus={status} />
               <Avatar
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                 alt=""
