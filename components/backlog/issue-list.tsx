@@ -10,7 +10,7 @@ const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
   issues,
 }) => {
   return (
-    <AccordionContent>
+    <AccordionContent className="pt-2">
       <Droppable key={sprintId} droppableId={sprintId}>
         {({ droppableProps, innerRef, placeholder }) => (
           <Fragment>
