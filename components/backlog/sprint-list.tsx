@@ -16,13 +16,13 @@ const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
   const [statusCount] = useState(() => getIssueCountByStatus(issues));
 
   return (
-    <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium [&[data-state=open]>svg]:rotate-90">
-      <Fragment>
-        <FaChevronRight
-          className="mr-2 text-xs text-black transition-transform"
-          aria-hidden
-        />
-        <div className="flex w-full items-center justify-between text-sm ">
+    <div className="flex w-full items-center justify-between text-sm ">
+      <AccordionTrigger className="flex w-full items-center p-2 font-medium [&[data-state=open]>svg]:rotate-90">
+        <Fragment>
+          <FaChevronRight
+            className="mr-2 text-xs text-black transition-transform"
+            aria-hidden
+          />
           <div className="flex items-center">
             <div className="text-semibold">SP2023</div>
             <div className="text-semibold">Sprint 5</div>
@@ -30,16 +30,18 @@ const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
               10 Mar - 17 Mar (20 issues)
             </div>
           </div>
-          <div className="flex items-center gap-x-2">
-            <IssueStatusCount statusCount={statusCount} />
-            <Button>Complete Sprint</Button>
-            <Button>
-              <BsThreeDots className="sm:text-xl" />
-            </Button>
-          </div>
-        </div>
-      </Fragment>
-    </AccordionTrigger>
+        </Fragment>
+      </AccordionTrigger>
+      <div className="flex items-center gap-x-2 p-2">
+        <IssueStatusCount statusCount={statusCount} />
+        <Button>
+          <span className="whitespace-nowrap">Complete Sprint</span>
+        </Button>
+        <Button>
+          <BsThreeDots className="sm:text-xl" />
+        </Button>
+      </div>
+    </div>
   );
 };
 
