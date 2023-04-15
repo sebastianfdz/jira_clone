@@ -16,8 +16,8 @@ const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
   const [statusCount] = useState(() => getIssueCountByStatus(issues));
 
   return (
-    <div className="flex w-full items-center justify-between text-sm ">
-      <AccordionTrigger className="flex w-full items-center p-2 font-medium [&[data-state=open]>svg]:rotate-90">
+    <div className="flex w-full items-center justify-between pl-2 text-sm">
+      <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
         <Fragment>
           <FaChevronRight
             className="mr-2 text-xs text-black transition-transform"
@@ -32,7 +32,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
           </div>
         </Fragment>
       </AccordionTrigger>
-      <div className="flex items-center gap-x-2 p-2">
+      <div className="flex items-center gap-x-2">
         <IssueStatusCount statusCount={statusCount} />
         <Button>
           <span className="whitespace-nowrap">Complete Sprint</span>
@@ -84,7 +84,7 @@ export const SprintList: React.FC<{ id: string }> = ({ id }) => {
   return (
     <Fragment>
       <Accordion
-        className="rounded-lg bg-zinc-100 pl-2"
+        className="rounded-lg bg-zinc-100 p-2"
         type="single"
         collapsible
       >
