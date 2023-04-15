@@ -1,11 +1,14 @@
-"use client";
+import { Fragment } from "react";
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const ProjectLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <div className="flex">
+      <div className="flex h-screen w-72 items-center justify-center border bg-blue-100">
+        Sidebar
+      </div>
+      <main>{children}</main>
+    </div>
   );
 };
 
-export default RootLayout;
+export default ProjectLayout;
