@@ -117,12 +117,14 @@ export const Issue: React.FC<{
           >
             <div className="flex items-center justify-between gap-x-2">
               <IssueIcon issueType={type} />
-              <div className="text-gray-600">SP2023-128</div>
-              <div>Add environment variables in production</div>
+              <div className="whitespace-nowrap text-gray-600">SP2023-128</div>
+              <div className=" whitespace-nowrap">
+                Add environment variables in production
+              </div>
               <Button className="invisible w-0 px-0 group-hover:visible group-hover:w-fit group-hover:bg-transparent group-hover:px-1.5 group-hover:hover:bg-gray-200">
                 <MdEdit className="text-sm" />
               </Button>
-              <div className="rounded-[3px] bg-indigo-500 bg-opacity-30 px-2 text-xs font-bold text-indigo-700">
+              <div className="whitespace-nowrap rounded-[3px] bg-indigo-500 bg-opacity-30 px-2 text-xs font-bold text-indigo-700">
                 EPIC-LABEL
               </div>
             </div>
