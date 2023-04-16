@@ -21,7 +21,7 @@ const IssueStatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
 }) => {
   const statuses = [
     { value: "TODO", color: "#52525b" },
-    { value: "IN PROGRESS", color: "#1e40af" },
+    { value: "IN_PROGRESS", color: "#1e40af" },
     { value: "DONE", color: "#15803d" },
   ];
   const [selected, setSelected] = useState(currentStatus ?? "TODO");
@@ -39,7 +39,7 @@ const IssueStatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
         }}
         className="mx-2 flex items-center gap-x-1 rounded-md bg-opacity-30 px-1.5 py-0.5 text-xs font-semibold text-white focus:ring-2"
       >
-        <SelectValue className="w-full bg-transparent text-white">
+        <SelectValue className="w-full whitespace-nowrap bg-transparent text-white">
           {selected}
         </SelectValue>
         <SelectIcon>
