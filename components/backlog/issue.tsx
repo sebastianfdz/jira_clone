@@ -1,49 +1,18 @@
-import React, {
-  Fragment,
-  type ReactNode,
-  useState,
-  useEffect,
-  useRef,
-} from "react";
+import React, { Fragment, useState, useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { IssueIcon } from "../issue-icon";
 import { Button } from "../ui/button";
-import { MdCheck, MdClose, MdEdit } from "react-icons/md";
 import clsx from "clsx";
 import { BsThreeDots } from "react-icons/bs";
-import { Avatar } from "@/components/avatar";
+import { Avatar } from "../avatar";
 import { ChildrenTreeIcon } from "../icons";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectIcon,
-  SelectItem,
-  SelectPortal,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { FaChevronDown } from "react-icons/fa";
-import { SelectSeparator, SelectViewport } from "@radix-ui/react-select";
-import { NotImplemented } from "@/components/not-implemented";
-import {
-  Dropdown,
-  DropdownContent,
-  DropdownGroup,
-  DropdownItem,
-  DropdownLabel,
-  DropdownPortal,
-  DropdownTrigger,
-} from "../ui/dropdown-menu";
-import {
-  Context,
-  ContextContent,
-  ContextGroup,
-  ContextItem,
-  ContextLabel,
-  ContextPortal,
-  ContextTrigger,
-} from "../ui/context-menu";
+import { NotImplemented } from "../not-implemented";
+import { DropdownTrigger } from "../ui/dropdown-menu";
+import { ContextTrigger } from "../ui/context-menu";
+import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
+import { IssueStatusSelect } from "../issue-status-select";
+import { MdEdit } from "react-icons/md";
+import { IssueTitle } from "../issue-title";
 
 export type IssueType = {
   id: string;
@@ -53,259 +22,6 @@ export type IssueType = {
   type: "TASK" | "STORY" | "BUG";
   assignee?: string;
 };
-
-const StatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
-  currentStatus,
-}) => {
-  const statuses = [
-    { value: "TODO", color: "#52525b" },
-    { value: "IN PROGRESS", color: "#1e40af" },
-    { value: "DONE", color: "#15803d" },
-  ];
-  const [selected, setSelected] = useState(currentStatus ?? "TODO");
-  return (
-    <Select
-      onValueChange={
-        setSelected as React.Dispatch<React.SetStateAction<string>>
-      }
-    >
-      <SelectTrigger
-        style={{
-          backgroundColor:
-            statuses.find((status) => status.value == selected)?.color ??
-            "#1e40af",
-        }}
-        className="mx-2 flex items-center gap-x-1 rounded-md bg-opacity-30 px-1.5 py-0.5 text-xs font-semibold text-white focus:ring-2"
-      >
-        <SelectValue className="w-full bg-transparent text-white">
-          {selected}
-        </SelectValue>
-        <SelectIcon>
-          <FaChevronDown className="text-xs" />
-        </SelectIcon>
-      </SelectTrigger>
-      <SelectPortal className="">
-        <SelectContent>
-          <SelectViewport className="top-10 w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
-            <SelectGroup>
-              {statuses.map((status) => (
-                <SelectItem
-                  key={status.value}
-                  value={status.value}
-                  className={clsx(
-                    "border-l-[3px] border-transparent py-1 pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50"
-                  )}
-                >
-                  <span
-                    style={{ color: status.color }}
-                    className={clsx(
-                      "rounded-md bg-opacity-30 px-2 text-xs font-semibold"
-                    )}
-                  >
-                    {status.value}
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectGroup>
-            <SelectSeparator className="mt-2 h-[1px] bg-gray-300" />
-            <NotImplemented feature="workflow">
-              <button className="w-full border py-4 pl-5 text-left text-sm font-medium hover:cursor-default hover:bg-zinc-100">
-                View Workflow
-              </button>
-            </NotImplemented>
-          </SelectViewport>
-        </SelectContent>
-      </SelectPortal>
-    </Select>
-  );
-};
-
-const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const menuOptions = {
-    actions: [
-      { id: "add-flag", label: "Add Flag" },
-      { id: "change-parent", label: "Change Parent" },
-      { id: "copy-issue-link", label: "Copy Issue Link" },
-      { id: "split-issue", label: "Split Issue" },
-      { id: "delete", label: "Delete" },
-    ],
-    moveTo: [],
-  };
-  return (
-    <Dropdown>
-      {children}
-      <DropdownPortal>
-        <DropdownContent
-          side="top"
-          sideOffset={5}
-          align="end"
-          className="w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md"
-        >
-          <DropdownLabel className="p-2 text-xs font-normal text-zinc-400">
-            ACTIONS
-          </DropdownLabel>
-          <DropdownGroup>
-            {menuOptions.actions.map((action) => (
-              <DropdownItem
-                key={action.id}
-                textValue={action.label}
-                className={clsx(
-                  "border-transparent p-2 text-sm hover:cursor-default hover:bg-zinc-100"
-                )}
-              >
-                <span className={clsx("pr-2 text-sm")}>{action.label}</span>
-              </DropdownItem>
-            ))}
-          </DropdownGroup>
-          <DropdownLabel className="p-2 text-xs font-normal text-zinc-400">
-            MOVE TO
-          </DropdownLabel>
-          <DropdownGroup>
-            {menuOptions.actions.map((action) => (
-              <DropdownItem
-                key={action.id}
-                textValue={action.label}
-                className={clsx(
-                  "border-transparent p-2 text-sm hover:cursor-default hover:bg-zinc-100"
-                )}
-              >
-                <span className={clsx("rounded-md bg-opacity-30 pr-2 text-sm")}>
-                  {action.label}
-                </span>
-              </DropdownItem>
-            ))}
-          </DropdownGroup>
-        </DropdownContent>
-      </DropdownPortal>
-    </Dropdown>
-  );
-};
-const IssueContextMenu: React.FC<{
-  children: ReactNode;
-  isEditing: boolean;
-}> = ({ children, isEditing }) => {
-  const menuOptions = {
-    actions: [
-      { id: "add-flag", label: "Add Flag" },
-      { id: "change-parent", label: "Change Parent" },
-      { id: "copy-issue-link", label: "Copy Issue Link" },
-      { id: "split-issue", label: "Split Issue" },
-      { id: "delete", label: "Delete" },
-    ],
-    moveTo: [],
-  };
-  return (
-    <div
-      data-state={isEditing ? "editing" : "not-editing"}
-      className="flex w-full [&[data-state=editing]]:hidden"
-    >
-      <Context>
-        {children}
-        <ContextPortal>
-          <ContextContent className="w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md">
-            <ContextLabel className="p-2 text-xs font-normal text-zinc-400">
-              ACTIONS
-            </ContextLabel>
-            <ContextGroup>
-              {menuOptions.actions.map((action) => (
-                <ContextItem
-                  key={action.id}
-                  textValue={action.label}
-                  className={clsx(
-                    "border-transparent p-2 text-sm hover:cursor-default hover:bg-zinc-100"
-                  )}
-                >
-                  <span className={clsx("pr-2 text-sm")}>{action.label}</span>
-                </ContextItem>
-              ))}
-            </ContextGroup>
-            <ContextLabel className="p-2 text-xs font-normal text-zinc-400">
-              MOVE TO
-            </ContextLabel>
-            <ContextGroup>
-              {menuOptions.actions.map((action) => (
-                <ContextItem
-                  key={action.id}
-                  textValue={action.label}
-                  className={clsx(
-                    "border-transparent p-2 text-sm hover:cursor-default hover:bg-zinc-100"
-                  )}
-                >
-                  <span
-                    className={clsx("rounded-md bg-opacity-30 pr-2 text-sm")}
-                  >
-                    {action.label}
-                  </span>
-                </ContextItem>
-              ))}
-            </ContextGroup>
-          </ContextContent>
-        </ContextPortal>
-      </Context>
-    </div>
-  );
-};
-
-type IssueTitleProps = {
-  isEditing: boolean;
-  setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
-  title: string;
-};
-
-const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
-  ({ isEditing, setIsEditing, title }, ref) => {
-    const [currentTitle, setCurrentTitle] = useState(title);
-    useEffect(() => {
-      if (isEditing) {
-        (ref as React.RefObject<HTMLInputElement>).current?.focus();
-      }
-    }, [isEditing, ref]);
-    return (
-      <Fragment>
-        {isEditing ? (
-          <div
-            data-state={isEditing ? "editing" : "not-editing"}
-            className="relative flex w-fit [&[data-state=editing]]:w-full"
-          >
-            <input
-              type="text"
-              ref={ref}
-              value={currentTitle}
-              onChange={(e) => setCurrentTitle(e.target.value)}
-              className="h-7 w-full min-w-[500px] px-1"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  setIsEditing(false);
-                }
-              }}
-            />
-            <div
-              data-state={isEditing ? "editing" : "not-editing"}
-              className="absolute -bottom-10 right-0 z-10 hidden gap-x-1 [&[data-state=editing]]:flex"
-            >
-              <Button
-                className="aspect-square shadow-md"
-                onClick={() => setIsEditing(false)}
-              >
-                <MdClose className="text-sm" />
-              </Button>
-              <Button
-                className="aspect-square shadow-md"
-                onClick={() => setIsEditing(false)}
-              >
-                <MdCheck className="text-sm" />
-              </Button>
-            </div>
-          </div>
-        ) : (
-          <div className=" whitespace-nowrap">{title}</div>
-        )}
-      </Fragment>
-    );
-  }
-);
-
-IssueTitle.displayName = "IssueTitle";
 
 export const Issue: React.FC<{
   id: string;
@@ -366,7 +82,7 @@ export const Issue: React.FC<{
                   <ChildrenTreeIcon className="mx-2 text-gray-600" />
                 </button>
               </NotImplemented>
-              <StatusSelect currentStatus={status} />
+              <IssueStatusSelect currentStatus={status} />
               <Avatar
                 src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                 alt=""
