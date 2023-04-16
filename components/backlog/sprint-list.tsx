@@ -23,10 +23,10 @@ const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
             className="mr-2 text-xs text-black transition-transform"
             aria-hidden
           />
-          <div className="flex items-center">
-            <div className="text-semibold">SP2023</div>
-            <div className="text-semibold">Sprint 5</div>
-            <div className="ml-3 font-normal text-gray-500">
+          <div className="flex items-center gap-x-2">
+            <div className="text-semibold whitespace-nowrap">SP2023</div>
+            <div className="text-semibold whitespace-nowrap">Sprint 5</div>
+            <div className="whitespace-nowrap font-normal text-gray-500">
               10 Mar - 17 Mar (20 issues)
             </div>
           </div>
