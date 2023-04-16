@@ -19,7 +19,7 @@ import {
 const IssueStatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
   currentStatus,
 }) => {
-  const statuses = [
+  const statuses: { value: IssueType["status"]; color: string }[] = [
     { value: "TODO", color: "#52525b" },
     { value: "IN_PROGRESS", color: "#1e40af" },
     { value: "DONE", color: "#15803d" },
