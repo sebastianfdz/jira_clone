@@ -26,11 +26,11 @@ const NavList: React.FC<{ items: NavItem[]; label: string }> = ({
   const currentPath = usePathname();
   return (
     <div className="flex flex-col gap-y-2">
-      <div className="flex items-center gap-x-1">
+      <div className="group flex items-center gap-x-1">
         <button
           data-state={isVisible ? "open" : "closed"}
           onClick={() => setIsVisible(!isVisible)}
-          className="[&[data-state=open]>svg]:rotate-90"
+          className="invisible group-hover:visible [&[data-state=open]>svg]:rotate-90"
         >
           <FaChevronRight className="text-xs transition-transform" />
         </button>
@@ -88,7 +88,14 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className="flex h-screen w-64 flex-col gap-y-5 bg-zinc-50 p-2 shadow-inner">
+    <div className="flex h-screen w-72 flex-col gap-y-5 bg-zinc-50 p-3 shadow-inner">
+      <div className="my-5 flex items-center gap-x-2 px-3">
+        <div className="flex aspect-square items-center justify-center rounded-sm bg-orange-500 p-3 text-xs font-bold text-white"></div>
+        <div>
+          <h2 className="text-sm font-semibold text-zinc-600">Project Name</h2>
+          <p className="text-xs text-zinc-500">Project Type</p>
+        </div>
+      </div>
       <NavList label={"PLANNING"} items={planningItems} />
       <NavList label={"DEVELOPMENT"} items={planningItems} />
     </div>
