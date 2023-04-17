@@ -34,7 +34,9 @@ export const Backlog: React.FC<{
 
   return (
     <Container>
+      <div className="text-sm text-zinc-500">Breadcrumbs / backlog</div>
       <h1>Backlog</h1>
+      <div className="h-10 border">Backlog Menu</div>
       <DragDropContext onDragEnd={onDragEnd}>
         {isBrowser ? (
           <Fragment>
