@@ -13,6 +13,8 @@ import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
 import { IssueStatusSelect } from "../issue-status-select";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export type IssueType = {
   id: string;
@@ -23,7 +25,7 @@ export type IssueType = {
   assignee?: string;
 };
 
-export const Issue: React.FC<{
+const Issue: React.FC<{
   id: string;
   type: IssueType["type"];
   status: IssueType["status"];
@@ -31,11 +33,17 @@ export const Issue: React.FC<{
 }> = ({ id, index, type, status }) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const pathname = usePathname();
+
   return (
     <Fragment>
       <Draggable draggableId={id} index={index}>
         {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
-          <div
+          <Link
+            href={{
+              pathname,
+              query: { selectedIssue: id },
+            }}
             ref={innerRef}
             {...draggableProps}
             {...dragHandleProps}
@@ -99,9 +107,11 @@ export const Issue: React.FC<{
                 </DropdownTrigger>
               </IssueDropdownMenu>
             </div>
-          </div>
+          </Link>
         )}
       </Draggable>
     </Fragment>
   );
 };
+
+export { Issue };
