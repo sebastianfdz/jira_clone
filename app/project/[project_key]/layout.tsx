@@ -1,16 +1,17 @@
 import { Sidebar } from "@/components/sidebar";
+import { Fragment } from "react";
 
 const ProjectLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div>
+    <Fragment>
       <div className="flex h-12 w-full items-center justify-center border-b">
         top nav bar
       </div>
-      <div className="flex">
+      <div className="flex h-[calc(100vh_-_3rem)]">
         <Sidebar />
         <main className="w-full">{children}</main>
       </div>
-    </div>
+    </Fragment>
   );
 };
 
