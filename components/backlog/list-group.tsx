@@ -6,11 +6,11 @@ import {
 import { BacklogList } from "./list-backlog";
 import { Fragment } from "react";
 import { SprintList } from "./list-sprint";
-import { useBrowser } from "@/hooks/useBrowser";
+import clsx from "clsx";
 
-const ListGroup = () => {
+const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const sprints = [{ id: "1" }, { id: "2" }, { id: "3" }];
-  const { isBrowser } = useBrowser();
+  // const { isBrowser } = useBrowser();
   const onDragEnd = (result: DropResult) => {
     const {
       destination,
@@ -23,22 +23,22 @@ const ListGroup = () => {
     }
   };
   return (
-    <div className="h-full min-w-max">
+    <div className={clsx("h-full min-w-max", className)}>
       <DragDropContext onDragEnd={onDragEnd}>
-        {isBrowser ? (
-          <Fragment>
-            {sprints.map((sprint) => (
-              <div key={sprint.id} className="my-3">
-                <SprintList {...sprint} />
-              </div>
-            ))}
-            <BacklogList id={"backlog"} />
-          </Fragment>
-        ) : null}
+        <Fragment>
+          {sprints.map((sprint) => (
+            <div key={sprint.id} className="my-3">
+              <SprintList {...sprint} />
+            </div>
+          ))}
+          <BacklogList id={"backlog"} />
+        </Fragment>
       </DragDropContext>
     </div>
   );
 };
+
+ListGroup.displayName = "ListGroup";
 
 function positionHasChanged(
   source: DraggableLocation,
