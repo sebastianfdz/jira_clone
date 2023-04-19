@@ -1,15 +1,15 @@
 "use client";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import React, { useLayoutEffect } from "react";
+import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 import { MdClose } from "react-icons/md";
+import { Button } from "../ui/button";
 
 const IssueDetails: React.FC<{
-  issueId: string | null;
-}> = ({ issueId }) => {
+  selectedIssue: string | null;
+}> = ({ selectedIssue }) => {
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
+  const { setIssue } = useSelectedIssueContext();
 
-  const pathname = usePathname();
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
     const calculatedHeight = renderContainerRef.current.offsetTop;
@@ -17,16 +17,15 @@ const IssueDetails: React.FC<{
   }, []);
 
   return (
-    <div ref={renderContainerRef} className="z-10 bg-white px-4">
-      <Link
-        href={{
-          pathname,
-          query: undefined,
-        }}
-      >
+    <div
+      ref={renderContainerRef}
+      data-state={selectedIssue ? "open" : "closed"}
+      className="z-10 w-full bg-white px-4 [&[data-state=closed]]:hidden"
+    >
+      <Button onClick={() => setIssue(null)}>
         <MdClose />
-      </Link>
-      Issue Details {issueId}
+      </Button>
+      Issue Details {selectedIssue}
     </div>
   );
 };
