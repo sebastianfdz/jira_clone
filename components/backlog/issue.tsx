@@ -1,4 +1,5 @@
-import React, { Fragment, useState, useRef } from "react";
+"use client";
+import React, { Fragment, useState, useRef, useCallback } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { IssueIcon } from "../issue-icon";
 import { Button } from "../ui/button";
@@ -13,8 +14,8 @@ import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
 import { IssueStatusSelect } from "../issue-status-select";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 
 export type IssueType = {
   id: string;
@@ -35,15 +36,23 @@ const Issue: React.FC<{
   const inputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
 
+  const { setIssue } = useSelectedIssueContext();
+
+  const setSelectedIssue = useCallback(() => {
+    setIssue(id);
+
+    const urlWithQuery = pathname + id ? `?selectedIssue=${id}` : "";
+
+    window.history.pushState(null, "", urlWithQuery);
+  }, [id, pathname, setIssue]);
+
   return (
     <Fragment>
       <Draggable draggableId={id} index={index}>
         {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
-          <Link
-            href={{
-              pathname,
-              query: { selectedIssue: id },
-            }}
+          <div
+            role="button"
+            onClick={setSelectedIssue}
             ref={innerRef}
             {...draggableProps}
             {...dragHandleProps}
@@ -107,7 +116,7 @@ const Issue: React.FC<{
                 </DropdownTrigger>
               </IssueDropdownMenu>
             </div>
-          </Link>
+          </div>
         )}
       </Draggable>
     </Fragment>
