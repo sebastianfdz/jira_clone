@@ -1,0 +1,27 @@
+.gutter {
+    background-repeat: no-repeat;
+  }
+  .gutter:hover{
+    background-color: #1d4ed8;
+    transition: all;
+    transition-duration: 0.2s;
+  }
+  
+  .gutter.gutter-horizontal {
+    cursor: col-resize;
+  }
+  
+  .gutter.gutter-vertical {
+    cursor: row-resize;
+  }
+
+  /* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scroll {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
