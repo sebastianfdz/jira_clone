@@ -4,7 +4,7 @@ import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
-} from "@radix-ui/react-accordion";
+} from "@/components/ui/accordion";
 import { FaChevronRight } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
@@ -49,35 +49,51 @@ const SprintList: React.FC<{ id: string }> = ({ id }) => {
   const issues: IssueType[] = [
     {
       id: `issue-1-${id}`,
-      name: "Issue 1",
+      title: "Issue 1",
       description: "This is a description",
       status: "TODO",
       assignee: "assignee_id",
       type: "STORY",
+      sprint: "P-SEB313",
+      epic: "EPIC-1",
+      comments: [],
+      logs: [],
     },
     {
       id: `issue-2-${id}`,
-      name: "Issue 2",
+      title: "Issue 2",
       description: "This is a description",
       status: "IN_PROGRESS",
       assignee: "assignee_id",
       type: "TASK",
+      sprint: "P-SEB313",
+      epic: "EPIC",
+      comments: [],
+      logs: [],
     },
     {
       id: `issue-3-${id}`,
-      name: "Issue 3",
+      title: "Issue 3",
       description: "This is a description",
       status: "IN_PROGRESS",
       assignee: "assignee_id",
       type: "TASK",
+      sprint: "P-SEB313",
+      epic: "EPIC",
+      comments: [],
+      logs: [],
     },
     {
       id: `issue-4-${id}`,
-      name: "Issue 4",
+      title: "Issue 4",
       description: "This is a description",
       status: "DONE",
       assignee: "assignee_id",
       type: "BUG",
+      sprint: "P-SEB313",
+      epic: "EPIC",
+      comments: [],
+      logs: [],
     },
   ];
 
