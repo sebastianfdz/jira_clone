@@ -19,15 +19,19 @@ import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 
 export type IssueType = {
   id: string;
-  name: string;
-  description: string;
   status: "TODO" | "IN_PROGRESS" | "DONE";
   type: "TASK" | "STORY" | "BUG" | "EPIC";
   assignee?: string;
+  title: string;
+  description: string | null;
+  sprint: string;
+  epic: string | null;
+  comments: string[];
+  logs: string[];
 };
 
 const Issue: React.FC<{
-  id: string;
+  id: IssueType["id"];
   type: IssueType["type"];
   status: IssueType["status"];
   index: number;
@@ -41,7 +45,7 @@ const Issue: React.FC<{
   const setSelectedIssue = useCallback(() => {
     setIssue(id);
 
-    const urlWithQuery = pathname + id ? `?selectedIssue=${id}` : "";
+    const urlWithQuery = pathname + (id ? `?selectedIssue=${id}` : "");
 
     window.history.pushState(null, "", urlWithQuery);
   }, [id, pathname, setIssue]);
