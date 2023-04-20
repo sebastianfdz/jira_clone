@@ -11,7 +11,7 @@ import { NotImplemented } from "../not-implemented";
 import { DropdownTrigger } from "../ui/dropdown-menu";
 import { ContextTrigger } from "../ui/context-menu";
 import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
-import { IssueStatusSelect } from "../issue-status-select";
+import { IssueStatusSelect } from "../issue-select-status";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
 import { usePathname } from "next/navigation";
@@ -22,7 +22,7 @@ export type IssueType = {
   name: string;
   description: string;
   status: "TODO" | "IN_PROGRESS" | "DONE";
-  type: "TASK" | "STORY" | "BUG";
+  type: "TASK" | "STORY" | "BUG" | "EPIC";
   assignee?: string;
 };
 
