@@ -16,9 +16,10 @@ import {
   SelectViewport,
 } from "@/components/ui/select";
 
-const IssueStatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
-  currentStatus,
-}) => {
+const IssueStatusSelect: React.FC<{
+  currentStatus: IssueType["status"];
+  variant?: "sm" | "lg";
+}> = ({ currentStatus, variant = "sm" }) => {
   const statuses: { value: IssueType["status"]; color: string }[] = [
     { value: "TODO", color: "#52525b" },
     { value: "IN_PROGRESS", color: "#1e40af" },
@@ -37,7 +38,11 @@ const IssueStatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
             statuses.find((status) => status.value == selected)?.color ??
             "#1e40af",
         }}
-        className="mx-2 flex items-center gap-x-1 rounded-md bg-opacity-30 px-1.5 py-0.5 text-xs font-semibold text-white focus:ring-2"
+        className={clsx(
+          variant == "sm" && "mx-2 px-1.5 py-0.5 text-xs",
+          variant == "lg" && "my-2 px-3 py-1 text-base",
+          "flex items-center gap-x-1 rounded-[3px] bg-opacity-30  text-xs font-semibold text-white focus:ring-2"
+        )}
       >
         <SelectValue className="w-full whitespace-nowrap bg-transparent text-white">
           {selected}
@@ -46,7 +51,7 @@ const IssueStatusSelect: React.FC<{ currentStatus: IssueType["status"] }> = ({
           <FaChevronDown className="text-xs" />
         </SelectIcon>
       </SelectTrigger>
-      <SelectPortal className="">
+      <SelectPortal className="z-10">
         <SelectContent>
           <SelectViewport className="top-10 w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
             <SelectGroup>
