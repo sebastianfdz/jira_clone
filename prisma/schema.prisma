@@ -47,6 +47,7 @@ enum IssueType {
     BUG
     TASK
     STORY
+    EPIC
 }
 
 model Issue {
