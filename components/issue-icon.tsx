@@ -1,6 +1,7 @@
 import { type ReactNode } from "react";
 import { BsBookmarkFill, BsFillRecordFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
+import { HiLightningBolt } from "react-icons/hi";
 import clsx from "clsx";
 import { type IssueType } from "./backlog/issue";
 
@@ -21,15 +22,15 @@ const Icon: React.FC<{ children: ReactNode; className?: string }> = ({
 
 const TaskIcon = () => {
   return (
-    <Icon className="bg-[#4bade8]">
-      <FaCheck className="p-0.5 text-white" />
+    <Icon className="h-fit bg-[#4bade8]">
+      <FaCheck className=" p-0.5 text-white" />
     </Icon>
   );
 };
 
 const StoryIcon = () => {
   return (
-    <Icon className="bg-lime-500">
+    <Icon className="h-fit bg-lime-500">
       <BsBookmarkFill className="p-0.5" />
     </Icon>
   );
@@ -37,8 +38,16 @@ const StoryIcon = () => {
 
 const BugIcon = () => {
   return (
-    <Icon className="bg-red-500">
+    <Icon className="h-fit bg-red-500">
       <BsFillRecordFill />
+    </Icon>
+  );
+};
+
+const EpicIcon = () => {
+  return (
+    <Icon className="h-fit bg-purple-600">
+      <HiLightningBolt />
     </Icon>
   );
 };
@@ -47,6 +56,7 @@ const IssueIcon: React.FC<IssueIconProps> = ({ issueType }) => {
   if (issueType === "TASK") return <TaskIcon />;
   if (issueType === "STORY") return <StoryIcon />;
   if (issueType === "BUG") return <BugIcon />;
+  if (issueType === "EPIC") return <EpicIcon />;
   return null;
 };
 
