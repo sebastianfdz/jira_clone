@@ -15,7 +15,7 @@ const NotImplemented: React.FC<{ children: ReactNode; feature?: string }> = ({
     <Popover>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverPortal>
-        <PopoverContent side="left" align="end" sideOffset={5}>
+        <PopoverContent className="z-10" side="left" align="end" sideOffset={5}>
           <div className="rounded-md border-2 bg-white px-6 py-4">
             <h1 className="text-sm font-semibold">Not implemented</h1>
             <p className="max-w-32 flex text-xs text-gray-500">
