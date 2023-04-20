@@ -5,3 +5,7 @@
 h1 {
     @apply text-xl font-semibold my-1;
 }
+
+h2 {
+    @apply text-base font-semibold my-1;
+}
