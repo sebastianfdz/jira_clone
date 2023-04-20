@@ -5,7 +5,7 @@ import Split from "react-split";
 import { ListGroup } from "./list-group";
 import { IssueDetails } from "./issue-details";
 import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
-import "./index.css";
+import "@/styles/split.css";
 import clsx from "clsx";
 
 const Backlog: React.FC<{
@@ -15,13 +15,13 @@ const Backlog: React.FC<{
 
   return (
     <Split
-      sizes={issue ? [80, 20] : [100, 0]}
+      sizes={issue ? [60, 40] : [100, 0]}
       gutterSize={issue ? 2 : 0}
       className="flex h-full"
       minSize={issue ? 100 : 0}
     >
       <ListGroup className={clsx(issue && "pr-4")} />
-      <IssueDetails selectedIssue={issue} />
+      <IssueDetails issue={issue} />
     </Split>
   );
 };
