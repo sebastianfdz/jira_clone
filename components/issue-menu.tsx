@@ -36,7 +36,7 @@ const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
           side="top"
           sideOffset={5}
           align="end"
-          className="w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md"
+          className="z-10 w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md"
         >
           <DropdownLabel className="p-2 text-xs font-normal text-zinc-400">
             ACTIONS
