@@ -3,27 +3,18 @@ import { MdEdit } from "react-icons/md";
 import { IssueIcon } from "../issue-icon";
 import { Button } from "../ui/button";
 import { IssueTypeSelect } from "../issue-select-type";
+import { type IssueType } from "./issue";
 
 const IssuePath: React.FC<{
-  issue: string | null;
+  issue: IssueType;
   setIssue: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ issue, setIssue }) => {
   const [showEditButton, setShowEditButton] = useState(false);
 
-  const issueInfo = {
-    id: issue,
-    sprint: "Sprint 1",
-    epic: "P-SEB20",
-    type: "Story",
-    status: "In Progress",
-    description: "",
-    comments: [],
-    logs: [],
-  };
   return (
     <div className="flex gap-x-3">
       <div
-        data-state={issueInfo.epic ? "epic" : "not-epic"}
+        data-state={issue.epic ? "epic" : "not-epic"}
         className="flex items-center [&[data-state=not-epic]]:hidden"
       >
         <Button
@@ -37,11 +28,11 @@ const IssuePath: React.FC<{
         <Button
           onMouseEnter={() => setShowEditButton(true)}
           onMouseLeave={() => setShowEditButton(false)}
-          onClick={() => setIssue(issueInfo.epic)}
+          onClick={() => setIssue(issue.epic)}
           customColors
           className=" bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
         >
-          <span className="whitespace-nowrap">{issueInfo.epic}</span>
+          <span className="whitespace-nowrap">{issue.epic}</span>
         </Button>
       </div>
       <span className="py-1.5 text-zinc-500">/</span>
@@ -51,7 +42,7 @@ const IssuePath: React.FC<{
           customColors
           className="bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
         >
-          <span className="whitespace-nowrap">{issue?.toUpperCase()}</span>
+          <span className="whitespace-nowrap">{issue.id.toUpperCase()}</span>
         </Button>
       </div>
     </div>
