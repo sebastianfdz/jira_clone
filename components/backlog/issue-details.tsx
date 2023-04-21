@@ -18,6 +18,7 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { FaChevronUp } from "react-icons/fa";
+import { Avatar } from "../avatar";
 
 const IssueDetails: React.FC<{
   issue: string;
@@ -29,6 +30,20 @@ const IssueDetails: React.FC<{
     id: issue,
     title: "My new issue",
     sprint: "Sprint 1",
+    assignee: {
+      id: "assignee_id",
+      name: "Sebastian Garcia",
+      email: "seb.gar@gmail.com",
+      avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
+    },
+    // assignee: null,
+    reporter: {
+      id: "reporter_id",
+      name: "Sebastian Garcia",
+      email: "seb.gar@gmail.com",
+      avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
+    },
+
     epic: "P-SEB20",
     type: "STORY",
     status: "IN_PROGRESS",
@@ -101,7 +116,6 @@ const IssueDetailsHeader: React.FC<{
 };
 
 const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
-  console.log(issue);
   return (
     <div className="">
       <h1>{issue.title}</h1>
@@ -119,24 +133,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
       </div>
       <h2>Description</h2>
       <div>[add_description]</div>
-      <Accordion
-        className="my-3 rounded-[3px] border"
-        type="single"
-        collapsible
-      >
-        <AccordionItem value={`details-${issue.id ?? 0}`}>
-          <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-zinc-100 [&[data-state=open]>svg]:rotate-180">
-            <span>Details</span>
-            <FaChevronUp
-              className="mr-2 text-xs text-black transition-transform"
-              aria-hidden
-            />
-          </AccordionTrigger>
-          <AccordionContent className="bg-white p-2">
-            <div>DETAILS SECTION</div>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      <IssueDetailsInfoAccordion issue={issue} />
       <div>[meta]</div>
       <div>[activity]</div>
       <div>[add_comment ]</div>
@@ -144,4 +141,78 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
   );
 };
 
+const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
+  issue,
+}) => {
+  return (
+    <Accordion className="my-3 rounded-[3px] border" type="single" collapsible>
+      <AccordionItem value={`details-${issue.id ?? 0}`}>
+        <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-zinc-100 [&[data-state=open]>svg]:rotate-180 [&[data-state=open]]:border-b">
+          <span className="text-sm">Details</span>
+          <FaChevronUp
+            className="mr-2 text-xs text-black transition-transform"
+            aria-hidden
+          />
+        </AccordionTrigger>
+        <AccordionContent className="flex flex-col bg-white px-3 [&[data-state=open]]:py-2">
+          <div
+            data-state={issue.assignee ? "assigned" : "unassigned"}
+            className="my-2 flex [&[data-state=assigned]]:items-center"
+          >
+            <span className="w-1/3 text-sm font-semibold text-zinc-600">
+              Assignee
+            </span>
+            <div className="flex flex-col">
+              <div className="flex w-2/3 items-center">
+                <Avatar
+                  src={issue.assignee?.avatar ?? ""}
+                  alt=""
+                  size={20}
+                  className="mr-2"
+                />
+                <div className="flex flex-col">
+                  <span className="whitespace-nowrap text-sm">
+                    {issue.assignee?.name ?? "Unassigned"}
+                  </span>
+                </div>
+              </div>
+              <Button
+                data-state={issue.assignee ? "assigned" : "unassigned"}
+                customColors
+                customPadding
+                className="mt-1 hidden text-sm text-blue-600 underline-offset-2 hover:underline [&[data-state=unassigned]]:flex"
+              >
+                Assign to me
+              </Button>
+            </div>
+          </div>
+          <div className="my-4 flex items-center">
+            <span className="w-1/3 text-sm font-semibold text-zinc-600">
+              Sprint
+            </span>
+            <div className="flex w-2/3 items-center">
+              <span className="text-sm">{issue.sprint ?? "None"}</span>
+            </div>
+          </div>
+          <div className="my-2 flex items-center">
+            <span className="w-1/3 text-sm font-semibold text-zinc-600">
+              Reporter
+            </span>
+            <div className="flex w-2/3 items-center">
+              <Avatar
+                src={issue.reporter?.avatar ?? null}
+                alt=""
+                size={20}
+                className="mr-2"
+              />
+              <span className="whitespace-nowrap text-sm">
+                {issue.reporter?.name}
+              </span>
+            </div>
+          </div>
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  );
+};
 export { IssueDetails };
