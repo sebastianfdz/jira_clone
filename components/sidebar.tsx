@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { BacklogIcon, BoardIcon, RoadmapIcon } from "./icons";
+import { BacklogIcon, BoardIcon, DevelopmentIcon, RoadmapIcon } from "./icons";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -22,7 +22,7 @@ const NavList: React.FC<{ items: NavItem[]; label: string }> = ({
   items,
   label,
 }) => {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const currentPath = usePathname();
   return (
     <div className="flex flex-col gap-y-2">
@@ -87,6 +87,15 @@ const Sidebar = () => {
       href: `/project/${project_key}/board`,
     },
   ];
+
+  const developmentItems = [
+    {
+      id: "development",
+      label: "Development",
+      icon: DevelopmentIcon,
+      href: `/project/${project_key}/`,
+    },
+  ];
   return (
     <div className="flex h-full w-72 flex-col gap-y-5 bg-zinc-50 p-3 shadow-inner">
       <div className="my-5 flex items-center gap-x-2 px-3">
@@ -97,7 +106,7 @@ const Sidebar = () => {
         </div>
       </div>
       <NavList label={"PLANNING"} items={planningItems} />
-      <NavList label={"DEVELOPMENT"} items={planningItems} />
+      <NavList label={"DEVELOPMENT"} items={developmentItems} />
     </div>
   );
 };
