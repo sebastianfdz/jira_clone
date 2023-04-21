@@ -10,7 +10,11 @@ const config = {
   experimental: { appDir: true },
 
   images: {
-    domains: ["images.clerk.dev", "images.unsplash.com"],
+    domains: [
+      "images.clerk.dev",
+      "images.unsplash.com",
+      "avatars.githubusercontent.com",
+    ],
   },
   /**
    * If you have the "experimental: { appDir: true }" setting enabled, then you
