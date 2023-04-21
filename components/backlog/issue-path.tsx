@@ -4,6 +4,8 @@ import { IssueIcon } from "../issue-icon";
 import { Button } from "../ui/button";
 import { IssueSelectType } from "../issue-select-type";
 import { type IssueType } from "./issue";
+import { IssueSelectEpic } from "../issue-select-epic";
+import { SelectValue } from "../ui/select";
 
 const IssuePath: React.FC<{
   issue: IssueType;
@@ -17,14 +19,16 @@ const IssuePath: React.FC<{
         data-state={issue.epic ? "epic" : "not-epic"}
         className="flex items-center [&[data-state=not-epic]]:hidden"
       >
-        <Button
-          onMouseEnter={() => setShowEditButton(true)}
-          onMouseLeave={() => setShowEditButton(false)}
-          customColors
-          className=" bg-transparent hover:bg-zinc-200"
+        <IssueSelectEpic
+          currentEpic={{ key: "P-SEBB-1", title: "Epic title 1" }}
         >
-          {showEditButton ? <MdEdit /> : <IssueIcon issueType="EPIC" />}
-        </Button>
+          <SelectValue
+            onMouseEnter={() => setShowEditButton(true)}
+            onMouseLeave={() => setShowEditButton(false)}
+          >
+            {showEditButton ? <MdEdit /> : <IssueIcon issueType="EPIC" />}
+          </SelectValue>
+        </IssueSelectEpic>
         <Button
           onMouseEnter={() => setShowEditButton(true)}
           onMouseLeave={() => setShowEditButton(false)}
