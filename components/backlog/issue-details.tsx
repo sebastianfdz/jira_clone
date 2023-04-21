@@ -1,6 +1,5 @@
 "use client";
 import React, { useLayoutEffect } from "react";
-import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
 import { Button } from "../ui/button";
 import { IssueDropdownMenu } from "../issue-menu";
@@ -9,10 +8,34 @@ import { BsThreeDots } from "react-icons/bs";
 import { NotImplemented } from "../not-implemented";
 import { AiOutlineLike } from "react-icons/ai";
 import { IssuePath } from "./issue-path";
+import { LightningIcon } from "../icons";
+import { IssueStatusSelect } from "../issue-select-status";
+import { type IssueType } from "./issue";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../ui/accordion";
+import { FaChevronUp } from "react-icons/fa";
 
-const IssueDetails: React.FC<{ issue: string | null }> = ({ issue }) => {
+const IssueDetails: React.FC<{
+  issue: string;
+  setIssue: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ issue, setIssue }) => {
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
-  const { setIssue } = useSelectedIssueContext();
+
+  const issueInfo: IssueType = {
+    id: issue,
+    title: "My new issue",
+    sprint: "Sprint 1",
+    epic: "P-SEB20",
+    type: "STORY",
+    status: "IN_PROGRESS",
+    description: "",
+    comments: [],
+    logs: [],
+  };
 
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
@@ -24,15 +47,16 @@ const IssueDetails: React.FC<{ issue: string | null }> = ({ issue }) => {
     <div
       ref={renderContainerRef}
       data-state={issue ? "open" : "closed"}
-      className="z-10 flex w-full justify-between bg-white  pl-4 [&[data-state=closed]]:hidden"
+      className="z-10 flex w-full flex-col bg-white  pl-4 [&[data-state=closed]]:hidden"
     >
-      <IssueDetailsHeader issue={issue} setIssue={setIssue} />
+      <IssueDetailsHeader issue={issueInfo} setIssue={setIssue} />
+      <IssueDetailsInfo issue={issueInfo} />
     </div>
   );
 };
 
 const IssueDetailsHeader: React.FC<{
-  issue: string | null;
+  issue: IssueType;
   setIssue: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ issue, setIssue }) => {
   return (
@@ -72,6 +96,50 @@ const IssueDetailsHeader: React.FC<{
           <MdClose className="text-2xl" />
         </Button>
       </div>
+    </div>
+  );
+};
+
+const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
+  console.log(issue);
+  return (
+    <div className="">
+      <h1>{issue.title}</h1>
+      <div>[attach_button][add_child_button][link_issue_button]</div>
+      <div className="relative flex items-center gap-x-3">
+        <IssueStatusSelect currentStatus={issue.status} variant="lg" />
+        <NotImplemented>
+          <Button customColors className="hover:bg-zinc-200">
+            <div className="flex items-center">
+              <LightningIcon className="mt-0.5" />
+              <span>Actions</span>
+            </div>
+          </Button>
+        </NotImplemented>
+      </div>
+      <h2>Description</h2>
+      <div>[add_description]</div>
+      <Accordion
+        className="my-3 rounded-[3px] border"
+        type="single"
+        collapsible
+      >
+        <AccordionItem value={`details-${issue.id ?? 0}`}>
+          <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-zinc-100 [&[data-state=open]>svg]:rotate-180">
+            <span>Details</span>
+            <FaChevronUp
+              className="mr-2 text-xs text-black transition-transform"
+              aria-hidden
+            />
+          </AccordionTrigger>
+          <AccordionContent className="bg-white p-2">
+            <div>DETAILS SECTION</div>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+      <div>[meta]</div>
+      <div>[activity]</div>
+      <div>[add_comment ]</div>
     </div>
   );
 };
