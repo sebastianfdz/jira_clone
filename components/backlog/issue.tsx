@@ -16,15 +16,23 @@ import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
 import { usePathname } from "next/navigation";
 import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
+import {} from "@prisma/client";
 
+type UserType = {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+};
 export type IssueType = {
   id: string;
   status: "TODO" | "IN_PROGRESS" | "DONE";
   type: "TASK" | "STORY" | "BUG" | "EPIC";
-  assignee?: string;
+  assignee: UserType | null;
+  reporter: UserType | null;
   title: string;
   description: string | null;
-  sprint: string;
+  sprint: string | null;
   epic: string | null;
   comments: string[];
   logs: string[];
