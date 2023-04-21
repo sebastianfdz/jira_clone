@@ -39,11 +39,9 @@ export type IssueType = {
 };
 
 const Issue: React.FC<{
-  id: IssueType["id"];
-  type: IssueType["type"];
-  status: IssueType["status"];
+  issue: IssueType;
   index: number;
-}> = ({ id, index, type, status }) => {
+}> = ({ index, issue }) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
@@ -51,16 +49,17 @@ const Issue: React.FC<{
   const { setIssue } = useSelectedIssueContext();
 
   const setSelectedIssue = useCallback(() => {
-    setIssue(id);
+    setIssue(issue.id);
 
-    const urlWithQuery = pathname + (id ? `?selectedIssue=${id}` : "");
+    const urlWithQuery =
+      pathname + (issue.id ? `?selectedIssue=${issue.id}` : "");
 
     window.history.pushState(null, "", urlWithQuery);
-  }, [id, pathname, setIssue]);
+  }, [issue.id, pathname, setIssue]);
 
   return (
     <Fragment>
-      <Draggable draggableId={id} index={index}>
+      <Draggable draggableId={issue.id} index={index}>
         {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
           <div
             role="button"
@@ -77,12 +76,12 @@ const Issue: React.FC<{
               data-state={isEditing ? "editing" : "not-editing"}
               className="flex w-fit items-center gap-x-2 [&[data-state=editing]]:w-full"
             >
-              <IssueIcon issueType={type} />
-              <div className="whitespace-nowrap text-gray-600">SP2023-128</div>
+              <IssueIcon issueType={issue.type} />
+              <div className="whitespace-nowrap text-gray-600">{issue.id}</div>
               <IssueTitle
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
-                title="Issue title goes here"
+                title={issue.title}
                 ref={inputRef}
               />
               <div
@@ -98,7 +97,7 @@ const Issue: React.FC<{
                   <MdEdit className="text-sm" />
                 </Button>
                 <div className="whitespace-nowrap rounded-[3px] bg-indigo-500 bg-opacity-30 px-2 text-xs font-bold text-indigo-700">
-                  EPIC-LABEL
+                  {issue.epic}
                 </div>
               </div>
             </div>
@@ -111,9 +110,9 @@ const Issue: React.FC<{
                   <ChildrenTreeIcon className="mx-2 text-gray-600" />
                 </button>
               </NotImplemented>
-              <IssueStatusSelect currentStatus={status} />
+              <IssueStatusSelect currentStatus={issue.status} />
               <Avatar
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                src={issue.assignee?.avatar ?? null}
                 alt=""
                 className="mx-1"
               />
