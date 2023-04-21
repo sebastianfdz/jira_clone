@@ -11,7 +11,7 @@ import clsx from "clsx";
 const Backlog: React.FC<{
   project: Project;
 }> = ({}) => {
-  const { issue } = useSelectedIssueContext();
+  const { issue, setIssue } = useSelectedIssueContext();
 
   return (
     <Split
@@ -21,7 +21,7 @@ const Backlog: React.FC<{
       minSize={issue ? 100 : 0}
     >
       <ListGroup className={clsx(issue && "pr-4")} />
-      <IssueDetails issue={issue} />
+      {issue ? <IssueDetails setIssue={setIssue} issue={issue} /> : null}
     </Split>
   );
 };
