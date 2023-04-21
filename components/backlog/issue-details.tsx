@@ -36,14 +36,12 @@ const IssueDetails: React.FC<{
       email: "seb.gar@gmail.com",
       avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
     },
-    // assignee: null,
     reporter: {
       id: "reporter_id",
       name: "Sebastian Garcia",
       email: "seb.gar@gmail.com",
       avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
     },
-
     epic: "P-SEB20",
     type: "STORY",
     status: "IN_PROGRESS",
