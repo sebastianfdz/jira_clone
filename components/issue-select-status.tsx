@@ -16,7 +16,7 @@ import {
   SelectViewport,
 } from "@/components/ui/select";
 
-const IssueStatusSelect: React.FC<{
+const IssueSelectStatus: React.FC<{
   currentStatus: IssueType["status"];
   variant?: "sm" | "lg";
 }> = ({ currentStatus, variant = "sm" }) => {
@@ -40,7 +40,7 @@ const IssueStatusSelect: React.FC<{
         }}
         className={clsx(
           variant == "sm" && "mx-2 px-1.5 py-0.5 text-xs",
-          variant == "lg" && "my-2 px-3 py-1 text-base",
+          variant == "lg" && "my-2 px-3 py-2 text-[13px]",
           "flex items-center gap-x-1 rounded-[3px] bg-opacity-30  text-xs font-semibold text-white focus:ring-2"
         )}
       >
@@ -87,4 +87,4 @@ const IssueStatusSelect: React.FC<{
   );
 };
 
-export { IssueStatusSelect };
+export { IssueSelectStatus };

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { IssueIcon } from "./issue-icon";
 
-const IssueTypeSelect: React.FC<{ currentType: IssueType["type"] }> = ({
+const IssueSelectType: React.FC<{ currentType: IssueType["type"] }> = ({
   currentType,
 }) => {
   const types: { value: IssueType["type"]; color: string }[] = [
@@ -62,4 +62,4 @@ const IssueTypeSelect: React.FC<{ currentType: IssueType["type"] }> = ({
   );
 };
 
-export { IssueTypeSelect };
+export { IssueSelectType };
