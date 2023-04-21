@@ -16,7 +16,7 @@ const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
           <Fragment>
             <div {...droppableProps} ref={innerRef}>
               {issues.map((issue, index) => (
-                <Issue key={issue.id} index={index} {...issue} />
+                <Issue key={issue.id} index={index} issue={issue} />
               ))}
             </div>
             {placeholder}
