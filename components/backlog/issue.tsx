@@ -11,7 +11,7 @@ import { NotImplemented } from "../not-implemented";
 import { DropdownTrigger } from "../ui/dropdown-menu";
 import { ContextTrigger } from "../ui/context-menu";
 import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
-import { IssueStatusSelect } from "../issue-select-status";
+import { IssueSelectStatus } from "../issue-select-status";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
 import { usePathname } from "next/navigation";
@@ -110,7 +110,7 @@ const Issue: React.FC<{
                   <ChildrenTreeIcon className="mx-2 text-gray-600" />
                 </button>
               </NotImplemented>
-              <IssueStatusSelect currentStatus={issue.status} />
+              <IssueSelectStatus currentStatus={issue.status} />
               <Avatar
                 src={issue.assignee?.avatar ?? null}
                 alt=""

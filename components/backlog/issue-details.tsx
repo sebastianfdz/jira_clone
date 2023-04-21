@@ -9,7 +9,7 @@ import { NotImplemented } from "../not-implemented";
 import { AiOutlineLike } from "react-icons/ai";
 import { IssuePath } from "./issue-path";
 import { LightningIcon } from "../icons";
-import { IssueStatusSelect } from "../issue-select-status";
+import { IssueSelectStatus } from "../issue-select-status";
 import { type IssueType } from "./issue";
 import {
   Accordion,
@@ -119,7 +119,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
       <h1>{issue.title}</h1>
       <div>[attach_button][add_child_button][link_issue_button]</div>
       <div className="relative flex items-center gap-x-3">
-        <IssueStatusSelect currentStatus={issue.status} variant="lg" />
+        <IssueSelectStatus currentStatus={issue.status} variant="lg" />
         <NotImplemented>
           <Button customColors className="hover:bg-zinc-200">
             <div className="flex items-center">
@@ -146,7 +146,12 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
     <Accordion className="my-3 rounded-[3px] border" type="single" collapsible>
       <AccordionItem value={`details-${issue.id ?? 0}`}>
         <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-zinc-100 [&[data-state=open]>svg]:rotate-180 [&[data-state=open]]:border-b">
-          <span className="text-sm">Details</span>
+          <div className="flex items-center gap-x-1">
+            <span className="text-sm">Details</span>
+            <span className="text-xs text-zinc-500">
+              (Assignee, Sprint, Reporter)
+            </span>
+          </div>
           <FaChevronUp
             className="mr-2 text-xs text-black transition-transform"
             aria-hidden

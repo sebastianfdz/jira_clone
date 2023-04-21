@@ -2,7 +2,7 @@ import { useState } from "react";
 import { MdEdit } from "react-icons/md";
 import { IssueIcon } from "../issue-icon";
 import { Button } from "../ui/button";
-import { IssueTypeSelect } from "../issue-select-type";
+import { IssueSelectType } from "../issue-select-type";
 import { type IssueType } from "./issue";
 
 const IssuePath: React.FC<{
@@ -37,7 +37,7 @@ const IssuePath: React.FC<{
       </div>
       <span className="py-1.5 text-zinc-500">/</span>
       <div className="relative flex items-center">
-        <IssueTypeSelect currentType="TASK" />
+        <IssueSelectType currentType="TASK" />
         <Button
           customColors
           className="bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
