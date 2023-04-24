@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect } from "react";
+import React, { Fragment, useLayoutEffect } from "react";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
 import { Button } from "../ui/button";
 import { IssueDropdownMenu } from "../issue-menu";
@@ -19,36 +19,15 @@ import {
 } from "../ui/accordion";
 import { FaChevronUp } from "react-icons/fa";
 import { Avatar } from "../avatar";
+import { issues } from "./mock-data";
 
 const IssueDetails: React.FC<{
-  issue: string;
-  setIssue: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ issue, setIssue }) => {
+  issueId: string;
+  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ issueId, setIssueId }) => {
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const issueInfo: IssueType = {
-    id: issue,
-    title: "My new issue",
-    sprint: "Sprint 1",
-    assignee: {
-      id: "assignee_id",
-      name: "Sebastian Garcia",
-      email: "seb.gar@gmail.com",
-      avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-    },
-    reporter: {
-      id: "reporter_id",
-      name: "Sebastian Garcia",
-      email: "seb.gar@gmail.com",
-      avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-    },
-    epic: "P-SEB20",
-    type: "STORY",
-    status: "IN_PROGRESS",
-    description: "",
-    comments: [],
-    logs: [],
-  };
+  const issueInfo: IssueType = issues.find((issue) => issue.id === issueId)!;
 
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
@@ -59,22 +38,22 @@ const IssueDetails: React.FC<{
   return (
     <div
       ref={renderContainerRef}
-      data-state={issue ? "open" : "closed"}
+      data-state={issueId ? "open" : "closed"}
       className="z-10 flex w-full flex-col bg-white  pl-4 [&[data-state=closed]]:hidden"
     >
-      <IssueDetailsHeader issue={issueInfo} setIssue={setIssue} />
-      <IssueDetailsInfo issue={issueInfo} />
+      <IssueDetailsHeader issue={issueInfo} setIssueId={setIssueId} />
+      <IssueDetailsInfo key={issueId} issue={issueInfo} />
     </div>
   );
 };
 
 const IssueDetailsHeader: React.FC<{
   issue: IssueType;
-  setIssue: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ issue, setIssue }) => {
+  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ issue, setIssueId }) => {
   return (
     <div className="flex h-fit w-full items-center justify-between">
-      <IssuePath issue={issue} setIssue={setIssue} />
+      <IssuePath issue={issue} setIssueId={setIssueId} />
       <div className="relative flex items-center gap-x-0.5">
         <NotImplemented feature="watch">
           <Button customColors className="bg-transparent hover:bg-zinc-200">
@@ -104,7 +83,7 @@ const IssueDetailsHeader: React.FC<{
         <Button
           customColors
           className="bg-transparent hover:bg-zinc-200"
-          onClick={() => setIssue(null)}
+          onClick={() => setIssueId(null)}
         >
           <MdClose className="text-2xl" />
         </Button>
@@ -115,7 +94,7 @@ const IssueDetailsHeader: React.FC<{
 
 const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
   return (
-    <div className="">
+    <Fragment>
       <h1>{issue.title}</h1>
       <div>[attach_button][add_child_button][link_issue_button]</div>
       <div className="relative flex items-center gap-x-3">
@@ -135,7 +114,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
       <div>[meta]</div>
       <div>[activity]</div>
       <div>[add_comment ]</div>
-    </div>
+    </Fragment>
   );
 };
 
@@ -160,21 +139,21 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
         <AccordionContent className="flex flex-col bg-white px-3 [&[data-state=open]]:py-2">
           <div
             data-state={issue.assignee ? "assigned" : "unassigned"}
-            className="my-2 flex [&[data-state=assigned]]:items-center"
+            className="my-2 grid grid-cols-3 [&[data-state=assigned]]:items-center"
           >
-            <span className="w-1/3 text-sm font-semibold text-zinc-600">
+            <span className="text-sm font-semibold text-zinc-600">
               Assignee
             </span>
             <div className="flex flex-col">
-              <div className="flex w-2/3 items-center">
+              <div className="flex items-center">
                 <Avatar
                   src={issue.assignee?.avatar ?? ""}
-                  alt=""
+                  alt={`${issue.assignee?.name ?? "Unassigned"} avatar`}
                   size={20}
                   className="mr-2"
                 />
                 <div className="flex flex-col">
-                  <span className="whitespace-nowrap text-sm">
+                  <span className="ml-1 whitespace-nowrap text-sm">
                     {issue.assignee?.name ?? "Unassigned"}
                   </span>
                 </div>
@@ -189,22 +168,20 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
               </Button>
             </div>
           </div>
-          <div className="my-4 flex items-center">
-            <span className="w-1/3 text-sm font-semibold text-zinc-600">
-              Sprint
-            </span>
-            <div className="flex w-2/3 items-center">
+          <div className="my-4 grid grid-cols-3 items-center">
+            <span className="text-sm font-semibold text-zinc-600">Sprint</span>
+            <div className="flex items-center">
               <span className="text-sm">{issue.sprint ?? "None"}</span>
             </div>
           </div>
-          <div className="my-2 flex items-center">
-            <span className="w-1/3 text-sm font-semibold text-zinc-600">
+          <div className="my-2 grid grid-cols-3  items-center">
+            <span className="text-sm font-semibold text-zinc-600">
               Reporter
             </span>
-            <div className="flex w-2/3 items-center">
+            <div className="flex items-center">
               <Avatar
                 src={issue.reporter?.avatar ?? null}
-                alt=""
+                alt={`${issue.reporter?.name ?? "Unassigned"} avatar`}
                 size={20}
                 className="mr-2"
               />
