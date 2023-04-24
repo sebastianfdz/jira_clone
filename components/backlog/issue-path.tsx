@@ -5,8 +5,8 @@ import { IssueSelectEpic } from "../issue-select-epic";
 
 const IssuePath: React.FC<{
   issue: IssueType;
-  setIssue: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ issue, setIssue }) => {
+  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ issue, setIssueId }) => {
   return (
     <div className="flex gap-x-3">
       <div
@@ -17,7 +17,7 @@ const IssuePath: React.FC<{
           currentEpic={{ key: "P-SEBB-1", title: "Epic title 1" }}
         />
         <Button
-          onClick={() => setIssue(issue.epic)}
+          onClick={() => setIssueId(issue.epic)}
           customColors
           className=" bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
         >
