@@ -3,12 +3,10 @@ import { type IsseCountType } from "./types";
 
 export const moveItemWithinArray = (
   arr: unknown[],
-  item: unknown,
+  oldIndex: number,
   newIndex: number
 ) => {
-  // Snippet taken from https://github.com/oldboyxx/jira_clone
   const arrClone = [...arr];
-  const oldIndex = arrClone.indexOf(item);
   arrClone.splice(newIndex, 0, arrClone.splice(oldIndex, 1)[0]);
   return arrClone;
 };
