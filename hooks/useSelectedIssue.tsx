@@ -4,14 +4,14 @@ import { useSearchParams } from "next/navigation";
 import { type ReactNode, createContext, useContext, useState } from "react";
 
 type SelectedIssueContextProps = {
-  issue: string | null;
-  setIssue: React.Dispatch<React.SetStateAction<string | null>>;
+  issueId: string | null;
+  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
 };
 
 const SelectedIssueContext = createContext<SelectedIssueContextProps>({
-  issue: null,
+  issueId: null,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setIssue: () => {},
+  setIssueId: () => {},
 });
 
 export const SelectedIssueProvider = ({
@@ -20,12 +20,12 @@ export const SelectedIssueProvider = ({
   children: ReactNode;
 }) => {
   const searchParams = useSearchParams();
-  const [issue, setIssue] = useState<string | null>(
+  const [issueId, setIssueId] = useState<string | null>(
     searchParams.get("selectedIssue")
   );
 
   return (
-    <SelectedIssueContext.Provider value={{ issue, setIssue }}>
+    <SelectedIssueContext.Provider value={{ issueId, setIssueId }}>
       {children}
     </SelectedIssueContext.Provider>
   );
