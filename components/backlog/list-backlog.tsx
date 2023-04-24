@@ -11,6 +11,35 @@ import { IssueList } from "./issue-list";
 import { getIssueCountByStatus } from "@/utils/helpers";
 import { IssueStatusCount } from "./issue-status-count";
 
+const BacklogList: React.FC<{ id: string; issues: IssueType[] }> = ({
+  id,
+  issues,
+}) => {
+  const [openAccordion, setOpenAccordion] = useState("");
+
+  useEffect(() => {
+    // Open accordion on mount in order for DND to work.
+    setOpenAccordion(`backlog`);
+  }, [id]);
+
+  return (
+    <Fragment>
+      <Accordion
+        className="rounded-md pl-2"
+        type="single"
+        value={openAccordion}
+        onValueChange={setOpenAccordion}
+        collapsible
+      >
+        <AccordionItem value={`backlog`}>
+          <BacklogListHeader issues={issues} />
+          <IssueList sprintId={id} issues={issues} />
+        </AccordionItem>
+      </Accordion>
+    </Fragment>
+  );
+};
+
 const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
   const [statusCount] = useState(() => getIssueCountByStatus(issues));
 
@@ -37,127 +66,6 @@ const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
         </Button>
       </div>
     </div>
-  );
-};
-
-const BacklogList: React.FC<{ id: string }> = ({ id }) => {
-  const issues: IssueType[] = [
-    {
-      id: `issue-1-${id}`,
-      title: "Issue 1",
-      description: "This is a description",
-      status: "TODO",
-      assignee: {
-        id: "assignee_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      reporter: {
-        id: "reporter_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      type: "STORY",
-      sprint: "P-SEB313",
-      epic: "EPIC-1",
-      comments: [],
-      logs: [],
-    },
-    {
-      id: `issue-2-${id}`,
-      title: "Issue 2",
-      description: "This is a description",
-      status: "IN_PROGRESS",
-      assignee: {
-        id: "assignee_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      reporter: {
-        id: "reporter_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      type: "TASK",
-      sprint: "P-SEB313",
-      epic: "EPIC",
-      comments: [],
-      logs: [],
-    },
-    {
-      id: `issue-3-${id}`,
-      title: "Issue 3",
-      description: "This is a description",
-      status: "IN_PROGRESS",
-      assignee: {
-        id: "assignee_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      reporter: {
-        id: "reporter_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      type: "TASK",
-      sprint: "P-SEB313",
-      epic: "EPIC",
-      comments: [],
-      logs: [],
-    },
-    {
-      id: `issue-4-${id}`,
-      title: "Issue 4",
-      description: "This is a description",
-      status: "DONE",
-      assignee: {
-        id: "assignee_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      reporter: {
-        id: "reporter_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      type: "BUG",
-      sprint: "P-SEB313",
-      epic: "EPIC",
-      comments: [],
-      logs: [],
-    },
-  ];
-
-  const [openAccordion, setOpenAccordion] = useState("");
-
-  useEffect(() => {
-    // Open accordion on mount in order for DND to work.
-    setOpenAccordion(`backlog-${id}`);
-  }, [id]);
-
-  return (
-    <Fragment>
-      <Accordion
-        className="rounded-md pl-2"
-        type="single"
-        value={openAccordion}
-        onValueChange={setOpenAccordion}
-        collapsible
-      >
-        <AccordionItem value={`backlog-${id}`}>
-          <BacklogListHeader issues={issues} />
-          <IssueList sprintId={id} issues={issues} />
-        </AccordionItem>
-      </Accordion>
-    </Fragment>
   );
 };
 

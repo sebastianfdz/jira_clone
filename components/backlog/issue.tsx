@@ -45,16 +45,16 @@ const Issue: React.FC<{
   const inputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
 
-  const { setIssue } = useSelectedIssueContext();
+  const { setIssueId } = useSelectedIssueContext();
 
   const setSelectedIssue = useCallback(() => {
-    setIssue(issue.id);
+    setIssueId(issue.id);
 
     const urlWithQuery =
       pathname + (issue.id ? `?selectedIssue=${issue.id}` : "");
 
     window.history.pushState(null, "", urlWithQuery);
-  }, [issue.id, pathname, setIssue]);
+  }, [issue.id, pathname, setIssueId]);
 
   return (
     <Fragment>
@@ -112,13 +112,13 @@ const Issue: React.FC<{
               <IssueSelectStatus currentStatus={issue.status} />
               <Avatar
                 src={issue.assignee?.avatar ?? null}
-                alt=""
+                alt={`${issue.assignee?.name ?? "Unassigned"} avatar`}
                 className="mx-1"
               />
               <IssueDropdownMenu>
                 <DropdownTrigger
                   asChild
-                  className="rounded-m flex w-16 items-center gap-x-1 bg-opacity-30 px-1.5 py-0.5 text-xs font-semibold text-white focus:ring-2 "
+                  className="rounded-m flex items-center gap-x-1 bg-opacity-30 px-1.5 py-0.5 text-xs font-semibold text-white focus:ring-2 "
                 >
                   <div className="invisible rounded-sm px-2 py-1.5 text-zinc-700 group-hover:visible group-hover:bg-zinc-200 group-hover:hover:bg-zinc-300 [&[data-state=open]]:visible [&[data-state=open]]:bg-slate-700 [&[data-state=open]]:text-white">
                     <BsThreeDots className="sm:text-xl" />

@@ -7,19 +7,20 @@ import { BacklogList } from "./list-backlog";
 import { Fragment } from "react";
 import { SprintList } from "./list-sprint";
 import clsx from "clsx";
+// import { moveItemWithinArray } from "@/utils/helpers";
+import { issues, sprints } from "./mock-data";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
-  const sprints = [{ id: "1" }, { id: "2" }, { id: "3" }];
-  // const { isBrowser } = useBrowser();
   const onDragEnd = (result: DropResult) => {
+    console.log("result", result);
     const {
       destination,
       source,
-      //  draggableId
+      // draggableId
     } = result;
     if (!positionHasChanged(source, destination)) return;
     if (source.droppableId === destination?.droppableId) {
-      // const column = moveItemWithinArray();
+      // const newOrder = moveItemWithinArray();
     }
   };
   return (
@@ -28,10 +29,16 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
         <Fragment>
           {sprints.map((sprint) => (
             <div key={sprint.id} className="my-3">
-              <SprintList {...sprint} />
+              <SprintList
+                {...sprint}
+                issues={issues.filter((issue) => issue.sprint == sprint.id)}
+              />
             </div>
           ))}
-          <BacklogList id={"backlog"} />
+          <BacklogList
+            id={"backlog"}
+            issues={issues.filter((issue) => issue.sprint == null)}
+          />
         </Fragment>
       </DragDropContext>
     </div>

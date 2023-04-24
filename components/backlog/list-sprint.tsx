@@ -12,7 +12,30 @@ import { IssueList } from "./issue-list";
 import { getIssueCountByStatus } from "@/utils/helpers";
 import { IssueStatusCount } from "./issue-status-count";
 
-const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
+const SprintList: React.FC<{ id: string; issues: IssueType[] }> = ({
+  id,
+  issues,
+}) => {
+  return (
+    <Fragment>
+      <Accordion
+        className="rounded-lg bg-zinc-100 p-2"
+        type="single"
+        collapsible
+      >
+        <AccordionItem value={`sprint-${id}`}>
+          <SprintListHeader sprintId={id} issues={issues} />
+          <IssueList sprintId={id} issues={issues} />
+        </AccordionItem>
+      </Accordion>
+    </Fragment>
+  );
+};
+
+const SprintListHeader: React.FC<{ issues: IssueType[]; sprintId: string }> = ({
+  issues,
+  sprintId,
+}) => {
   const [statusCount] = useState(() => getIssueCountByStatus(issues));
 
   return (
@@ -24,10 +47,10 @@ const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
             aria-hidden
           />
           <div className="flex items-center gap-x-2">
-            <div className="text-semibold whitespace-nowrap">SP2023</div>
+            <div className="text-semibold whitespace-nowrap">{sprintId}</div>
             <div className="text-semibold whitespace-nowrap">Sprint 5</div>
             <div className="whitespace-nowrap font-normal text-gray-500">
-              10 Mar - 17 Mar (20 issues)
+              10 Mar - 17 Mar ({issues.length})
             </div>
           </div>
         </Fragment>
@@ -42,118 +65,6 @@ const SprintListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
         </Button>
       </div>
     </div>
-  );
-};
-
-const SprintList: React.FC<{ id: string }> = ({ id }) => {
-  const issues: IssueType[] = [
-    {
-      id: `issue-1-${id}`,
-      title: "Issue 1",
-      description: "This is a description",
-      status: "TODO",
-      assignee: {
-        id: "assignee_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      reporter: {
-        id: "reporter_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      type: "STORY",
-      sprint: "P-SEB313",
-      epic: "EPIC-1",
-      comments: [],
-      logs: [],
-    },
-    {
-      id: `issue-2-${id}`,
-      title: "Issue 2",
-      description: "This is a description",
-      status: "IN_PROGRESS",
-      assignee: {
-        id: "assignee_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      reporter: {
-        id: "reporter_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      type: "TASK",
-      sprint: "P-SEB313",
-      epic: "EPIC",
-      comments: [],
-      logs: [],
-    },
-    {
-      id: `issue-3-${id}`,
-      title: "Issue 3",
-      description: "This is a description",
-      status: "IN_PROGRESS",
-      assignee: {
-        id: "assignee_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      reporter: {
-        id: "reporter_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      type: "TASK",
-      sprint: "P-SEB313",
-      epic: "EPIC",
-      comments: [],
-      logs: [],
-    },
-    {
-      id: `issue-4-${id}`,
-      title: "Issue 4",
-      description: "This is a description",
-      status: "DONE",
-      assignee: {
-        id: "assignee_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      reporter: {
-        id: "reporter_id",
-        name: "Sebastian Garcia",
-        email: "seb.gar@gmail.com",
-        avatar: "https://avatars.githubusercontent.com/u/42552874?v=4",
-      },
-      type: "BUG",
-      sprint: "P-SEB313",
-      epic: "EPIC",
-      comments: [],
-      logs: [],
-    },
-  ];
-
-  return (
-    <Fragment>
-      <Accordion
-        className="rounded-lg bg-zinc-100 p-2"
-        type="single"
-        collapsible
-      >
-        <AccordionItem value={`sprint-${id}`}>
-          <SprintListHeader issues={issues} />
-          <IssueList sprintId={id} issues={issues} />
-        </AccordionItem>
-      </Accordion>
-    </Fragment>
   );
 };
 
