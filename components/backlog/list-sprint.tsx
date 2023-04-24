@@ -23,7 +23,7 @@ const SprintList: React.FC<{ id: string; issues: IssueType[] }> = ({
         type="single"
         collapsible
       >
-        <AccordionItem value={`sprint-${id}`}>
+        <AccordionItem value={id}>
           <SprintListHeader sprintId={id} issues={issues} />
           <IssueList sprintId={id} issues={issues} />
         </AccordionItem>
