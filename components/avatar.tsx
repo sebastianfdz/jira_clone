@@ -12,17 +12,22 @@ const Avatar = ({ src, alt, size = 32, className, ...props }: AvatarProps) => {
   return (
     <Fragment>
       {src ? (
-        <Image
-          className={clsx("rounded-full", className)}
-          src={src}
-          alt={alt}
-          height={size}
-          width={size}
-          {...props}
-        />
+        <div style={{ width: size, height: size }} className={className}>
+          <Image
+            className="rounded-full"
+            src={src}
+            alt={alt}
+            height={size}
+            width={size}
+            {...props}
+          />
+        </div>
       ) : (
         <div
-          className="flex items-center justify-center rounded-full bg-zinc-400 p-1"
+          className={clsx(
+            "flex items-center justify-center rounded-full bg-zinc-400 ",
+            className
+          )}
           style={{ width: size, height: size }}
         >
           <FaUser className="text-white" />
