@@ -27,7 +27,8 @@ const IssueDetails: React.FC<{
 }> = ({ issueId, setIssueId }) => {
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const issueInfo: IssueType = issues.find((issue) => issue.id === issueId)!;
+  const issueInfo: IssueType =
+    issues.find((issue) => issue.id === issueId) ?? ({} as IssueType);
 
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
