@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import clsx from "clsx";
 import {
   Select,
@@ -14,9 +14,8 @@ import {
 import { IssueIcon } from "./issue-icon";
 
 const IssueSelectEpic: React.FC<{
-  children: ReactNode;
   currentEpic: { key: string; title: string };
-}> = ({ currentEpic, children }) => {
+}> = ({ currentEpic }) => {
   const epics: { key: string; title: string }[] = Array.from(
     Array(10).keys()
   ).map((el) => {
@@ -26,23 +25,22 @@ const IssueSelectEpic: React.FC<{
   const [selected, setSelected] = useState<string>(currentEpic.key);
   return (
     <Select onValueChange={setSelected}>
-      <SelectTrigger
-        className={clsx(
-          "flex items-center gap-x-1 rounded-[3px] bg-opacity-30  text-xs font-semibold text-white focus:ring-2"
-        )}
-      >
-        <SelectValue defaultValue={selected}>{children}</SelectValue>
+      <SelectTrigger className="flex items-center gap-x-1 rounded-md bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-zinc-200 focus:ring-2">
+        <SelectValue defaultValue={selected}>
+          <IssueIcon issueType="EPIC" />
+        </SelectValue>
       </SelectTrigger>
       <SelectPortal className="z-10">
         <SelectContent>
           <SelectViewport className="top-10 w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
+            <span className="pl-3 text-xs text-zinc-500">EPICS</span>
             <SelectGroup>
               {epics.map((status) => (
                 <SelectItem
                   key={status.key}
                   value={status.key}
                   className={clsx(
-                    "border-l-[3px] border-transparent py-2 pl-4 text-sm hover:cursor-default  hover:bg-zinc-50 [&[data-state=checked]]:bg-zinc-200"
+                    "border-l-[3px] border-transparent py-2 pl-3 text-sm hover:cursor-default  hover:bg-zinc-50 [&[data-state=checked]]:bg-zinc-200"
                   )}
                 >
                   <div className="flex">
