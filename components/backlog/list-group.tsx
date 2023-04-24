@@ -4,23 +4,32 @@ import {
   type DropResult,
 } from "react-beautiful-dnd";
 import { BacklogList } from "./list-backlog";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import { SprintList } from "./list-sprint";
 import clsx from "clsx";
-// import { moveItemWithinArray } from "@/utils/helpers";
-import { issues, sprints } from "./mock-data";
+import { moveItemWithinArray } from "@/utils/helpers";
+import { issues as _issues, sprints } from "./mock-data";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
+  const [issues, setIssues] = useState(_issues);
   const onDragEnd = (result: DropResult) => {
     console.log("result", result);
-    const {
-      destination,
-      source,
-      // draggableId
-    } = result;
+    const { destination, source, draggableId } = result;
     if (!positionHasChanged(source, destination)) return;
     if (source.droppableId === destination?.droppableId) {
-      // const newOrder = moveItemWithinArray();
+      const column = issues.filter(
+        (el) =>
+          el.sprint ===
+          (source.droppableId == "backlog" ? null : source.droppableId)
+      );
+      const newOrder = moveItemWithinArray(
+        column,
+        source.index,
+        destination.index
+      );
+
+      console.log("oldOrder", column);
+      console.log("newOrder", newOrder);
     }
   };
   return (
