@@ -30,6 +30,7 @@ export type IssueType = {
   assignee: UserType | null;
   reporter: UserType | null;
   title: string;
+  listPosition: number;
   description: string | null;
   sprint: string | null;
   epic: string | null;
