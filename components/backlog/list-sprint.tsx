@@ -50,7 +50,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprintId: string }> = ({
             <div className="text-semibold whitespace-nowrap">{sprintId}</div>
             <div className="text-semibold whitespace-nowrap">Sprint 5</div>
             <div className="whitespace-nowrap font-normal text-gray-500">
-              10 Mar - 17 Mar ({issues.length})
+              10 Mar - 17 Mar ({issues.length} issues)
             </div>
           </div>
         </Fragment>
