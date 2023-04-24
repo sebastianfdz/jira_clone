@@ -16,7 +16,6 @@ import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
 import { usePathname } from "next/navigation";
 import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
-import {} from "@prisma/client";
 
 type UserType = {
   id: string;
