@@ -20,7 +20,7 @@ model Project {
     imageUrl        String?
     admin           String
     createdAt       DateTime  @default(now())
-    updatedAt       DateTime  @updatedAt
+    updatedAt       DateTime? @updatedAt
     deletedAt       DateTime?
     epics           Epic[]
     sprints         Sprint[]
