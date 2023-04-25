@@ -20,11 +20,13 @@ import {
 import { FaChevronUp } from "react-icons/fa";
 import { Avatar } from "../avatar";
 import { issues } from "./mock-data";
+import clsx from "clsx";
 
 const IssueDetails: React.FC<{
   issueId: string;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ issueId, setIssueId }) => {
+  className?: string;
+}> = ({ issueId, setIssueId, className }) => {
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
   const issueInfo: IssueType =
@@ -40,7 +42,10 @@ const IssueDetails: React.FC<{
     <div
       ref={renderContainerRef}
       data-state={issueId ? "open" : "closed"}
-      className="z-10 flex w-full flex-col bg-white  pl-4 [&[data-state=closed]]:hidden"
+      className={clsx(
+        "z-10 flex w-full min-w-max flex-col pl-4 [&[data-state=closed]]:hidden",
+        className
+      )}
     >
       <IssueDetailsHeader issue={issueInfo} setIssueId={setIssueId} />
       <IssueDetailsInfo key={issueId} issue={issueInfo} />
