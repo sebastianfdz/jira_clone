@@ -7,29 +7,25 @@ import { BacklogList } from "./list-backlog";
 import { Fragment, useState } from "react";
 import { SprintList } from "./list-sprint";
 import clsx from "clsx";
-import { moveItemWithinArray } from "@/utils/helpers";
 import { issues as _issues, sprints } from "./mock-data";
+import { type IssueType } from "./issue";
+import { moveItemWithinArray } from "@/utils/helpers";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
-  const [issues, setIssues] = useState(_issues);
+  const [issues, setIssues] = useState(() => _issues);
   const onDragEnd = (result: DropResult) => {
     console.log("result", result);
-    const { destination, source, draggableId } = result;
+    const { destination, source } = result;
     if (!positionHasChanged(source, destination)) return;
     if (source.droppableId === destination?.droppableId) {
-      const column = issues.filter(
-        (el) =>
-          el.sprint ===
-          (source.droppableId == "backlog" ? null : source.droppableId)
-      );
-      const newOrder = moveItemWithinArray(
-        column,
-        source.index,
-        destination.index
-      );
-
-      console.log("oldOrder", column);
-      console.log("newOrder", newOrder);
+      setIssues((prev) => {
+        return reorderIssuesWithinColumn(
+          prev,
+          source.droppableId,
+          source.index,
+          destination.index
+        );
+      });
     }
   };
   return (
@@ -40,13 +36,13 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
             <div key={sprint.id} className="my-3">
               <SprintList
                 {...sprint}
-                issues={issues.filter((issue) => issue.sprint == sprint.id)}
+                issues={issues.filter((issue) => issue.sprint === sprint.id)}
               />
             </div>
           ))}
           <BacklogList
             id={"backlog"}
-            issues={issues.filter((issue) => issue.sprint == null)}
+            issues={issues.filter((issue) => issue.sprint === null)}
           />
         </Fragment>
       </DragDropContext>
@@ -55,6 +51,32 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
 };
 
 ListGroup.displayName = "ListGroup";
+
+function sprintId(id: string) {
+  return id == "backlog" ? null : id;
+}
+
+function reorderIssuesWithinColumn(
+  issues: IssueType[],
+  columnId: string,
+  startIndex: number,
+  endIndex: number
+) {
+  const unaffectedIssues = issues.filter(
+    (issue) => issue.sprint !== sprintId(columnId)
+  );
+  const affectedIssues = getSortedListIssues(issues, columnId);
+  const reordered = moveItemWithinArray(
+    affectedIssues,
+    startIndex,
+    endIndex
+  ) as IssueType[];
+
+  return [
+    ...unaffectedIssues,
+    ...reordered.map((issue, index) => ({ ...issue, listPosition: index })),
+  ];
+}
 
 function positionHasChanged(
   source: DraggableLocation,
@@ -67,21 +89,11 @@ function positionHasChanged(
   return !isSameList || !isSamePosition;
 }
 
-// function cloneAndReorder(
-//   list: unknown[],
-//   startIndex: number,
-//   endIndex: number
-// ) {
-//   const listClone = [...list];
-//   const [removed] = listClone.splice(startIndex, 1);
-//   listClone.splice(endIndex, 0, removed);
-//   return listClone;
-// }
-
-// function getSortedListIssues(issues, columnId) {
-//   issues
-//     .filter((issue) => issue.columnId === columnId)
-//     .sort((a, b) => a.listPosition - b.listPosition);
-// }
+function getSortedListIssues(issues: IssueType[], listId: string) {
+  const clone = [...issues];
+  return clone
+    .filter((issue) => issue.sprint === sprintId(listId))
+    .sort((a, b) => a.listPosition - b.listPosition);
+}
 
 export { ListGroup };
