@@ -15,14 +15,20 @@ const Backlog: React.FC<{
 
   return (
     <Split
-      sizes={issueId ? [60, 40] : [100, 0]}
+      sizes={issueId ? [50, 50] : [100, 0]}
       gutterSize={issueId ? 2 : 0}
-      className="flex h-full"
-      minSize={issueId ? 100 : 0}
+      className="flex h-full w-full overflow-y-auto "
+      minSize={0}
     >
-      <ListGroup className={clsx(issueId && "pr-4")} />
+      <ListGroup
+        className={clsx(issueId && "max-h-[80vh] overflow-y-auto  pr-4")}
+      />
       {issueId ? (
-        <IssueDetails setIssueId={setIssueId} issueId={issueId} />
+        <IssueDetails
+          className="max-h-[80vh] w-full overflow-y-auto "
+          setIssueId={setIssueId}
+          issueId={issueId}
+        />
       ) : null}
     </Split>
   );
