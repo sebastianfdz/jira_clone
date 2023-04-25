@@ -46,7 +46,7 @@ const Issue: React.FC<{
   const inputRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
 
-  const { setIssueId } = useSelectedIssueContext();
+  const { setIssueId, issueId } = useSelectedIssueContext();
 
   const setSelectedIssue = useCallback(() => {
     setIssueId(issue.id);
@@ -63,13 +63,14 @@ const Issue: React.FC<{
         {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
           <div
             role="button"
+            data-state={issueId == issue.id ? "selected" : "not-selected"}
             onClick={setSelectedIssue}
             ref={innerRef}
             {...draggableProps}
             {...dragHandleProps}
             className={clsx(
               isDragging ? "bg-blue-100" : "bg-white",
-              "group flex w-full min-w-max items-center justify-between border-[0.3px] border-gray-300  px-3  py-1.5 text-sm hover:bg-gray-50"
+              "group flex w-full min-w-max items-center justify-between border-[0.3px] border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 [&[data-state=selected]]:bg-blue-100"
             )}
           >
             <div
