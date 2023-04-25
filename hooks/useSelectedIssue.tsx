@@ -1,7 +1,14 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { type ReactNode, createContext, useContext, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import {
+  type ReactNode,
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from "react";
 
 type SelectedIssueContextProps = {
   issueId: string | null;
@@ -20,9 +27,22 @@ export const SelectedIssueProvider = ({
   children: ReactNode;
 }) => {
   const searchParams = useSearchParams();
+  const pathname = usePathname();
   const [issueId, setIssueId] = useState<string | null>(
     searchParams.get("selectedIssue")
   );
+
+  const setSelectedIssueUrl = useCallback(
+    (id: string | null) => {
+      const urlWithQuery = pathname + (id ? `?selectedIssue=${id}` : "");
+      window.history.pushState(null, "", urlWithQuery);
+    },
+    [pathname]
+  );
+
+  useEffect(() => {
+    setSelectedIssueUrl(issueId);
+  }, [issueId, setSelectedIssueUrl]);
 
   return (
     <SelectedIssueContext.Provider value={{ issueId, setIssueId }}>
