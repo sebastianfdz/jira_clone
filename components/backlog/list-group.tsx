@@ -9,7 +9,7 @@ import { SprintList } from "./list-sprint";
 import clsx from "clsx";
 import { issues as _issues, sprints } from "./mock-data";
 import { type IssueType } from "./issue";
-import { moveItemWithinArray } from "@/utils/helpers";
+import { insertItemIntoArray, moveItemWithinArray } from "@/utils/helpers";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const [issues, setIssues] = useState(() => _issues);
@@ -19,9 +19,19 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
     if (!positionHasChanged(source, destination)) return;
     if (source.droppableId === destination?.droppableId) {
       setIssues((prev) => {
-        return reorderIssuesWithinColumn(
+        return moveIssueWithinColumn(
           prev,
           source.droppableId,
+          source.index,
+          destination.index
+        );
+      });
+    } else if (destination) {
+      setIssues((prev) => {
+        return moveIssueBetweenColumns(
+          prev,
+          source.droppableId,
+          destination.droppableId,
           source.index,
           destination.index
         );
@@ -56,7 +66,7 @@ function sprintId(id: string) {
   return id == "backlog" ? null : id;
 }
 
-function reorderIssuesWithinColumn(
+function moveIssueWithinColumn(
   issues: IssueType[],
   columnId: string,
   startIndex: number,
@@ -76,6 +86,44 @@ function reorderIssuesWithinColumn(
     ...unaffectedIssues,
     ...reordered.map((issue, index) => ({ ...issue, listPosition: index })),
   ];
+}
+
+function moveIssueBetweenColumns(
+  issues: IssueType[],
+  startColumnId: string,
+  endColumnId: string,
+  startIndex: number,
+  endIndex: number
+) {
+  // TODO
+  const unaffectedIssues = issues.filter(
+    (issue) =>
+      issue.sprint !== sprintId(startColumnId) &&
+      issue.sprint !== sprintId(endColumnId)
+  );
+
+  const startColumn = getSortedListIssues(issues, startColumnId);
+  const itemToInsert = {
+    ...startColumn[startIndex],
+    sprint: sprintId(endColumnId),
+  };
+  startColumn.splice(startIndex, 1);
+
+  const endColumn = getSortedListIssues(issues, endColumnId);
+  const newEndColumn = insertItemIntoArray(
+    endColumn,
+    itemToInsert,
+    endIndex
+  ) as IssueType[];
+
+  return [
+    ...unaffectedIssues,
+    ...startColumn.map((issue, index) => ({
+      ...issue,
+      listPosition: index,
+    })),
+    ...newEndColumn.map((issue, index) => ({ ...issue, listPosition: index })),
+  ] as IssueType[];
 }
 
 function positionHasChanged(
