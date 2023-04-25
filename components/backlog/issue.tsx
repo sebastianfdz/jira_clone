@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useState, useRef, useCallback } from "react";
+import React, { Fragment, useState, useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
 import { IssueIcon } from "../issue-icon";
 import { Button } from "../ui/button";
@@ -14,7 +14,6 @@ import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
 import { IssueSelectStatus } from "../issue-select-status";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
-import { usePathname } from "next/navigation";
 import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 
 type UserType = {
@@ -44,18 +43,7 @@ const Issue: React.FC<{
 }> = ({ index, issue }) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const pathname = usePathname();
-
   const { setIssueId, issueId } = useSelectedIssueContext();
-
-  const setSelectedIssue = useCallback(() => {
-    setIssueId(issue.id);
-
-    const urlWithQuery =
-      pathname + (issue.id ? `?selectedIssue=${issue.id}` : "");
-
-    window.history.pushState(null, "", urlWithQuery);
-  }, [issue.id, pathname, setIssueId]);
 
   return (
     <Fragment>
@@ -64,7 +52,7 @@ const Issue: React.FC<{
           <div
             role="button"
             data-state={issueId == issue.id ? "selected" : "not-selected"}
-            onClick={setSelectedIssue}
+            onClick={() => setIssueId(issue.id)}
             ref={innerRef}
             {...draggableProps}
             {...dragHandleProps}
