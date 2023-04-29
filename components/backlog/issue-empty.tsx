@@ -7,7 +7,7 @@ import { MdCheck, MdClose } from "react-icons/md";
 
 const EmtpyIssue: React.FC<{
   className?: string;
-  onCreate: () => void;
+  onCreate: (name: string, type: IssueType["type"]) => void;
   onCancel: () => void;
 }> = ({ onCreate, onCancel, className, ...props }) => {
   const [name, setName] = useState("");
@@ -27,8 +27,7 @@ const EmtpyIssue: React.FC<{
   function handleCreateIssue(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
-      onCreate();
-      // createissue
+      onCreate(name, type);
     }
   }
 
@@ -62,7 +61,10 @@ const EmtpyIssue: React.FC<{
         <Button className="aspect-square shadow-md" onClick={() => onCancel()}>
           <MdClose className="text-sm" />
         </Button>
-        <Button className="aspect-square shadow-md" onClick={() => onCreate()}>
+        <Button
+          className="aspect-square shadow-md"
+          onClick={() => onCreate(name, type)}
+        >
           <MdCheck className="text-sm" />
         </Button>
       </div>
