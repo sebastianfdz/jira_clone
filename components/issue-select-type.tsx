@@ -5,6 +5,7 @@ import {
   Select,
   SelectContent,
   SelectGroup,
+  SelectIcon,
   SelectItem,
   SelectPortal,
   SelectTrigger,
@@ -12,26 +13,38 @@ import {
   SelectViewport,
 } from "@/components/ui/select";
 import { IssueIcon } from "./issue-icon";
+import { FaChevronDown } from "react-icons/fa";
 
-const IssueSelectType: React.FC<{ currentType: IssueType["type"] }> = ({
-  currentType,
-}) => {
+const IssueSelectType: React.FC<{
+  currentType: IssueType["type"];
+  dropdownIcon?: boolean;
+  onSelect?: (type: IssueType["type"]) => void;
+}> = ({ currentType, dropdownIcon, onSelect }) => {
   const types: { value: IssueType["type"]; color: string }[] = [
     { value: "STORY", color: "#84cc16" },
     { value: "TASK", color: "#4bade8" },
     { value: "BUG", color: "#ef4444" },
   ];
   const [selected, setSelected] = useState(currentType);
+
+  function handleSelect(selected: string) {
+    const _selected = selected as IssueType["type"];
+    if (onSelect) {
+      onSelect(_selected);
+    }
+    setSelected(_selected);
+  }
   return (
-    <Select
-      onValueChange={
-        setSelected as React.Dispatch<React.SetStateAction<string>>
-      }
-    >
+    <Select onValueChange={handleSelect}>
       <SelectTrigger className="flex items-center gap-x-1 rounded-md bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-zinc-200 focus:ring-2">
         <SelectValue>
           <IssueIcon issueType={selected} />
         </SelectValue>
+        {dropdownIcon ? (
+          <SelectIcon>
+            <FaChevronDown className="text-zinc-500" />
+          </SelectIcon>
+        ) : null}
       </SelectTrigger>
       <SelectPortal className="z-10">
         <SelectContent className="">
