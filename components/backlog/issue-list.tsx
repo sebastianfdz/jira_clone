@@ -7,6 +7,7 @@ import { Button } from "../ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IssueSelectType } from "../issue-select-type";
 import clsx from "clsx";
+import { MdCheck, MdClose } from "react-icons/md";
 
 const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
   sprintId,
@@ -39,6 +40,7 @@ const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
         <AiOutlinePlus className="text-sm" />
         <span className="text-sm">Create Issue</span>
       </Button>
+
       <EmtpyIssue
         data-state={isCreating ? "open" : "closed"}
         onFinish={() => setIsCreating(false)}
@@ -78,7 +80,6 @@ const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
         "relative flex items-center gap-x-2 border-2 border-blue-400 bg-white p-1.5",
         className
       )}
-      // onBlur={() => onFinish()}
     >
       <IssueSelectType
         currentType={type}
@@ -94,6 +95,14 @@ const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
         onChange={(e) => setName(e.currentTarget.value)}
         onKeyDown={handleCreateIssue}
       />
+      <div className="absolute right-2 z-10 flex gap-x-1">
+        <Button className="aspect-square shadow-md" onClick={() => onFinish()}>
+          <MdClose className="text-sm" />
+        </Button>
+        <Button className="aspect-square shadow-md" onClick={() => onFinish()}>
+          <MdCheck className="text-sm" />
+        </Button>
+      </div>
     </div>
   );
 };
