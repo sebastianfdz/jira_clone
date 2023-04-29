@@ -59,12 +59,12 @@ enum IssueStatus {
 model Issue {
     id          String      @id @default(uuid())
     name        String
-    description String      @default("")
+    description String?     @default("")
     status      IssueStatus @default(TODO)
     reporter    String
-    assignee    String
+    assignee    String?
     createdAt   DateTime    @default(now())
-    updatedAt   DateTime    @updatedAt
+    updatedAt   DateTime?   @updatedAt
     deletedAt   DateTime?
     comments    Comment[]
     logs        Log[]
