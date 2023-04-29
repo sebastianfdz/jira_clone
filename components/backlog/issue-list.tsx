@@ -43,18 +43,19 @@ const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
 
       <EmtpyIssue
         data-state={isCreating ? "open" : "closed"}
-        onFinish={() => setIsCreating(false)}
+        onCreate={() => setIsCreating(false)}
+        onCancel={() => setIsCreating(false)}
         className="[&[data-state=closed]]:hidden"
       />
     </AccordionContent>
   );
 };
 
-const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
-  onFinish,
-  className,
-  ...props
-}) => {
+const EmtpyIssue: React.FC<{
+  className?: string;
+  onCreate: () => void;
+  onCancel: () => void;
+}> = ({ onCreate, onCancel, className, ...props }) => {
   const [name, setName] = useState("");
   const [type, setType] = useState<IssueType["type"]>("TASK");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -72,7 +73,7 @@ const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
   function handleCreateIssue(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
-      onFinish();
+      onCreate();
       // createissue
     }
   }
@@ -98,16 +99,16 @@ const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
         autoFocus
         type="text"
         placeholder="What needs to be done?"
-        className="w-full px-2 text-sm focus:outline-none"
+        className=" w-full pl-2 pr-20 text-sm focus:outline-none"
         value={name}
         onChange={(e) => setName(e.currentTarget.value)}
         onKeyDown={handleCreateIssue}
       />
       <div className="absolute right-2 z-10 flex gap-x-1">
-        <Button className="aspect-square shadow-md" onClick={() => onFinish()}>
+        <Button className="aspect-square shadow-md" onClick={() => onCancel()}>
           <MdClose className="text-sm" />
         </Button>
-        <Button className="aspect-square shadow-md" onClick={() => onFinish()}>
+        <Button className="aspect-square shadow-md" onClick={() => onCreate()}>
           <MdCheck className="text-sm" />
         </Button>
       </div>
