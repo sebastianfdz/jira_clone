@@ -12,7 +12,7 @@ datasource db {
 }
 
 model Project {
-    id              String    @id @default(uuid())
+    id              String    @id
     name            String
     key             String    @unique
     projectLead     String
@@ -22,25 +22,7 @@ model Project {
     createdAt       DateTime  @default(now())
     updatedAt       DateTime? @updatedAt
     deletedAt       DateTime?
-    epics           Epic[]
     sprints         Sprint[]
-}
-
-model Epic {
-    id          String    @id @default(uuid())
-    name        String
-    description String    @default("")
-    projectId   String
-    color       String
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
-    deletedAt   DateTime?
-    comments    Comment[]
-    logs        Log[]
-    issues      Issue[]
-    Project     Project   @relation(fields: [projectId], references: [id])
-
-    @@index([projectId])
 }
 
 enum IssueType {
@@ -57,24 +39,23 @@ enum IssueStatus {
 }
 
 model Issue {
-    id          String      @id @default(uuid())
+    id          String      @id
     name        String
     description String?     @default("")
     status      IssueStatus @default(TODO)
+    type        IssueType   @default(TASK)
     reporter    String
     assignee    String?
+    parentId    String?
+    sprintId    String?
+    isActive    Boolean     @default(true)
     createdAt   DateTime    @default(now())
     updatedAt   DateTime?   @updatedAt
     deletedAt   DateTime?
     comments    Comment[]
     logs        Log[]
-    type        IssueType   @default(TASK)
-    Epic        Epic?       @relation(fields: [epicId], references: [id])
     Sprint      Sprint?     @relation(fields: [sprintId], references: [id])
-    epicId      String?
-    sprintId    String?
 
-    @@index([epicId])
     @@index([sprintId])
 }
 
@@ -108,14 +89,11 @@ model Comment {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    epicId    String?
     issueId   String?
     logId     String?
-    Epic      Epic?     @relation(fields: [epicId], references: [id])
     Issue     Issue?    @relation(fields: [issueId], references: [id])
 
     @@index([author])
-    @@index([epicId])
     @@index([issueId])
 }
 
@@ -126,12 +104,9 @@ model Log {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    epicId    String?
     issueId   String?
-    Epic      Epic?     @relation(fields: [epicId], references: [id])
     Issue     Issue?    @relation(fields: [issueId], references: [id])
 
     @@index([author])
-    @@index([epicId])
     @@index([issueId])
 }
