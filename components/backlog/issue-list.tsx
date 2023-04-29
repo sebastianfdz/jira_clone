@@ -60,10 +60,14 @@ const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    focusInput();
+  }, [props]);
+
+  function focusInput() {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, [props]);
+  }
 
   function handleCreateIssue(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
@@ -84,10 +88,14 @@ const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
       <IssueSelectType
         currentType={type}
         dropdownIcon
-        onSelect={(type) => setType(type)}
+        onSelect={(type) => {
+          setType(type);
+          setTimeout(() => focusInput(), 50);
+        }}
       />
       <input
         ref={inputRef}
+        autoFocus
         type="text"
         placeholder="What needs to be done?"
         className="w-full px-2 text-sm focus:outline-none"
