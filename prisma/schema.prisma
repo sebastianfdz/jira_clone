@@ -50,21 +50,27 @@ enum IssueType {
     EPIC
 }
 
+enum IssueStatus {
+    TODO
+    IN_PROGRESS
+    DONE
+}
+
 model Issue {
-    id          String    @id @default(uuid())
+    id          String      @id @default(uuid())
     name        String
-    description String    @default("")
-    status      String    @default("BACKLOG")
+    description String      @default("")
+    status      IssueStatus @default(TODO)
     reporter    String
     assignee    String
-    createdAt   DateTime  @default(now())
-    updatedAt   DateTime  @updatedAt
+    createdAt   DateTime    @default(now())
+    updatedAt   DateTime    @updatedAt
     deletedAt   DateTime?
     comments    Comment[]
     logs        Log[]
-    type        IssueType @default(TASK)
-    Epic        Epic?     @relation(fields: [epicId], references: [id])
-    Sprint      Sprint?   @relation(fields: [sprintId], references: [id])
+    type        IssueType   @default(TASK)
+    Epic        Epic?       @relation(fields: [epicId], references: [id])
+    Sprint      Sprint?     @relation(fields: [sprintId], references: [id])
     epicId      String?
     sprintId    String?
 
