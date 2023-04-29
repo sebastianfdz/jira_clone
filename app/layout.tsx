@@ -1,7 +1,7 @@
 "use client";
 
 import "@/styles/globals.css";
-import { ClientProvider } from "./trpcProvider";
+import { ClientProvider } from "./clientProvider";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (

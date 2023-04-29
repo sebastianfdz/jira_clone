@@ -6,7 +6,6 @@ import { Issue, type IssueType } from "./issue";
 import { Button } from "../ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { IssueSelectType } from "../issue-select-type";
-import { api } from "@/utils/api";
 import clsx from "clsx";
 
 const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
@@ -54,7 +53,6 @@ const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
   className,
   ...props
 }) => {
-  const { mutate: createIssue } = api.issues.create.useMutation();
   const [name, setName] = useState("");
   const [type, setType] = useState<IssueType["type"]>("TASK");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -68,20 +66,8 @@ const EmtpyIssue: React.FC<{ className?: string; onFinish: () => void }> = ({
   function handleCreateIssue(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
-      createIssue(
-        {
-          name,
-          type,
-        },
-        {
-          onSuccess: () => {
-            console.log("success");
-            setName("");
-            setType("TASK");
-            onFinish();
-          },
-        }
-      );
+      onFinish();
+      // createissue
     }
   }
 
