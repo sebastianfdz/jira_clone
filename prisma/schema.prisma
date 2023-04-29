@@ -12,9 +12,9 @@ datasource db {
 }
 
 model Project {
-    id              String    @id
-    name            String
+    id              String    @id @default(uuid())
     key             String    @unique
+    name            String
     projectLead     String
     defaultAssignee String?
     imageUrl        String?
@@ -39,7 +39,8 @@ enum IssueStatus {
 }
 
 model Issue {
-    id          String      @id
+    id          String      @id @default(uuid())
+    key         String      @unique
     name        String
     description String?     @default("")
     status      IssueStatus @default(TODO)
@@ -49,7 +50,7 @@ model Issue {
     parentId    String?
     sprintId    String?
     projectId   String
-    isActive    Boolean     @default(true)
+    isDeleted   Boolean     @default(false)
     createdAt   DateTime    @default(now())
     updatedAt   DateTime?   @updatedAt
     deletedAt   DateTime?
