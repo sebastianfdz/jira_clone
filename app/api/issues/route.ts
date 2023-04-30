@@ -23,7 +23,8 @@ export type PostIssueResponse = { issue: Issue };
 export async function GET() {
   const issues = await prisma.issue.findMany();
   const active_issues = issues.filter((issue) => !issue.isDeleted);
-  return NextResponse.json<GetIssuesResponse>({ issues: active_issues });
+  // return NextResponse.json<GetIssuesResponse>({ issues: active_issues });
+  return NextResponse.json({ issues: active_issues });
 }
 
 export async function POST(req: NextRequest) {
@@ -54,5 +55,6 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  return NextResponse.json<PostIssueResponse>({ issue });
+  // return NextResponse.json<PostIssueResponse>({ issue });
+  return NextResponse.json({ issue });
 }

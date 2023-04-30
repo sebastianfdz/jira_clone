@@ -12,5 +12,6 @@ export async function GET() {
       key: "CLONE",
     },
   });
-  return NextResponse.json<GetProjectResponse>({ project });
+  // return NextResponse.json<GetProjectResponse>({ project });
+  return NextResponse.json({ project });
 }

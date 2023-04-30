@@ -16,5 +16,6 @@ export async function GET(
       key: issue_key,
     },
   });
-  return NextResponse.json<GetIssueDetailsResponse>({ issue });
+  // return NextResponse.json<GetIssueDetailsResponse>({ issue });
+  return NextResponse.json({ issue });
 }

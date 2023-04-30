@@ -19,10 +19,12 @@ export async function POST() {
       name: `SPRINT-${k}`,
     },
   });
-  return NextResponse.json<PostSprintResponse>({ sprint });
+  // return NextResponse.json<PostSprintResponse>({ sprint });
+  return NextResponse.json({ sprint });
 }
 
 export async function GET() {
   const sprints = await prisma.sprint.findMany();
-  return NextResponse.json<GetSprintsResponse>({ sprints });
+  // return NextResponse.json<GetSprintsResponse>({ sprints });
+  return NextResponse.json({ sprints });
 }

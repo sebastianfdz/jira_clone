@@ -58,5 +58,6 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
     },
   });
 
-  return NextResponse.json<PatchSprintResponse>({ sprint });
+  // return NextResponse.json<PatchSprintResponse>({ sprint });
+  return NextResponse.json({ sprint });
 }
