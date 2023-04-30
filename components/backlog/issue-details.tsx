@@ -139,7 +139,11 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
   return (
-    <Accordion className="my-3 rounded-[3px] border" type="single" collapsible>
+    <Accordion
+      className="my-3 w-min min-w-full rounded-[3px] border"
+      type="single"
+      collapsible
+    >
       <AccordionItem value={`details-${issue.id ?? 0}`}>
         <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-zinc-100 [&[data-state=open]>svg]:rotate-180 [&[data-state=open]]:border-b">
           <div className="flex items-center gap-x-1">
