@@ -2,15 +2,15 @@
 import { Droppable } from "react-beautiful-dnd";
 import { AccordionContent } from "../ui/accordion";
 import { Fragment, useState } from "react";
-import { Issue, type IssueType } from "./issue";
+import { Issue } from "./issue";
 import { Button } from "../ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { EmtpyIssue } from "./issue-empty";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
-import { type PostIssueBody } from "@/app/api/issues/route";
+import { type Issue as IssueType } from "@prisma/client";
 
-const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
+const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   sprintId,
   issues,
 }) => {
@@ -18,29 +18,41 @@ const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
     ["issues"],
     api.issues.postIssue
   );
+  const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
-  // const [isCreating, setIsCreating] = useState(false);
 
   function handleCreateIssue({
     name,
     type,
   }: {
     name: string;
-    type: PostIssueBody["type"];
+    type: IssueType["type"];
   }) {
-    const reporter = "guest_user"; // TODO: get from auth
+    const reporter = {
+      id: "1",
+      name: "John Doe",
+      email: "jon@doe.com",
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
+    }; // TODO: get from auth
+    const listPosition =
+      issues.filter((issue) => issue.sprintId === sprintId).length + 1;
     createIssue(
-      { name, type, sprintId, reporter },
+      { name, type, sprintId, reporter, listPosition },
       {
         onSuccess: () => {
           setIsEditing(false);
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          queryClient.invalidateQueries(["issues"]);
+        },
+        onError: (error) => {
+          console.error("Eroror => ", error);
         },
       }
     );
   }
   return (
     <AccordionContent className="pt-2">
-      <Droppable key={sprintId} droppableId={sprintId}>
+      <Droppable key={sprintId} droppableId={sprintId ?? "backlog"}>
         {({ droppableProps, innerRef, placeholder }) => (
           <Fragment>
             <div {...droppableProps} ref={innerRef}>
