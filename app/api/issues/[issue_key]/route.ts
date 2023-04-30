@@ -11,12 +11,10 @@ export async function GET(
   { params }: { params: { issue_key: string } }
 ) {
   const { issue_key } = params;
-  const issue: GetIssueDetailsResponse["issue"] = await prisma.issue.findUnique(
-    {
-      where: {
-        key: issue_key,
-      },
-    }
-  );
-  return NextResponse.json({ issue });
+  const issue = await prisma.issue.findUnique({
+    where: {
+      key: issue_key,
+    },
+  });
+  return NextResponse.json<GetIssueDetailsResponse>({ issue });
 }
