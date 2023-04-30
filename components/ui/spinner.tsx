@@ -1,11 +1,20 @@
-const Spinner = () => {
+import clsx from "clsx";
+
+const Spinner: React.FC<{ size: "sm" | "md" | "lg"; white?: boolean }> = ({
+  size,
+  white,
+}) => {
   return (
     <div
       aria-label="loading"
-      className="absolute bottom-1/2 right-1/2  translate-x-1/2 translate-y-1/2 transform "
-    >
-      <div className="h-12 w-12 animate-spin rounded-full border-4 border-solid border-blue-500 border-t-transparent"></div>
-    </div>
+      className={clsx(
+        size === "sm" && "h-6 w-6",
+        size === "md" && "h-8 w-8",
+        size === "lg" && "h-12 w-12",
+        white ? "border-white" : "border-blue-500",
+        "animate-spin rounded-full border-4 border-solid border-t-transparent"
+      )}
+    />
   );
 };
 
