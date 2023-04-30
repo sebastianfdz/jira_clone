@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useLayoutEffect } from "react";
 import { type Project } from "@prisma/client";
 import Split from "react-split";
 import { ListGroup } from "./list-group";
@@ -13,24 +13,36 @@ const Backlog: React.FC<{
 }> = ({}) => {
   const { issueId, setIssueId } = useSelectedIssueContext();
 
+  const renderContainerRef = React.useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (!renderContainerRef.current) return;
+    const calculatedHeight = renderContainerRef.current.offsetTop;
+    renderContainerRef.current.style.height = `calc(100vh - ${calculatedHeight}px)`;
+  }, []);
+
   return (
-    <Split
-      sizes={issueId ? [50, 50] : [100, 0]}
-      gutterSize={issueId ? 2 : 0}
-      className="flex h-full w-full overflow-y-auto "
-      minSize={0}
-    >
-      <ListGroup
-        className={clsx(issueId && "max-h-[80vh] overflow-y-auto  pr-4")}
-      />
-      {issueId ? (
-        <IssueDetails
-          className="max-h-[80vh] w-full overflow-y-auto "
-          setIssueId={setIssueId}
-          issueId={issueId}
+    <div ref={renderContainerRef} className="overflow-y-auto">
+      <Split
+        sizes={issueId ? [80, 20] : [100, 0]}
+        gutterSize={issueId ? 2 : 0}
+        className="flex w-full overflow-y-auto "
+        minSize={0}
+      >
+        <ListGroup
+          className={clsx(
+            issueId && "max-h-[80vh] w-full overflow-y-auto pb-5 pr-4"
+          )}
         />
-      ) : null}
-    </Split>
+        {issueId ? (
+          <IssueDetails
+            className="max-h-[80vh] w-full overflow-y-auto"
+            setIssueId={setIssueId}
+            issueId={issueId}
+          />
+        ) : null}
+      </Split>
+    </div>
   );
 };
 
