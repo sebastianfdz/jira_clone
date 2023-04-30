@@ -3,7 +3,7 @@ import { BsBookmarkFill, BsFillRecordFill } from "react-icons/bs";
 import { FaCheck } from "react-icons/fa";
 import { HiLightningBolt } from "react-icons/hi";
 import clsx from "clsx";
-import { type IssueType } from "./backlog/issue";
+import { type Issue as IssueType } from "@prisma/client";
 
 type IssueIconProps = {
   issueType: IssueType["type"];

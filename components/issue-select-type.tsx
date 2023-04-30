@@ -1,6 +1,6 @@
 import { useState } from "react";
 import clsx from "clsx";
-import { type IssueType } from "@/components/backlog/issue";
+import { type Issue as IssueType } from "@prisma/client";
 import {
   Select,
   SelectContent,

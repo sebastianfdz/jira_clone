@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import clsx from "clsx";
-import { type IssueType } from "@/components/backlog/issue";
+import { type Issue as IssueType } from "@prisma/client";
 import { NotImplemented } from "@/components/not-implemented";
 import {
   Select,

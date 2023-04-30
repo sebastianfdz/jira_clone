@@ -1,6 +1,6 @@
 import { Button } from "../ui/button";
 import { IssueSelectType } from "../issue-select-type";
-import { type IssueType } from "./issue";
+import { type Issue as IssueType } from "@prisma/client";
 import { IssueSelectEpic } from "../issue-select-epic";
 
 const IssuePath: React.FC<{
@@ -10,18 +10,18 @@ const IssuePath: React.FC<{
   return (
     <div className="flex gap-x-3">
       <div
-        data-state={issue.epic ? "epic" : "not-epic"}
+        data-state={issue.parentId ? "epic" : "not-epic"}
         className="flex items-center [&[data-state=not-epic]]:hidden"
       >
         <IssueSelectEpic
           currentEpic={{ key: "P-SEBB-1", title: "Epic title 1" }}
         />
         <Button
-          onClick={() => setIssueId(issue.epic)}
+          onClick={() => setIssueId(issue.parentId)}
           customColors
           className=" bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
         >
-          <span className="whitespace-nowrap">{issue.epic}</span>
+          <span className="whitespace-nowrap">{issue.parentId}</span>
         </Button>
       </div>
       <span className="py-1.5 text-zinc-500">/</span>

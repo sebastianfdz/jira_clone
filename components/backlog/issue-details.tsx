@@ -10,7 +10,7 @@ import { AiOutlineLike } from "react-icons/ai";
 import { IssuePath } from "./issue-path";
 import { LightningIcon } from "../icons";
 import { IssueSelectStatus } from "../issue-select-status";
-import { type IssueType } from "./issue";
+import { type Issue as IssueType } from "@prisma/client";
 import {
   Accordion,
   AccordionContent,
@@ -19,18 +19,21 @@ import {
 } from "../ui/accordion";
 import { FaChevronUp } from "react-icons/fa";
 import { Avatar } from "../avatar";
-import { issues } from "./mock-data";
+// import { issues } from "./mock-data";
 import clsx from "clsx";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/utils/api";
 
 const IssueDetails: React.FC<{
   issueId: string;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
   className?: string;
 }> = ({ issueId, setIssueId, className }) => {
+  const { data: issues } = useQuery(["issues"], api.issues.getIssues);
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
   const issueInfo: IssueType =
-    issues.find((issue) => issue.id === issueId) ?? ({} as IssueType);
+    issues?.find((issue) => issue.id === issueId) ?? ({} as IssueType);
 
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
@@ -101,7 +104,7 @@ const IssueDetailsHeader: React.FC<{
 const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
   return (
     <Fragment>
-      <h1>{issue.title}</h1>
+      <h1>{issue.name}</h1>
       <div>[attach_button][add_child_button][link_issue_button]</div>
       <div className="relative flex items-center gap-x-3">
         <IssueSelectStatus currentStatus={issue.status} variant="lg" />
@@ -177,7 +180,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
           <div className="my-4 grid grid-cols-3 items-center">
             <span className="text-sm font-semibold text-zinc-600">Sprint</span>
             <div className="flex items-center">
-              <span className="text-sm">{issue.sprint ?? "None"}</span>
+              <span className="text-sm">{issue.sprintId ?? "None"}</span>
             </div>
           </div>
           <div className="my-2 grid grid-cols-3  items-center">
