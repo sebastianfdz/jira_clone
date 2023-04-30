@@ -5,6 +5,11 @@ generator client {
     provider = "prisma-client-js"
 }
 
+generator json {
+    provider = "prisma-json-types-generator"
+    // namespace = "PrismaJson"
+}
+
 datasource db {
     provider     = "mysql"
     url          = env("DATABASE_URL")
@@ -45,8 +50,9 @@ model Issue {
     status       IssueStatus @default(TODO)
     type         IssueType   @default(TASK)
     listPosition Int
-    reporter     String
-    assignee     String?
+    /// [MyType]
+    reporter     Json
+    assignee     Json
     parentId     String?
     sprintId     String?
     isDeleted    Boolean     @default(false)
@@ -58,6 +64,14 @@ model Issue {
     Sprint       Sprint?     @relation(fields: [sprintId], references: [id])
 
     @@index([sprintId])
+}
+
+model User {
+    id        String  @id @default(uuid())
+    email     String  @unique
+    firstName String
+    lastName  String
+    avatar    String?
 }
 
 enum SprintStatus {
