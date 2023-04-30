@@ -22,7 +22,6 @@ model Project {
     createdAt       DateTime  @default(now())
     updatedAt       DateTime? @updatedAt
     deletedAt       DateTime?
-    sprints         Sprint[]
 }
 
 enum IssueType {
@@ -71,7 +70,6 @@ model Sprint {
     key         String       @unique
     name        String
     description String       @default("")
-    projectId   String
     startDate   DateTime
     endDate     DateTime
     createdAt   DateTime     @default(now())
@@ -79,9 +77,6 @@ model Sprint {
     deletedAt   DateTime?
     status      SprintStatus @default(PENDING)
     issues      Issue[]
-    Project     Project      @relation(fields: [projectId], references: [id])
-
-    @@index([projectId])
 }
 
 model Comment {
