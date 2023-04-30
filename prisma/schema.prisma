@@ -50,8 +50,9 @@ model Issue {
     status       IssueStatus @default(TODO)
     type         IssueType   @default(TASK)
     listPosition Int
-    /// [MyType]
+    /// [UserType]
     reporter     Json
+    /// [UserType]
     assignee     Json
     parentId     String?
     sprintId     String?
