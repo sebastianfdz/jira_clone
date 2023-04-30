@@ -53,7 +53,7 @@ model Issue {
     /// [UserType]
     reporter     Json
     /// [UserType]
-    assignee     Json
+    assignee     Json?
     parentId     String?
     sprintId     String?
     isDeleted    Boolean     @default(false)
