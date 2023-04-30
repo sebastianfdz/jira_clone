@@ -1,3 +1,4 @@
+"use client";
 import { BacklogHeader } from "@/components/backlog/header";
 import { Container } from "@/components/ui/container";
 import { SelectedIssueProvider } from "@/hooks/useSelectedIssue";
