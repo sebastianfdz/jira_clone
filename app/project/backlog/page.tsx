@@ -16,7 +16,12 @@ const BacklogPage = () => {
   // const project = await getProject();
   const { data: project, isLoading } = useQuery(
     ["project"],
-    api.project.getProject
+    api.project.getProject,
+    {
+      onError: (error) => {
+        console.log("error", error);
+      },
+    }
   );
   if (isLoading) return <BacklogSkeleton />;
   if (!project) return notFound();
