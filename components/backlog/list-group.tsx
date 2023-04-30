@@ -5,57 +5,58 @@ import {
   type DropResult,
 } from "react-beautiful-dnd";
 import { BacklogList } from "./list-backlog";
-import { Fragment, useState } from "react";
 import { SprintList } from "./list-sprint";
 import clsx from "clsx";
-import { issues as _issues, sprints } from "./mock-data";
-import { type IssueType } from "./issue";
 import { insertItemIntoArray, moveItemWithinArray } from "@/utils/helpers";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/utils/api";
+import { type Issue as IssueType } from "@prisma/client";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
-  const [issues, setIssues] = useState(() => _issues);
+  const { data: issues } = useQuery(["issues"], api.issues.getIssues);
+  const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
+
   const onDragEnd = (result: DropResult) => {
-    console.log("result", result);
     const { destination, source } = result;
     if (!positionHasChanged(source, destination)) return;
     if (source.droppableId === destination?.droppableId) {
-      setIssues((prev) => {
-        return moveIssueWithinColumn(
-          prev,
-          source.droppableId,
-          source.index,
-          destination.index
-        );
-      });
+      // setIssues((prev) => {
+      //   return moveIssueWithinColumn(
+      //     prev,
+      //     source.droppableId,
+      //     source.index,
+      //     destination.index
+      //   );
+      // });
     } else if (destination) {
-      setIssues((prev) => {
-        return moveIssueBetweenColumns(
-          prev,
-          source.droppableId,
-          destination.droppableId,
-          source.index,
-          destination.index
-        );
-      });
+      // setIssues((prev) => {
+      //   return moveIssueBetweenColumns(
+      //     prev,
+      //     source.droppableId,
+      //     destination.droppableId,
+      //     source.index,
+      //     destination.index
+      //   );
+      // });
     }
   };
+
+  if (!issues || !sprints) return <div />;
   return (
     <div className={clsx("h-full min-w-max", className)}>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Fragment>
-          {sprints.map((sprint) => (
-            <div key={sprint.id} className="my-3">
-              <SprintList
-                {...sprint}
-                issues={issues.filter((issue) => issue.sprint === sprint.id)}
-              />
-            </div>
-          ))}
-          <BacklogList
-            id={"backlog"}
-            issues={issues.filter((issue) => issue.sprint === null)}
-          />
-        </Fragment>
+        {sprints.map((sprint) => (
+          <div key={sprint.id} className="my-3">
+            <SprintList
+              sprint={sprint}
+              issues={issues.filter((issue) => issue.sprintId === sprint.id)}
+            />
+          </div>
+        ))}
+        <BacklogList
+          id="backlog"
+          issues={issues.filter((issue) => issue.sprintId === null)}
+        />
       </DragDropContext>
     </div>
   );
@@ -74,7 +75,7 @@ function moveIssueWithinColumn(
   endIndex: number
 ) {
   const unaffectedIssues = issues.filter(
-    (issue) => issue.sprint !== sprintId(columnId)
+    (issue) => issue.sprintId !== sprintId(columnId)
   );
   const affectedIssues = getSortedListIssues(issues, columnId);
   const reordered = moveItemWithinArray(
@@ -99,8 +100,8 @@ function moveIssueBetweenColumns(
   // TODO
   const unaffectedIssues = issues.filter(
     (issue) =>
-      issue.sprint !== sprintId(startColumnId) &&
-      issue.sprint !== sprintId(endColumnId)
+      issue.sprintId !== sprintId(startColumnId) &&
+      issue.sprintId !== sprintId(endColumnId)
   );
 
   const startColumn = getSortedListIssues(issues, startColumnId);
@@ -141,7 +142,7 @@ function positionHasChanged(
 function getSortedListIssues(issues: IssueType[], listId: string) {
   const clone = [...issues];
   return clone
-    .filter((issue) => issue.sprint === sprintId(listId))
+    .filter((issue) => issue.sprintId === sprintId(listId))
     .sort((a, b) => a.listPosition - b.listPosition);
 }
 
