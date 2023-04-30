@@ -69,11 +69,11 @@ model Sprint {
     id          String       @id @default(uuid())
     key         String       @unique
     name        String
-    description String       @default("")
-    startDate   DateTime
-    endDate     DateTime
+    description String?      @default("")
+    startDate   DateTime?
+    endDate     DateTime?
     createdAt   DateTime     @default(now())
-    updatedAt   DateTime     @updatedAt
+    updatedAt   DateTime?    @updatedAt
     deletedAt   DateTime?
     status      SprintStatus @default(PENDING)
     issues      Issue[]
