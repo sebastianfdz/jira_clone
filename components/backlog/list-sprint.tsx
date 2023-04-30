@@ -15,23 +15,15 @@ import { type Issue as IssueType, type Sprint } from "@prisma/client";
 
 const SprintList: React.FC<{
   sprint: Sprint;
-  issues: IssueType[] | undefined;
+  issues: IssueType[];
 }> = ({ sprint, issues }) => {
   return (
-    <Fragment>
-      {issues ? (
-        <Accordion
-          className="rounded-lg bg-zinc-100 p-2"
-          type="single"
-          collapsible
-        >
-          <AccordionItem value={sprint.id}>
-            <SprintListHeader sprint={sprint} issues={issues} />
-            <IssueList sprintId={sprint.id} issues={issues} />
-          </AccordionItem>
-        </Accordion>
-      ) : null}
-    </Fragment>
+    <Accordion className="rounded-lg bg-zinc-100 p-2" type="single" collapsible>
+      <AccordionItem value={sprint.id}>
+        <SprintListHeader sprint={sprint} issues={issues} />
+        <IssueList sprintId={sprint.id} issues={issues} />
+      </AccordionItem>
+    </Accordion>
   );
 };
 
