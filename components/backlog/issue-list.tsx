@@ -6,12 +6,38 @@ import { Issue, type IssueType } from "./issue";
 import { Button } from "../ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { EmtpyIssue } from "./issue-empty";
+import { useMutation } from "@tanstack/react-query";
+import { api } from "@/utils/api";
+import { type PostIssueBody } from "@/app/api/issues/route";
 
 const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
   sprintId,
   issues,
 }) => {
-  const [isCreating, setIsCreating] = useState(false);
+  const { mutate: createIssue, isLoading } = useMutation(
+    ["issues"],
+    api.issues.postIssue
+  );
+  const [isEditing, setIsEditing] = useState(false);
+  // const [isCreating, setIsCreating] = useState(false);
+
+  function handleCreateIssue({
+    name,
+    type,
+  }: {
+    name: string;
+    type: PostIssueBody["type"];
+  }) {
+    const reporter = "guest_user"; // TODO: get from auth
+    createIssue(
+      { name, type, sprintId, reporter },
+      {
+        onSuccess: () => {
+          setIsEditing(false);
+        },
+      }
+    );
+  }
   return (
     <AccordionContent className="pt-2">
       <Droppable key={sprintId} droppableId={sprintId}>
@@ -30,8 +56,8 @@ const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
       </Droppable>
 
       <Button
-        onClick={() => setIsCreating(true)}
-        data-state={isCreating ? "closed" : "open"}
+        onClick={() => setIsEditing(true)}
+        data-state={isEditing ? "closed" : "open"}
         customColors
         className="my-1 flex w-full bg-transparent hover:bg-zinc-200 [&[data-state=closed]]:hidden"
       >
@@ -40,10 +66,11 @@ const IssueList: React.FC<{ sprintId: string; issues: IssueType[] }> = ({
       </Button>
 
       <EmtpyIssue
-        data-state={isCreating ? "open" : "closed"}
+        data-state={isEditing ? "open" : "closed"}
         className="[&[data-state=closed]]:hidden"
-        onCreate={() => setIsCreating(false)}
-        onCancel={() => setIsCreating(false)}
+        onCreate={({ name, type }) => handleCreateIssue({ name, type })}
+        onCancel={() => setIsEditing(false)}
+        isCreating={isLoading}
       />
     </AccordionContent>
   );
