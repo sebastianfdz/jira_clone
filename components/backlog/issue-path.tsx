@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "../ui/button";
 import { IssueSelectType } from "../issue-select-type";
 import { type Issue as IssueType } from "@prisma/client";
