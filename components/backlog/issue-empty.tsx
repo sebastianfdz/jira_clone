@@ -4,12 +4,14 @@ import clsx from "clsx";
 import { IssueSelectType } from "../issue-select-type";
 import { Button } from "../ui/button";
 import { MdCheck, MdClose } from "react-icons/md";
+import { Spinner } from "../ui/spinner";
 
 const EmtpyIssue: React.FC<{
   className?: string;
-  onCreate: (name: string, type: IssueType["type"]) => void;
+  onCreate: (payload: { name: string; type: IssueType["type"] }) => void;
   onCancel: () => void;
-}> = ({ onCreate, onCancel, className, ...props }) => {
+  isCreating: boolean;
+}> = ({ onCreate, onCancel, isCreating, className, ...props }) => {
   const [name, setName] = useState("");
   const [type, setType] = useState<IssueType["type"]>("TASK");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,7 +29,7 @@ const EmtpyIssue: React.FC<{
   function handleCreateIssue(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
-      onCreate(name, type);
+      onCreate({ name, type });
     }
   }
 
@@ -57,17 +59,26 @@ const EmtpyIssue: React.FC<{
         onChange={(e) => setName(e.currentTarget.value)}
         onKeyDown={handleCreateIssue}
       />
-      <div className="absolute right-2 z-10 flex gap-x-1">
-        <Button className="aspect-square shadow-md" onClick={() => onCancel()}>
-          <MdClose className="text-sm" />
-        </Button>
-        <Button
-          className="aspect-square shadow-md"
-          onClick={() => onCreate(name, type)}
-        >
-          <MdCheck className="text-sm" />
-        </Button>
-      </div>
+      {isCreating ? (
+        <div className="absolute right-2 z-10">
+          <Spinner size="md" />
+        </div>
+      ) : (
+        <div className="absolute right-2 z-10 flex gap-x-1">
+          <Button
+            className="aspect-square shadow-md"
+            onClick={() => onCancel()}
+          >
+            <MdClose className="text-sm" />
+          </Button>
+          <Button
+            className="aspect-square shadow-md"
+            onClick={() => onCreate({ name, type })}
+          >
+            <MdCheck className="text-sm" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
