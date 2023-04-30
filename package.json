@@ -22,6 +22,7 @@
     "axios": "^1.4.0",
     "clsx": "^1.2.1",
     "next": "^13.2.4",
+    "prisma-json-types-generator": "^2.3.1",
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
