@@ -1,5 +1,5 @@
-import { type IssueType } from "@/components/backlog/issue";
 import { type IsseCountType } from "./types";
+import { type Issue as IssueType } from "@prisma/client";
 
 export const getBaseUrl = () => {
   if (typeof window !== "undefined") return ""; // browser should use relative url
