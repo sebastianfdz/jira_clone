@@ -1,7 +1,7 @@
 import clsx from "clsx";
 
-const Spinner: React.FC<{ size: "sm" | "md" | "lg"; white?: boolean }> = ({
-  size,
+const Spinner: React.FC<{ size?: "sm" | "md" | "lg"; white?: boolean }> = ({
+  size = "md",
   white,
 }) => {
   return (
