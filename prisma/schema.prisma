@@ -67,7 +67,6 @@ enum SprintStatus {
 
 model Sprint {
     id          String       @id @default(uuid())
-    key         String       @unique
     name        String
     description String?      @default("")
     startDate   DateTime?
