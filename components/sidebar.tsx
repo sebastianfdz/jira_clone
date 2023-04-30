@@ -66,25 +66,24 @@ const NavList: React.FC<{ items: NavItem[]; label: string }> = ({
 };
 
 const Sidebar = () => {
-  const project_key = "P-SEB";
   const planningItems = [
     {
       id: "roadmap",
       label: "Roadmap",
       icon: RoadmapIcon,
-      href: `/project/${project_key}/roadmap`,
+      href: `/project/roadmap`,
     },
     {
       id: "backlog",
       label: "Backlog",
       icon: BacklogIcon,
-      href: `/project/${project_key}/backlog`,
+      href: `/project/backlog`,
     },
     {
       id: "board",
       label: "Board",
       icon: BoardIcon,
-      href: `/project/${project_key}/board`,
+      href: `/project/board`,
     },
   ];
 
@@ -93,7 +92,7 @@ const Sidebar = () => {
       id: "development",
       label: "Development",
       icon: DevelopmentIcon,
-      href: `/project/${project_key}/`,
+      href: `/project/`,
     },
   ];
   return (
