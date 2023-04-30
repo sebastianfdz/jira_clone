@@ -1,3 +1,4 @@
+"use client";
 import { type IsseCountType } from "@/utils/types";
 import clsx from "clsx";
 import { Fragment } from "react";
