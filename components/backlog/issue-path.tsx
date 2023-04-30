@@ -32,7 +32,7 @@ const IssuePath: React.FC<{
           customColors
           className="bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
         >
-          <span className="whitespace-nowrap">{issue.id.toUpperCase()}</span>
+          <span className="whitespace-nowrap">{issue.key.toUpperCase()}</span>
         </Button>
       </div>
     </div>
