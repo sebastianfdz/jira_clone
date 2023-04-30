@@ -1,10 +1,11 @@
+"use client";
 import { useEffect, useRef, useState } from "react";
-import { type IssueType } from "./issue";
 import clsx from "clsx";
 import { IssueSelectType } from "../issue-select-type";
 import { Button } from "../ui/button";
 import { MdCheck, MdClose } from "react-icons/md";
 import { Spinner } from "../ui/spinner";
+import { type Issue as IssueType } from "@prisma/client";
 
 const EmtpyIssue: React.FC<{
   className?: string;
