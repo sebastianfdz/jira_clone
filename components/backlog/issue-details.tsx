@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useLayoutEffect } from "react";
+import React, { Fragment, useLayoutEffect, useState } from "react";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
 import { Button } from "../ui/button";
 import { IssueDropdownMenu } from "../issue-menu";
@@ -19,7 +19,6 @@ import {
 } from "../ui/accordion";
 import { FaChevronUp } from "react-icons/fa";
 import { Avatar } from "../avatar";
-// import { issues } from "./mock-data";
 import clsx from "clsx";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/api";
@@ -29,11 +28,16 @@ const IssueDetails: React.FC<{
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
   className?: string;
 }> = ({ issueId, setIssueId, className }) => {
-  const { data: issues } = useQuery(["issues"], api.issues.getIssues);
+  const { data: issues } = useQuery(["issues"], api.issues.getIssues, {
+    onSuccess: (data) => {
+      setIssueInfo(data.find((issue) => issue.id === issueId));
+    },
+  });
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const issueInfo: IssueType =
-    issues?.find((issue) => issue.id === issueId) ?? ({} as IssueType);
+  const [issueInfo, setIssueInfo] = useState(() =>
+    issues?.find((issue) => issue.id === issueId)
+  );
 
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
@@ -57,9 +61,10 @@ const IssueDetails: React.FC<{
 };
 
 const IssueDetailsHeader: React.FC<{
-  issue: IssueType;
+  issue: IssueType | undefined;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ issue, setIssueId }) => {
+  if (!issue) return <div />;
   return (
     <div className="flex h-fit w-full items-center justify-between">
       <IssuePath issue={issue} setIssueId={setIssueId} />
@@ -101,7 +106,10 @@ const IssueDetailsHeader: React.FC<{
   );
 };
 
-const IssueDetailsInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
+const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
+  issue,
+}) => {
+  if (!issue) return <div />;
   return (
     <Fragment>
       <h1>{issue.name}</h1>
