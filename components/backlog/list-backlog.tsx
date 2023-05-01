@@ -43,10 +43,7 @@ const BacklogList: React.FC<{
 const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
   const [statusCount] = useState(() => getIssueCountByStatus(issues ?? []));
   const queryClient = useQueryClient();
-  const { mutate: createSprint } = useMutation(
-    ["sprints"],
-    api.sprints.postSprint
-  );
+  const { mutate: createSprint } = useMutation(api.sprints.postSprint);
 
   function handleCreateSprint() {
     createSprint(undefined, {

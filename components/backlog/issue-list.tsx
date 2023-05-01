@@ -16,10 +16,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   issues,
 }) => {
   const { user } = useUser();
-  const { mutate: createIssue, isLoading } = useMutation(
-    ["issues"],
-    api.issues.postIssue
-  );
+  const { mutate: createIssue, isLoading } = useMutation(api.issues.postIssue);
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
 

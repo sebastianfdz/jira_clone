@@ -145,10 +145,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
 const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
-  const { mutate: updateIssue } = useMutation(
-    ["issues"],
-    api.issues.patchIssue
-  );
+  const { mutate: updateIssue } = useMutation(api.issues.patchIssue);
 
   const { user } = useUser();
   const queryClient = useQueryClient();
