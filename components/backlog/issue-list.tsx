@@ -9,11 +9,13 @@ import { EmtpyIssue } from "./issue-empty";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import { type Issue as IssueType } from "@prisma/client";
+import { useUser } from "@clerk/nextjs";
 
 const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   sprintId,
   issues,
 }) => {
+  const { user } = useUser();
   const { mutate: createIssue, isLoading } = useMutation(
     ["issues"],
     api.issues.postIssue
@@ -29,10 +31,12 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
     type: IssueType["type"];
   }) {
     const reporter = {
-      id: "1",
-      name: "John Doe",
-      email: "jon@doe.com",
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
+      id: user?.id ?? "1",
+      name: user?.fullName ?? "John Doe",
+      email: user?.emailAddresses[0]?.emailAddress ?? "jon@doe.com",
+      avatar:
+        user?.profileImageUrl ??
+        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
     }; // TODO: get from auth
     const listPosition =
       issues.filter((issue) => issue.sprintId === sprintId).length + 1;
