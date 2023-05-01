@@ -22,25 +22,18 @@ const Backlog: React.FC<{
   }, []);
 
   return (
-    <div ref={renderContainerRef} className="overflow-y-auto">
+    <div
+      ref={renderContainerRef}
+      className="min-w-full max-w-max overflow-hidden"
+    >
       <Split
-        sizes={issueId ? [80, 20] : [100, 0]}
+        sizes={issueId ? [60, 40] : [100, 0]}
         gutterSize={issueId ? 2 : 0}
-        className="flex w-full overflow-y-auto "
+        className="flex max-h-full w-full"
         minSize={0}
       >
-        <ListGroup
-          className={clsx(
-            issueId && "max-h-[80vh] w-full overflow-y-auto pb-5 pr-4"
-          )}
-        />
-        {issueId ? (
-          <IssueDetails
-            className="max-h-[80vh] w-full overflow-y-auto"
-            setIssueId={setIssueId}
-            issueId={issueId}
-          />
-        ) : null}
+        <ListGroup className={clsx(issueId && "pb-5 pr-4")} />
+        <IssueDetails setIssueId={setIssueId} issueId={issueId} />
       </Split>
     </div>
   );

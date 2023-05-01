@@ -43,7 +43,7 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
 
   if (!issues || !sprints) return <div />;
   return (
-    <div className={clsx("h-full min-w-max", className)}>
+    <div className={clsx("min-h-full min-w-max overflow-y-auto", className)}>
       <DragDropContext onDragEnd={onDragEnd}>
         {sprints.map((sprint) => (
           <div key={sprint.id} className="my-3">

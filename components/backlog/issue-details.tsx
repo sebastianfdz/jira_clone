@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useLayoutEffect, useState } from "react";
+import React, { Fragment, useEffect, useLayoutEffect, useState } from "react";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
 import { Button } from "../ui/button";
 import { IssueDropdownMenu } from "../issue-menu";
@@ -24,7 +24,7 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 
 const IssueDetails: React.FC<{
-  issueId: string;
+  issueId: string | null;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
   className?: string;
 }> = ({ issueId, setIssueId, className }) => {
@@ -45,12 +45,18 @@ const IssueDetails: React.FC<{
     renderContainerRef.current.style.minHeight = `calc(100vh - ${calculatedHeight}px)`;
   }, []);
 
+  useEffect(() => {
+    setIssueInfo(issues?.find((issue) => issue.id === issueId));
+  }, [issueId, issues]);
+
+  if (!issueInfo) return <div />;
+
   return (
     <div
       ref={renderContainerRef}
       data-state={issueId ? "open" : "closed"}
       className={clsx(
-        "z-10 flex w-full min-w-max flex-col pl-4 [&[data-state=closed]]:hidden",
+        "z-10 flex w-full min-w-max flex-col overflow-y-auto pl-4 [&[data-state=closed]]:hidden",
         className
       )}
     >
