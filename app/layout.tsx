@@ -1,14 +1,16 @@
-"use client";
 import { ClientProvider } from "./clientProvider";
+import { ClerkProvider } from "@clerk/nextjs/app-beta";
 import "@/styles/globals.css";
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <ClientProvider>
-      <html lang="en">
-        <body>{children}</body>
-      </html>
-    </ClientProvider>
+    <ClerkProvider>
+      <ClientProvider>
+        <html lang="en">
+          <body>{children}</body>
+        </html>
+      </ClientProvider>
+    </ClerkProvider>
   );
 };
 
