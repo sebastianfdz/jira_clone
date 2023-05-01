@@ -8,14 +8,37 @@ type ButtonProps = {
   customColors?: boolean;
   customPadding?: boolean;
   href?: string;
+  target?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { children, className, customColors, customPadding, href, ...props },
+    {
+      children,
+      className,
+      customColors,
+      customPadding,
+      href,
+      target,
+      ...props
+    },
     ref
   ) => {
-    if (href) return <Link href={href}>{children}</Link>;
+    if (href)
+      return (
+        <Link
+          href={href}
+          target={target ?? "_self"}
+          className={clsx(
+            !customColors && "bg-zinc-200 hover:bg-zinc-300",
+            !customPadding && "p-1.5",
+            "inline-flex items-center rounded-[3px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+            className
+          )}
+        >
+          {children}
+        </Link>
+      );
     return (
       <button
         className={clsx(
