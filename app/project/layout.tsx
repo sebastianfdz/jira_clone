@@ -7,7 +7,7 @@ const ProjectLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="flex h-12 w-full items-center justify-center border-b">
         top nav bar
       </div>
-      <div className="flex h-[calc(100vh_-_3rem)]">
+      <div className="flex h-[calc(100vh_-_3rem)] w-full pb-5">
         <Sidebar />
         <main className="w-full">{children}</main>
       </div>
