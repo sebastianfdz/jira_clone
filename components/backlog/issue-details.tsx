@@ -18,7 +18,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { FaChevronUp } from "react-icons/fa";
-import { Avatar } from "../avatar";
 import clsx from "clsx";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
