@@ -23,6 +23,7 @@ import clsx from "clsx";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
 
 const IssueDetails: React.FC<{
   issueId: string | null;
@@ -205,14 +206,18 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
             </span>
             <div className="flex flex-col">
               <div className="flex items-center">
-                <Avatar
-                  src={issue.assignee?.avatar ?? ""}
+                <Image
+                  width={20}
+                  height={20}
+                  src={
+                    issue.assignee?.avatar ??
+                    "https://www.gravatar.com/avatar?d=mp"
+                  }
                   alt={`${issue.assignee?.name ?? "Unassigned"} avatar`}
-                  size={20}
-                  className="mr-2"
+                  className="mr-2 rounded-full"
                 />
                 <div className="flex flex-col">
-                  <span className="ml-1 whitespace-nowrap text-sm">
+                  <span className="whitespace-nowrap text-sm">
                     {issue.assignee?.name ?? "Unassigned"}
                   </span>
                 </div>
@@ -239,11 +244,15 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
               Reporter
             </span>
             <div className="flex items-center">
-              <Avatar
-                src={issue.reporter?.avatar ?? null}
+              <Image
+                width={20}
+                height={20}
+                src={
+                  issue.reporter?.avatar ??
+                  "https://www.gravatar.com/avatar?d=mp"
+                }
                 alt={`${issue.reporter?.name ?? "Unassigned"} avatar`}
-                size={20}
-                className="mr-2"
+                className="mr-2 rounded-full"
               />
               <span className="whitespace-nowrap text-sm">
                 {issue.reporter?.name}
@@ -255,4 +264,5 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
     </Accordion>
   );
 };
+
 export { IssueDetails };
