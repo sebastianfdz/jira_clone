@@ -20,8 +20,9 @@ import {
 import { FaChevronUp } from "react-icons/fa";
 import { Avatar } from "../avatar";
 import clsx from "clsx";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
+import { useUser } from "@clerk/nextjs";
 
 const IssueDetails: React.FC<{
   issueId: string | null;
@@ -144,6 +145,37 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
 const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
+  const { mutate: updateIssue } = useMutation(
+    ["issues"],
+    api.issues.patchIssue
+  );
+
+  const { user } = useUser();
+  const queryClient = useQueryClient();
+
+  function handleAutoAssign() {
+    if (!user) {
+      console.error("No user found");
+      return;
+    }
+    updateIssue(
+      {
+        issue_key: issue.key,
+        assignee: {
+          id: user.id,
+          name: user?.fullName ?? "",
+          email: user?.emailAddresses[0]?.emailAddress ?? "",
+          avatar: user?.profileImageUrl ?? "",
+        },
+      },
+      {
+        onSuccess: () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          queryClient.invalidateQueries(["issues"]);
+        },
+      }
+    );
+  }
   return (
     <Accordion
       className="my-3 w-min min-w-full rounded-[3px] border"
@@ -186,6 +218,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
                 </div>
               </div>
               <Button
+                onClick={handleAutoAssign}
                 data-state={issue.assignee ? "assigned" : "unassigned"}
                 customColors
                 customPadding
