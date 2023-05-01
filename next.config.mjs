@@ -12,6 +12,7 @@ const config = {
   images: {
     domains: [
       "images.clerk.dev",
+      "www.gravatar.com",
       "images.unsplash.com",
       "avatars.githubusercontent.com",
     ],
