@@ -79,7 +79,11 @@ const Issue: React.FC<{
                 <ChildrenTreeIcon className="mx-2 text-gray-600" />
               </button>
             </NotImplemented>
-            <IssueSelectStatus currentStatus={issue.status} />
+            <IssueSelectStatus
+              key={issue.id + issue.status}
+              currentStatus={issue.status}
+              issueId={issue.key}
+            />
             <Avatar
               src={issue.assignee?.avatar ?? null}
               alt={`${issue.assignee?.name ?? "Unassigned"} avatar`}
