@@ -122,7 +122,12 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
       <h1>{issue.name}</h1>
       <div>[attach_button][add_child_button][link_issue_button]</div>
       <div className="relative flex items-center gap-x-3">
-        <IssueSelectStatus currentStatus={issue.status} variant="lg" />
+        <IssueSelectStatus
+          key={issue.id + issue.status}
+          currentStatus={issue.status}
+          issueId={issue.key}
+          variant="lg"
+        />
         <NotImplemented>
           <Button customColors className="hover:bg-zinc-200">
             <div className="flex items-center">
