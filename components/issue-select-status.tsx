@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import clsx from "clsx";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueStatus, type Issue as IssueType } from "@prisma/client";
 import { NotImplemented } from "@/components/not-implemented";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
@@ -17,18 +17,51 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
+import { capitalizeMany } from "@/utils/helpers";
+
+type StatusObject = {
+  value: IssueType["status"];
+  bgColor: string;
+  textColor: string;
+};
+type StatusMap = {
+  [key in IssueStatus]: string;
+};
 
 const IssueSelectStatus: React.FC<{
   currentStatus: IssueType["status"];
   issueId: string;
   variant?: "sm" | "lg";
 }> = ({ currentStatus, issueId, variant = "sm" }) => {
-  const statuses: { value: IssueType["status"]; color: string }[] = [
-    { value: "TODO", color: "#52525b" },
-    { value: "IN_PROGRESS", color: "#1e40af" },
-    { value: "DONE", color: "#15803d" },
+  const statuses: StatusObject[] = [
+    {
+      value: "TODO",
+      bgColor: variant == "sm" ? "#d4d4d8" : "#d4d4d8",
+      textColor: variant == "sm" ? "#4b5563" : "#4b5563",
+    },
+    {
+      value: "IN_PROGRESS",
+      bgColor: variant == "sm" ? "#e0ecfc" : "#0854cc",
+      textColor: variant == "sm" ? "#0854cc" : "#fff",
+    },
+    {
+      value: "DONE",
+      bgColor: variant == "sm" ? "#e8fcec" : "#08845c",
+      textColor: variant == "sm" ? "#08845c" : "#fff",
+    },
   ];
-  const [selected, setSelected] = useState<IssueType["status"]>(currentStatus);
+
+  const [selected, setSelected] = useState<StatusObject>(
+    () =>
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      statuses.find((status) => status.value == currentStatus) ?? statuses[0]!
+  );
+
+  const statusMap: StatusMap = {
+    DONE: "DONE",
+    IN_PROGRESS: "IN PROGRESS",
+    TODO: "TO DO",
+  };
 
   const queryClient = useQueryClient();
 
@@ -54,7 +87,9 @@ const IssueSelectStatus: React.FC<{
   });
 
   function handleSelectChange(value: IssueType["status"]) {
-    setSelected(value);
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const newStatus = statuses.find((status) => status.value == value)!;
+    setSelected(newStatus);
     updateIssue({
       issue_key: issueId,
       status: value,
@@ -66,18 +101,20 @@ const IssueSelectStatus: React.FC<{
       <SelectTrigger
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor:
-            statuses.find((status) => status.value == selected)?.color ??
-            "#1e40af",
+          backgroundColor: selected.bgColor,
+          color: selected.textColor,
         }}
         className={clsx(
-          variant == "sm" && "mx-2 px-1.5 py-0.5 text-xs",
-          variant == "lg" && "my-2 px-3 py-2 text-[13px]",
-          "flex items-center gap-x-1 rounded-[3px] bg-opacity-30  text-xs font-semibold text-white focus:ring-2"
+          variant == "sm" &&
+            "mx-2 bg-opacity-20 px-1.5 py-0.5 text-xs font-bold",
+          variant == "lg" && "my-2 px-3 py-1 text-base font-semibold",
+          "flex items-center gap-x-1 whitespace-nowrap rounded-[3px] text-xs focus:ring-2"
         )}
       >
         <SelectValue className="w-full whitespace-nowrap bg-transparent text-white">
-          {selected}
+          {variant == "sm"
+            ? statusMap[selected.value]
+            : capitalizeMany(statusMap[selected.value])}
         </SelectValue>
         <SelectIcon>
           <FaChevronDown className="text-xs" />
@@ -91,17 +128,27 @@ const IssueSelectStatus: React.FC<{
                 <SelectItem
                   key={status.value}
                   value={status.value}
+                  data-state={
+                    status.value == selected.value ? "checked" : "unchecked"
+                  }
                   className={clsx(
-                    "border-l-[3px] border-transparent py-1 pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-50 [&[data-state=checked]]:border-blue-600"
+                    "border-l-[3px] border-transparent py-1 pl-2 text-sm hover:cursor-default hover:border-blue-600 hover:bg-zinc-100 [&[data-state=checked]]:border-blue-600"
                   )}
                 >
                   <span
-                    style={{ color: status.color }}
+                    style={{
+                      color:
+                        variant == "sm"
+                          ? status.textColor
+                          : status.value == "TODO"
+                          ? status.textColor
+                          : status.bgColor,
+                    }}
                     className={clsx(
                       "rounded-md bg-opacity-30 px-2 text-xs font-semibold"
                     )}
                   >
-                    {status.value}
+                    {statusMap[status.value]}
                   </span>
                 </SelectItem>
               ))}
