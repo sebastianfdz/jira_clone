@@ -13,7 +13,13 @@ const NotImplemented: React.FC<{ children: ReactNode; feature?: string }> = ({
 }) => {
   return (
     <Popover>
-      <PopoverTrigger asChild>{children}</PopoverTrigger>
+      <PopoverTrigger
+        asChild
+        className=" hover:cursor-not-allowed"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {children}
+      </PopoverTrigger>
       <PopoverPortal>
         <PopoverContent className="z-10" side="left" align="end" sideOffset={5}>
           <div className="rounded-md border-2 bg-white px-6 py-4">
