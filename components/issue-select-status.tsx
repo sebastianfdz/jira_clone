@@ -3,6 +3,8 @@ import { FaChevronDown } from "react-icons/fa";
 import clsx from "clsx";
 import { type Issue as IssueType } from "@prisma/client";
 import { NotImplemented } from "@/components/not-implemented";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/utils/api";
 import {
   Select,
   SelectContent,
@@ -18,21 +20,51 @@ import {
 
 const IssueSelectStatus: React.FC<{
   currentStatus: IssueType["status"];
+  issueId: string;
   variant?: "sm" | "lg";
-}> = ({ currentStatus, variant = "sm" }) => {
+}> = ({ currentStatus, issueId, variant = "sm" }) => {
   const statuses: { value: IssueType["status"]; color: string }[] = [
     { value: "TODO", color: "#52525b" },
     { value: "IN_PROGRESS", color: "#1e40af" },
     { value: "DONE", color: "#15803d" },
   ];
-  const [selected, setSelected] = useState(currentStatus ?? "TODO");
+  const [selected, setSelected] = useState<IssueType["status"]>(currentStatus);
+
+  const queryClient = useQueryClient();
+
+  const { mutate: updateIssue } = useMutation(api.issues.patchIssue, {
+    onSuccess: () => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      queryClient.invalidateQueries(["issues"]);
+    },
+    onMutate: (data) => {
+      // Optimistic update
+      queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
+        return old?.map((issue) => {
+          if (issue.key == data.issue_key && data.status) {
+            return {
+              ...issue,
+              status: data.status,
+            };
+          }
+          return issue;
+        });
+      });
+    },
+  });
+
+  function handleSelectChange(value: IssueType["status"]) {
+    setSelected(value);
+    updateIssue({
+      issue_key: issueId,
+      status: value,
+    });
+  }
+
   return (
-    <Select
-      onValueChange={
-        setSelected as React.Dispatch<React.SetStateAction<string>>
-      }
-    >
+    <Select onValueChange={handleSelectChange}>
       <SelectTrigger
+        onClick={(e) => e.stopPropagation()}
         style={{
           backgroundColor:
             statuses.find((status) => status.value == selected)?.color ??
