@@ -90,6 +90,7 @@ model Sprint {
     createdAt   DateTime     @default(now())
     updatedAt   DateTime?    @updatedAt
     deletedAt   DateTime?
+    isDeleted   Boolean      @default(false)
     status      SprintStatus @default(PENDING)
     issues      Issue[]
 }
