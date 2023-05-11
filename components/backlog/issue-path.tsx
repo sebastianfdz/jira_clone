@@ -53,7 +53,8 @@ const IssuePath: React.FC<{
       <span className="py-1.5 text-zinc-500">/</span>
       <div className="relative flex items-center">
         <IssueSelectType
-          currentType="TASK"
+          key={issue.key + issue.type}
+          currentType={issue.type}
           onSelect={(type) =>
             updateIssue({
               issue_key: issue.key,
