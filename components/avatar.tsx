@@ -25,7 +25,7 @@ const Avatar = ({ src, alt, size = 32, className, ...props }: AvatarProps) => {
       ) : (
         <div
           className={clsx(
-            "flex items-center justify-center rounded-full bg-zinc-400 ",
+            "flex items-center justify-center rounded-full bg-gray-400 ",
             className
           )}
           style={{ width: size, height: size }}

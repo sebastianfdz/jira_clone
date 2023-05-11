@@ -45,12 +45,12 @@ const IssuePath: React.FC<{
         <Button
           onClick={() => setIssueId(issue.parentId)}
           customColors
-          className=" bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
+          className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
         >
           <span className="whitespace-nowrap">{issue.parentId}</span>
         </Button>
       </div>
-      <span className="py-1.5 text-zinc-500">/</span>
+      <span className="py-1.5 text-gray-500">/</span>
       <div className="relative flex items-center">
         <IssueSelectType
           key={issue.key + issue.type}
@@ -64,7 +64,7 @@ const IssuePath: React.FC<{
         />
         <Button
           customColors
-          className="bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
+          className="bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
         >
           <span className="whitespace-nowrap">{issue.key.toUpperCase()}</span>
         </Button>

@@ -26,7 +26,7 @@ const SprintList: React.FC<{
     <Accordion
       onValueChange={setOpenAccordion}
       value={openAccordion}
-      className="rounded-lg bg-zinc-100 p-2"
+      className="rounded-lg bg-gray-100 p-2"
       type="single"
       collapsible
     >

@@ -34,7 +34,7 @@ const NavList: React.FC<{ items: NavItem[]; label: string }> = ({
         >
           <FaChevronRight className="text-xs transition-transform" />
         </button>
-        <span className="text-xs font-bold text-zinc-700">{label}</span>
+        <span className="text-xs font-bold text-gray-700">{label}</span>
       </div>
       <NavigationMenu
         data-state={isVisible ? "open" : "closed"}
@@ -44,7 +44,7 @@ const NavList: React.FC<{ items: NavItem[]; label: string }> = ({
           {items.map((item) => (
             <NavigationMenuItem
               key={item.id}
-              className="w-full rounded-lg text-zinc-600"
+              className="w-full rounded-lg text-gray-600"
             >
               <Link href={item.href} passHref legacyBehavior>
                 <NavigationMenuLink
@@ -96,12 +96,12 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className="flex h-full w-72 flex-col gap-y-5 bg-slate-50 p-3 shadow-inner">
+    <div className="flex h-full w-72 flex-col gap-y-5 bg-gray-50 p-3 shadow-inner">
       <div className="my-5 flex items-center gap-x-2 px-3">
         <div className="flex aspect-square items-center justify-center rounded-sm bg-orange-500 p-3 text-xs font-bold text-white"></div>
         <div>
-          <h2 className="text-sm font-semibold text-zinc-600">Project Name</h2>
-          <p className="text-xs text-zinc-500">Project Type</p>
+          <h2 className="text-sm font-semibold text-gray-600">Project Name</h2>
+          <p className="text-xs text-gray-500">Project Type</p>
         </div>
       </div>
       <NavList label={"PLANNING"} items={planningItems} />

@@ -81,7 +81,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
               className="absolute -bottom-10 right-0 z-10 hidden gap-x-1 [&[data-state=editing]]:flex"
             >
               <Button
-                className="mt-2 aspect-square bg-zinc-50 p-2.5 shadow-md transition-all hover:bg-zinc-100"
+                className="mt-2 aspect-square bg-gray-50 p-2.5 shadow-md transition-all hover:bg-gray-100"
                 onClick={handleNameChange}
                 customColors
                 customPadding
@@ -89,7 +89,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
                 <MdClose className="text-sm" />
               </Button>
               <Button
-                className="mt-2 aspect-square bg-zinc-50 p-2.5 shadow-md transition-all hover:bg-zinc-100"
+                className="mt-2 aspect-square bg-gray-50 p-2.5 shadow-md transition-all hover:bg-gray-100"
                 onClick={handleNameChange}
                 customColors
                 customPadding

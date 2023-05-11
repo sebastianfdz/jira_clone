@@ -25,7 +25,7 @@ const IssueSelectEpic: React.FC<{
   const [selected, setSelected] = useState<string>(currentEpic.key);
   return (
     <Select onValueChange={setSelected}>
-      <SelectTrigger className="flex items-center gap-x-1 rounded-md bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-zinc-200 focus:ring-2">
+      <SelectTrigger className="flex items-center gap-x-1 rounded-md bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2">
         <SelectValue defaultValue={selected}>
           <IssueIcon issueType="EPIC" />
         </SelectValue>
@@ -33,14 +33,14 @@ const IssueSelectEpic: React.FC<{
       <SelectPortal className="z-10">
         <SelectContent>
           <SelectViewport className="top-10 w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
-            <span className="pl-3 text-xs text-zinc-500">EPICS</span>
+            <span className="pl-3 text-xs text-gray-500">EPICS</span>
             <SelectGroup>
               {epics.map((status) => (
                 <SelectItem
                   key={status.key}
                   value={status.key}
                   className={clsx(
-                    "border-l-[3px] border-transparent py-2 pl-3 text-sm hover:cursor-default  hover:bg-zinc-50 [&[data-state=checked]]:bg-zinc-200"
+                    "border-l-[3px] border-transparent py-2 pl-3 text-sm hover:cursor-default  hover:bg-gray-50 [&[data-state=checked]]:bg-gray-200"
                   )}
                 >
                   <div className="flex">
@@ -55,10 +55,10 @@ const IssueSelectEpic: React.FC<{
               ))}
             </SelectGroup>
             <SelectSeparator className="mt-2 h-[1px] bg-gray-300" />
-            <button className="w-full py-3 pl-4 text-left text-sm text-zinc-500 hover:cursor-default hover:bg-zinc-100">
+            <button className="w-full py-3 pl-4 text-left text-sm text-gray-500 hover:cursor-default hover:bg-gray-100">
               Unlink parent
             </button>
-            <button className="w-full py-3 pl-4 text-left text-sm text-zinc-500 hover:cursor-default hover:bg-zinc-100">
+            <button className="w-full py-3 pl-4 text-left text-sm text-gray-500 hover:cursor-default hover:bg-gray-100">
               View all epics
             </button>
           </SelectViewport>

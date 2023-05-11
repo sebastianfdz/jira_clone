@@ -72,7 +72,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
         onClick={() => setIsEditing(true)}
         data-state={isEditing ? "closed" : "open"}
         customColors
-        className="my-1 flex w-full bg-transparent hover:bg-zinc-200 [&[data-state=closed]]:hidden"
+        className="my-1 flex w-full bg-transparent hover:bg-gray-200 [&[data-state=closed]]:hidden"
       >
         <AiOutlinePlus className="text-sm" />
         <span className="text-sm">Create Issue</span>

@@ -84,33 +84,33 @@ const IssueDetailsHeader: React.FC<{
       <IssuePath issue={issue} setIssueId={setIssueId} />
       <div className="relative flex items-center gap-x-0.5">
         <NotImplemented feature="watch">
-          <Button customColors className="bg-transparent hover:bg-zinc-200">
+          <Button customColors className="bg-transparent hover:bg-gray-200">
             <MdRemoveRedEye className="text-xl" />
           </Button>
         </NotImplemented>
         <NotImplemented feature="like">
-          <Button customColors className="bg-transparent hover:bg-zinc-200">
+          <Button customColors className="bg-transparent hover:bg-gray-200">
             <AiOutlineLike className="text-xl" />
           </Button>
         </NotImplemented>
         <NotImplemented feature="share">
-          <Button customColors className="bg-transparent hover:bg-zinc-200">
+          <Button customColors className="bg-transparent hover:bg-gray-200">
             <MdOutlineShare className="text-xl" />
           </Button>
         </NotImplemented>
         <IssueDropdownMenu>
           <DropdownTrigger
             asChild
-            className="rounded-m flex items-center gap-x-1 bg-opacity-30 p-2 text-xs font-semibold text-white focus:ring-2 [&[data-state=open]]:bg-slate-700 [&[data-state=open]]:text-white"
+            className="rounded-m flex items-center gap-x-1 bg-opacity-30 p-2 text-xs font-semibold text-white focus:ring-2 [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white"
           >
-            <div className="rounded-[3px] text-zinc-800 hover:bg-zinc-200">
+            <div className="rounded-[3px] text-gray-800 hover:bg-gray-200">
               <BsThreeDots className="sm:text-xl" />
             </div>
           </DropdownTrigger>
         </IssueDropdownMenu>
         <Button
           customColors
-          className="bg-transparent hover:bg-zinc-200"
+          className="bg-transparent hover:bg-gray-200"
           onClick={() => setIssueId(null)}
         >
           <MdClose className="text-2xl" />
@@ -132,7 +132,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
         role="button"
         onClick={() => setIsEditing(true)}
         data-state={isEditing ? "editing" : "notEditing"}
-        className="transition-all [&[data-state=notEditing]]:hover:bg-zinc-100"
+        className="transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
       >
         <IssueTitle
           className="px-1 py-1"
@@ -152,7 +152,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
           variant="lg"
         />
         <NotImplemented>
-          <Button customColors className="hover:bg-zinc-200">
+          <Button customColors className="hover:bg-gray-200">
             <div className="flex items-center">
               <LightningIcon className="mt-0.5" />
               <span>Actions</span>
@@ -208,10 +208,10 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
       collapsible
     >
       <AccordionItem value={`details-${issue.id ?? 0}`}>
-        <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-zinc-100 [&[data-state=open]>svg]:rotate-180 [&[data-state=open]]:border-b">
+        <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-gray-100 [&[data-state=open]>svg]:rotate-180 [&[data-state=open]]:border-b">
           <div className="flex items-center gap-x-1">
             <span className="text-sm">Details</span>
-            <span className="text-xs text-zinc-500">
+            <span className="text-xs text-gray-500">
               (Assignee, Sprint, Reporter)
             </span>
           </div>
@@ -225,7 +225,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
             data-state={issue.assignee ? "assigned" : "unassigned"}
             className="my-2 grid grid-cols-3 [&[data-state=assigned]]:items-center"
           >
-            <span className="text-sm font-semibold text-zinc-600">
+            <span className="text-sm font-semibold text-gray-600">
               Assignee
             </span>
             <div className="flex flex-col">
@@ -258,13 +258,13 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
             </div>
           </div>
           <div className="my-4 grid grid-cols-3 items-center">
-            <span className="text-sm font-semibold text-zinc-600">Sprint</span>
+            <span className="text-sm font-semibold text-gray-600">Sprint</span>
             <div className="flex items-center">
               <span className="text-sm">{issue.sprintId ?? "None"}</span>
             </div>
           </div>
           <div className="my-2 grid grid-cols-3  items-center">
-            <span className="text-sm font-semibold text-zinc-600">
+            <span className="text-sm font-semibold text-gray-600">
               Reporter
             </span>
             <div className="flex items-center">

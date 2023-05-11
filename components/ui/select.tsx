@@ -174,7 +174,7 @@ const SelectItem = React.forwardRef<SelectItemRef, SelectItemProps>(
     return (
       <SelectPrimitive.Item
         className={clsx(
-          "border-l-[3px] border-transparent  [&[data-state=checked]]:bg-zinc-100",
+          "border-l-[3px] border-transparent  [&[data-state=checked]]:bg-gray-100",
           className
         )}
         {...props}

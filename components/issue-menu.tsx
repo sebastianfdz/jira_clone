@@ -38,7 +38,7 @@ const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
           align="end"
           className="z-10 w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md"
         >
-          <DropdownLabel className="p-2 text-xs font-normal text-zinc-400">
+          <DropdownLabel className="p-2 text-xs font-normal text-gray-400">
             ACTIONS
           </DropdownLabel>
           <DropdownGroup>
@@ -47,14 +47,14 @@ const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
                 key={action.id}
                 textValue={action.label}
                 className={clsx(
-                  "border-transparent p-2 text-sm hover:cursor-default hover:bg-zinc-100"
+                  "border-transparent p-2 text-sm hover:cursor-default hover:bg-gray-100"
                 )}
               >
                 <span className={clsx("pr-2 text-sm")}>{action.label}</span>
               </DropdownItem>
             ))}
           </DropdownGroup>
-          <DropdownLabel className="p-2 text-xs font-normal text-zinc-400">
+          <DropdownLabel className="p-2 text-xs font-normal text-gray-400">
             MOVE TO
           </DropdownLabel>
           <DropdownGroup>
@@ -63,7 +63,7 @@ const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
                 key={action.id}
                 textValue={action.label}
                 className={clsx(
-                  "border-transparent p-2 text-sm hover:cursor-default hover:bg-zinc-100"
+                  "border-transparent p-2 text-sm hover:cursor-default hover:bg-gray-100"
                 )}
               >
                 <span className={clsx("rounded-md bg-opacity-30 pr-2 text-sm")}>
@@ -100,7 +100,7 @@ const IssueContextMenu: React.FC<{
         {children}
         <ContextPortal>
           <ContextContent className="w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md">
-            <ContextLabel className="p-2 text-xs font-normal text-zinc-400">
+            <ContextLabel className="p-2 text-xs font-normal text-gray-400">
               ACTIONS
             </ContextLabel>
             <ContextGroup>
@@ -109,14 +109,14 @@ const IssueContextMenu: React.FC<{
                   key={action.id}
                   textValue={action.label}
                   className={clsx(
-                    "border-transparent p-2 text-sm hover:cursor-default hover:bg-zinc-100"
+                    "border-transparent p-2 text-sm hover:cursor-default hover:bg-gray-100"
                   )}
                 >
                   <span className={clsx("pr-2 text-sm")}>{action.label}</span>
                 </ContextItem>
               ))}
             </ContextGroup>
-            <ContextLabel className="p-2 text-xs font-normal text-zinc-400">
+            <ContextLabel className="p-2 text-xs font-normal text-gray-400">
               MOVE TO
             </ContextLabel>
             <ContextGroup>
@@ -125,7 +125,7 @@ const IssueContextMenu: React.FC<{
                   key={action.id}
                   textValue={action.label}
                   className={clsx(
-                    "border-transparent p-2 text-sm hover:cursor-default hover:bg-zinc-100"
+                    "border-transparent p-2 text-sm hover:cursor-default hover:bg-gray-100"
                   )}
                 >
                   <span

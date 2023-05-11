@@ -16,7 +16,7 @@ const TopNavbar: React.FC = () => {
           width={25}
           height={25}
         />
-        <span className="text-sm font-medium text-zinc-600">Jira Clone</span>
+        <span className="text-sm font-medium text-gray-600">Jira Clone</span>
         <Button
           href="https://github.com/sebastianfdz/jira_clone"
           target="_blank"
@@ -28,14 +28,14 @@ const TopNavbar: React.FC = () => {
       </div>
       {isSignedIn ? (
         <div className="flex items-center gap-x-2">
-          <span className="text-sm font-medium text-zinc-600">
+          <span className="text-sm font-medium text-gray-600">
             {user?.fullName ?? user?.emailAddresses[0]?.emailAddress ?? "Guest"}
           </span>
           <UserButton />
         </div>
       ) : (
         <div className="flex items-center gap-x-3">
-          <span className="text-xs text-zinc-400">
+          <span className="text-xs text-gray-400">
             Currently using guest account
           </span>
           <Button

@@ -36,20 +36,20 @@ const IssueSelectType: React.FC<{
   }
   return (
     <Select onValueChange={handleSelect}>
-      <SelectTrigger className="flex items-center gap-x-1 rounded-md bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-zinc-200 focus:ring-2">
+      <SelectTrigger className="flex items-center gap-x-1 rounded-md bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2">
         <SelectValue>
           <IssueIcon issueType={selected} />
         </SelectValue>
         {dropdownIcon ? (
           <SelectIcon>
-            <FaChevronDown className="text-zinc-500" />
+            <FaChevronDown className="text-gray-500" />
           </SelectIcon>
         ) : null}
       </SelectTrigger>
       <SelectPortal className="z-10">
         <SelectContent className="">
           <SelectViewport className="top-10 w-52 rounded-md border border-gray-300 bg-white py-2 shadow-md">
-            <span className="pl-3 text-xs text-zinc-500">
+            <span className="pl-3 text-xs text-gray-500">
               CHANGE ISSUE TYPE
             </span>
             <SelectGroup>
@@ -58,7 +58,7 @@ const IssueSelectType: React.FC<{
                   key={status.value}
                   value={status.value}
                   className={clsx(
-                    "border-transparent py-2 pl-3 text-sm hover:cursor-default hover:bg-zinc-50"
+                    "border-transparent py-2 pl-3 text-sm hover:cursor-default hover:bg-gray-50"
                   )}
                 >
                   <div className="flex">
