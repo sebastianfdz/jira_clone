@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import {
   Accordion,
   AccordionItem,
@@ -17,8 +17,19 @@ const SprintList: React.FC<{
   sprint: Sprint;
   issues: IssueType[];
 }> = ({ sprint, issues }) => {
+  const [openAccordion, setOpenAccordion] = useState("");
+  useEffect(() => {
+    setOpenAccordion(sprint.id); // Open accordion on mount in order for DND to work.
+  }, [sprint.id]);
+
   return (
-    <Accordion className="rounded-lg bg-zinc-100 p-2" type="single" collapsible>
+    <Accordion
+      onValueChange={setOpenAccordion}
+      value={openAccordion}
+      className="rounded-lg bg-zinc-100 p-2"
+      type="single"
+      collapsible
+    >
       <AccordionItem value={sprint.id}>
         <SprintListHeader sprint={sprint} issues={issues} />
         <IssueList sprintId={sprint.id} issues={issues} />
