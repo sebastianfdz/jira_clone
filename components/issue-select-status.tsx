@@ -94,7 +94,7 @@ const IssueSelectStatus: React.FC<{
           variant == "sm" &&
             "mx-2 bg-opacity-20 px-1.5 py-0.5 text-xs font-bold",
           variant == "lg" && "my-2 px-3 py-1.5 text-[16px] font-semibold",
-          "flex items-center gap-x-1 whitespace-nowrap rounded-[3px] text-xs focus:ring-2"
+          "flex items-center gap-x-1 whitespace-nowrap rounded-[3px] focus:ring-2"
         )}
       >
         <SelectValue className="w-full whitespace-nowrap bg-transparent text-white">
