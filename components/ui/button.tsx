@@ -43,8 +43,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         className={clsx(
           !customColors && "bg-gray-200 hover:bg-gray-300",
-          !customPadding && "p-1.5",
-          "inline-flex items-center rounded-[3px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
+          !customPadding && "p-2",
+          "inline-flex items-center rounded-[3px] font-medium text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2",
           className
         )}
         ref={ref}
