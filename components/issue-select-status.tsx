@@ -18,11 +18,14 @@ import {
   SelectViewport,
 } from "@/components/ui/select";
 import { capitalizeMany } from "@/utils/helpers";
+import { statuses } from "@/app/mockDb/db";
 
-type StatusObject = {
+export type StatusObject = {
   value: IssueType["status"];
-  bgColor: string;
-  textColor: string;
+  smBgColor: string;
+  smTextColor: string;
+  lgBgColor: string;
+  lgTextColor: string;
 };
 type StatusMap = {
   [key in IssueStatus]: string;
@@ -33,24 +36,6 @@ const IssueSelectStatus: React.FC<{
   issueId: string;
   variant?: "sm" | "lg";
 }> = ({ currentStatus, issueId, variant = "sm" }) => {
-  const statuses: StatusObject[] = [
-    {
-      value: "TODO",
-      bgColor: variant == "sm" ? "#d4d4d8" : "#d4d4d8",
-      textColor: variant == "sm" ? "#4b5563" : "#4b5563",
-    },
-    {
-      value: "IN_PROGRESS",
-      bgColor: variant == "sm" ? "#e0ecfc" : "#0854cc",
-      textColor: variant == "sm" ? "#0854cc" : "#fff",
-    },
-    {
-      value: "DONE",
-      bgColor: variant == "sm" ? "#e8fcec" : "#08845c",
-      textColor: variant == "sm" ? "#08845c" : "#fff",
-    },
-  ];
-
   const [selected, setSelected] = useState<StatusObject>(
     () =>
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -101,13 +86,14 @@ const IssueSelectStatus: React.FC<{
       <SelectTrigger
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor: selected.bgColor,
-          color: selected.textColor,
+          backgroundColor:
+            variant == "sm" ? selected.smBgColor : selected.lgBgColor,
+          color: variant == "sm" ? selected.smTextColor : selected.lgTextColor,
         }}
         className={clsx(
           variant == "sm" &&
             "mx-2 bg-opacity-20 px-1.5 py-0.5 text-xs font-bold",
-          variant == "lg" && "my-2 px-3 py-1 text-base font-semibold",
+          variant == "lg" && "my-2 px-3 py-1.5 text-[16px] font-semibold",
           "flex items-center gap-x-1 whitespace-nowrap rounded-[3px] text-xs focus:ring-2"
         )}
       >
@@ -137,12 +123,7 @@ const IssueSelectStatus: React.FC<{
                 >
                   <span
                     style={{
-                      color:
-                        variant == "sm"
-                          ? status.textColor
-                          : status.value == "TODO"
-                          ? status.textColor
-                          : status.bgColor,
+                      color: status.smTextColor,
                     }}
                     className={clsx(
                       "rounded-md bg-opacity-30 px-2 text-xs font-semibold"
