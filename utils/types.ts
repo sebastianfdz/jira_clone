@@ -3,3 +3,8 @@ export type IsseCountType = {
   IN_PROGRESS: number;
   DONE: number;
 };
+
+export type MenuOptionType = {
+  label: string;
+  id: string;
+};
