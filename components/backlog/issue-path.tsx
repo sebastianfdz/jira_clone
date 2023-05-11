@@ -3,11 +3,36 @@ import { Button } from "../ui/button";
 import { IssueSelectType } from "../issue-select-type";
 import { type Issue as IssueType } from "@prisma/client";
 import { IssueSelectEpic } from "../issue-select-epic";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/utils/api";
 
 const IssuePath: React.FC<{
   issue: IssueType;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ issue, setIssueId }) => {
+  const queryClient = useQueryClient();
+
+  const { mutate: updateIssue } = useMutation(api.issues.patchIssue, {
+    onSuccess: () => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      queryClient.invalidateQueries(["issues"]);
+    },
+    onMutate: (data) => {
+      // Optimistic update
+      queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
+        return old?.map((issue) => {
+          if (issue.key == data.issue_key && data.type) {
+            return {
+              ...issue,
+              type: data.type,
+            };
+          }
+          return issue;
+        });
+      });
+    },
+  });
+
   return (
     <div className="flex gap-x-3">
       <div
@@ -27,7 +52,15 @@ const IssuePath: React.FC<{
       </div>
       <span className="py-1.5 text-zinc-500">/</span>
       <div className="relative flex items-center">
-        <IssueSelectType currentType="TASK" />
+        <IssueSelectType
+          currentType="TASK"
+          onSelect={(type) =>
+            updateIssue({
+              issue_key: issue.key,
+              type,
+            })
+          }
+        />
         <Button
           customColors
           className="bg-transparent text-xs text-zinc-500 underline-offset-2 hover:underline"
