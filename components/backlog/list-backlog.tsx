@@ -26,7 +26,7 @@ const BacklogList: React.FC<{
 
   return (
     <Accordion
-      className="rounded-md pl-2"
+      className="rounded-md pb-20 pl-2"
       type="single"
       value={openAccordion}
       onValueChange={setOpenAccordion}
