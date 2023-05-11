@@ -1,5 +1,11 @@
 "use client";
-import React, { Fragment, useEffect, useLayoutEffect, useState } from "react";
+import React, {
+  Fragment,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
 import { Button } from "../ui/button";
 import { IssueDropdownMenu } from "../issue-menu";
@@ -23,6 +29,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import { IssueTitle } from "../issue-title";
 
 const IssueDetails: React.FC<{
   issueId: string | null;
@@ -116,10 +123,26 @@ const IssueDetailsHeader: React.FC<{
 const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
   issue,
 }) => {
+  const nameRef = useRef<HTMLInputElement>(null);
+  const [isEditing, setIsEditing] = useState(false);
   if (!issue) return <div />;
   return (
     <Fragment>
-      <h1>{issue.name}</h1>
+      <h1
+        role="button"
+        onClick={() => setIsEditing(true)}
+        data-state={isEditing ? "editing" : "notEditing"}
+        className="transition-all [&[data-state=notEditing]]:hover:bg-zinc-100"
+      >
+        <IssueTitle
+          className="px-1 py-1"
+          key={issue.id + issue.name}
+          isEditing={isEditing}
+          setIsEditing={setIsEditing}
+          issue={issue}
+          ref={nameRef}
+        />
+      </h1>
       <div>[attach_button][add_child_button][link_issue_button]</div>
       <div className="relative flex items-center gap-x-3">
         <IssueSelectStatus
