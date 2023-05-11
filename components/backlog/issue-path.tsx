@@ -5,6 +5,7 @@ import { type Issue as IssueType } from "@prisma/client";
 import { IssueSelectEpic } from "../issue-select-epic";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
+import { toast } from "../toast";
 
 const IssuePath: React.FC<{
   issue: IssueType;
@@ -13,9 +14,13 @@ const IssuePath: React.FC<{
   const queryClient = useQueryClient();
 
   const { mutate: updateIssue } = useMutation(api.issues.patchIssue, {
-    onSuccess: () => {
+    onSuccess: (data) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       queryClient.invalidateQueries(["issues"]);
+      toast.success({
+        message: `Issue type updated to ${data.type}`,
+        description: "Issue type changed",
+      });
     },
     onMutate: (data) => {
       // Optimistic update
