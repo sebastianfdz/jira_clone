@@ -16,6 +16,7 @@ import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
 import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 import { type Issue as IssueType } from "@prisma/client";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const Issue: React.FC<{
   issue: IssueType;
@@ -47,9 +48,11 @@ const Issue: React.FC<{
             <IssueIcon issueType={issue.type} />
             <div className="whitespace-nowrap text-gray-600">{issue.key}</div>
             <IssueTitle
+              key={issue.id + issue.name}
+              className="py-1.5"
               isEditing={isEditing}
               setIsEditing={setIsEditing}
-              title={issue.name}
+              issue={issue}
               ref={inputRef}
             />
             <div
@@ -57,15 +60,34 @@ const Issue: React.FC<{
               className="flex items-center gap-x-1 [&[data-state=editing]]:hidden"
             >
               <Button
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setIsEditing(!isEditing);
                 }}
                 className="invisible w-0 px-0 group-hover:visible group-hover:w-fit group-hover:bg-transparent group-hover:px-1.5 group-hover:hover:bg-gray-200 "
               >
                 <MdEdit className="text-sm" />
               </Button>
-              <div className="whitespace-nowrap rounded-[3px] bg-indigo-500 bg-opacity-30 px-2 text-xs font-bold text-indigo-700">
+              <div
+                data-state={issue.parentId ? "epic" : "noEpic"}
+                className="whitespace-nowrap rounded-[3px] bg-indigo-500 bg-opacity-30 px-2 text-xs font-bold text-indigo-700 [&[data-state=noEpic]]:hidden"
+              >
                 {issue.parentId}
+                {/* TODO: Conditional to check if parent is epic */}
+              </div>
+              <div
+                data-state={issue.parentId ? "epic" : "noEpic"}
+                className=" invisible w-0 whitespace-nowrap rounded-[3px] px-0 font-bold text-zinc-800 group-hover:visible [&[data-state=epic]]:hidden"
+              >
+                <Button
+                  onClick={(e) => e.stopPropagation()}
+                  className="flex items-center bg-zinc-200 px-2 py-0.5 font-medium"
+                  customPadding
+                  customColors
+                >
+                  <AiOutlinePlus className="text-sm" />
+                  Epic
+                </Button>
                 {/* TODO: Conditional to check if parent is epic */}
               </div>
             </div>
