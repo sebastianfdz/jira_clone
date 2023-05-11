@@ -7,7 +7,7 @@ const ProjectLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <Fragment>
       <TopNavbar />
-      <div className="flex h-[calc(100vh_-_3rem)] w-full pb-5">
+      <div className="flex h-[calc(100vh_-_3rem)] w-full">
         <Sidebar />
         <main className="w-full">{children}</main>
       </div>
