@@ -98,7 +98,7 @@ const IssueDetailsHeader: React.FC<{
             <MdOutlineShare className="text-xl" />
           </Button>
         </NotImplemented>
-        <IssueDropdownMenu>
+        <IssueDropdownMenu issue={issue}>
           <DropdownTrigger
             asChild
             className="rounded-m flex items-center gap-x-1 bg-opacity-30 p-2 text-xs font-semibold text-white focus:ring-2 [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white"
