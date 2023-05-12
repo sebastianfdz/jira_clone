@@ -46,4 +46,12 @@ export const issuesRoutes = {
 
     return data?.issue;
   },
+  deleteIssue: async ({ issue_key }: { issue_key: string }) => {
+    const { data } = await axios.delete<PostIssueResponse>(
+      `${baseUrl}/api/issues/${issue_key}`,
+      { headers: getHeaders() }
+    );
+
+    return data?.issue;
+  },
 };
