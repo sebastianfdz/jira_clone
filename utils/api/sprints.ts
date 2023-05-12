@@ -45,6 +45,16 @@ export const sprintsRoutes = {
         headers: getHeaders(),
       }
     );
+
+    return data.sprint;
+  },
+  deleteSprint: async ({ sprintId }: { sprintId: string }) => {
+    const { data } = await axios.delete<PatchSprintResponse>(
+      `${baseUrl}/api/sprints/${sprintId}`,
+      {
+        headers: getHeaders(),
+      }
+    );
     return data.sprint;
   },
 };
