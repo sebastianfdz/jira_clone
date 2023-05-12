@@ -112,3 +112,19 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
   // return NextResponse.json<PostIssueResponse>({ issue });
   return NextResponse.json({ issue });
 }
+
+export async function DELETE(req: NextRequest, { params }: PatchParams) {
+  const { issue_key } = params;
+
+  const issue = await prisma.issue.update({
+    where: {
+      key: issue_key,
+    },
+    data: {
+      isDeleted: true,
+    },
+  });
+
+  // return NextResponse.json<PostIssueResponse>({ issue });
+  return NextResponse.json({ issue });
+}
