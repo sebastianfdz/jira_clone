@@ -1,4 +1,4 @@
-import { type IsseCountType } from "./types";
+import { type IssueCountType } from "./types";
 import { type Issue as IssueType } from "@prisma/client";
 
 export const getBaseUrl = () => {
@@ -52,7 +52,7 @@ export const getIssueCountByStatus = (issues: IssueType[]) => {
     }
     acc[issue.status]++;
     return acc;
-  }, {} as IsseCountType);
+  }, {} as IssueCountType);
 };
 
 export const hexToRgba = (hex: string, opacity: number) => {

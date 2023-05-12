@@ -1,9 +1,9 @@
 "use client";
-import { type IsseCountType } from "@/utils/types";
+import { type IssueCountType } from "@/utils/types";
 import clsx from "clsx";
 import { Fragment } from "react";
 
-const IssueStatusCount: React.FC<{ statusCount: IsseCountType }> = ({
+const IssueStatusCount: React.FC<{ statusCount: IssueCountType }> = ({
   statusCount,
 }) => {
   return (
@@ -12,7 +12,7 @@ const IssueStatusCount: React.FC<{ statusCount: IsseCountType }> = ({
         <span
           key={status}
           className={clsx(
-            status == "TODO" && "bg-gray-300 text-black",
+            status == "TODO" && "bg-zinc-300 text-black",
             status == "IN_PROGRESS" && "bg-blue-700 text-white",
             status == "DONE" && "bg-green-700 text-white",
             "flex h-5 items-center justify-center rounded-full px-1.5 py-0.5 text-sm font-semibold"

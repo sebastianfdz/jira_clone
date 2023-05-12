@@ -1,4 +1,4 @@
-export type IsseCountType = {
+export type IssueCountType = {
   TODO: number;
   IN_PROGRESS: number;
   DONE: number;
