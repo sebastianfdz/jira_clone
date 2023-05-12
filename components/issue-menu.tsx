@@ -1,3 +1,6 @@
+import { type ReactNode } from "react";
+import { type MenuOptionType } from "@/utils/types";
+import clsx from "clsx";
 import {
   Dropdown,
   DropdownContent,
@@ -14,11 +17,14 @@ import {
   ContextLabel,
   ContextPortal,
 } from "@/components/ui/context-menu";
-import { type ReactNode } from "react";
-import clsx from "clsx";
+
+type MenuOptionsType = {
+  actions: MenuOptionType[];
+  moveTo: MenuOptionType[];
+};
 
 const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const menuOptions = {
+  const menuOptions: MenuOptionsType = {
     actions: [
       { id: "add-flag", label: "Add Flag" },
       { id: "change-parent", label: "Change Parent" },
