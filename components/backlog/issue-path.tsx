@@ -6,6 +6,8 @@ import { IssueSelectEpic } from "../issue-select-epic";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import { toast } from "../toast";
+import { IssueIcon } from "../issue-icon";
+import { AiOutlinePlus } from "react-icons/ai";
 
 const IssuePath: React.FC<{
   issue: IssueType;
@@ -14,14 +16,6 @@ const IssuePath: React.FC<{
   const queryClient = useQueryClient();
 
   const { mutate: updateIssue } = useMutation(api.issues.patchIssue, {
-    onSuccess: (data) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      queryClient.invalidateQueries(["issues"]);
-      toast.success({
-        message: `Issue type updated to ${data.type}`,
-        description: "Issue type changed",
-      });
-    },
     onMutate: (data) => {
       // Optimistic update
       queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
@@ -38,21 +32,37 @@ const IssuePath: React.FC<{
     },
   });
 
+  function handleSelectType(type: IssueType["type"]) {
+    updateIssue(
+      {
+        issue_key: issue.key,
+        type,
+      },
+      {
+        onSuccess: (data) => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          queryClient.invalidateQueries(["issues"]);
+          toast.success({
+            message: `Issue type updated to ${data.type}`,
+            description: "Issue type changed",
+          });
+        },
+      }
+    );
+  }
+
   return (
     <div className="flex gap-x-3">
-      <div
-        data-state={issue.parentId ? "epic" : "not-epic"}
-        className="flex items-center [&[data-state=not-epic]]:hidden"
-      >
-        <IssueSelectEpic
-          currentEpic={{ key: "P-SEBB-1", title: "Epic title 1" }}
-        />
+      <div className="flex items-center">
+        <IssueSelectEpic issue={issue}>
+          {issue.parentKey ? <IssueIcon issueType="EPIC" /> : <AddEpic />}
+        </IssueSelectEpic>
         <Button
-          onClick={() => setIssueId(issue.parentId)}
+          onClick={() => setIssueId(issue.parentKey)}
           customColors
           className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
         >
-          <span className="whitespace-nowrap">{issue.parentId}</span>
+          <span className="whitespace-nowrap">{issue.parentKey}</span>
         </Button>
       </div>
       <span className="py-1.5 text-gray-500">/</span>
@@ -60,12 +70,7 @@ const IssuePath: React.FC<{
         <IssueSelectType
           key={issue.key + issue.type}
           currentType={issue.type}
-          onSelect={(type) =>
-            updateIssue({
-              issue_key: issue.key,
-              type,
-            })
-          }
+          onSelect={handleSelectType}
         />
         <Button
           customColors
@@ -74,6 +79,15 @@ const IssuePath: React.FC<{
           <span className="whitespace-nowrap">{issue.key.toUpperCase()}</span>
         </Button>
       </div>
+    </div>
+  );
+};
+
+const AddEpic: React.FC = () => {
+  return (
+    <div className="flex items-center p-1.5 font-normal text-gray-500">
+      <AiOutlinePlus className="text-sm" />
+      <span>Add Epic</span>
     </div>
   );
 };
