@@ -3,16 +3,17 @@ import { getIssueCountByStatus } from "@/utils/helpers";
 // import { type IssueCountType } from "@/utils/types";
 import { type Issue as IssueType } from "@prisma/client";
 import clsx from "clsx";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 
 const IssueStatusCount: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
+  const memoizedCount = useCallback(getIssueCountByStatus, []);
   const [statusCount, setStatusCount] = useState(() =>
-    getIssueCountByStatus(issues ?? [])
+    memoizedCount(issues ?? [])
   );
 
   useEffect(() => {
-    setStatusCount(() => getIssueCountByStatus(issues ?? []));
-  }, [issues]);
+    setStatusCount(() => memoizedCount(issues ?? []));
+  }, [issues, memoizedCount]);
 
   return (
     <Fragment>
