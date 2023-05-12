@@ -6,15 +6,22 @@ import React, {
   useRef,
   useState,
 } from "react";
+import Image from "next/image";
+import clsx from "clsx";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/utils/api";
+import { useUser } from "@clerk/nextjs";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
+import { BsThreeDots } from "react-icons/bs";
+import { AiOutlineLike } from "react-icons/ai";
+import { FaChevronUp } from "react-icons/fa";
 import { Button } from "../ui/button";
 import { IssueDropdownMenu } from "../issue-menu";
 import { DropdownTrigger } from "../ui/dropdown-menu";
-import { BsThreeDots } from "react-icons/bs";
 import { NotImplemented } from "../not-implemented";
-import { AiOutlineLike } from "react-icons/ai";
 import { IssuePath } from "./issue-path";
 import { LightningIcon } from "../icons";
+import { IssueTitle } from "../issue-title";
 import { IssueSelectStatus } from "../issue-select-status";
 import { type Issue as IssueType } from "@prisma/client";
 import {
@@ -23,13 +30,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
-import { FaChevronUp } from "react-icons/fa";
-import clsx from "clsx";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/utils/api";
-import { useUser } from "@clerk/nextjs";
-import Image from "next/image";
-import { IssueTitle } from "../issue-title";
 
 const IssueDetails: React.FC<{
   issueId: string | null;
