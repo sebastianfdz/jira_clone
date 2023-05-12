@@ -31,6 +31,7 @@ const EmtpyIssue: React.FC<{
     if (e.key === "Enter") {
       e.preventDefault();
       onCreate({ name, type });
+      setName("");
     }
   }
 
