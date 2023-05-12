@@ -61,3 +61,25 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
   // return NextResponse.json<PatchSprintResponse>({ sprint });
   return NextResponse.json({ sprint });
 }
+
+export async function DELETE(req: NextRequest, { params }: PatchParams) {
+  const { sprint_id } = params;
+
+  await prisma.issue.updateMany({
+    where: {
+      sprintId: sprint_id,
+    },
+    data: {
+      sprintId: null,
+    },
+  });
+
+  const sprint = await prisma.sprint.delete({
+    where: {
+      id: sprint_id,
+    },
+  });
+
+  // return NextResponse.json<PatchSprintResponse>({ sprint });
+  return NextResponse.json({ sprint });
+}
