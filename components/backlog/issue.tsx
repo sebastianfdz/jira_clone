@@ -16,7 +16,8 @@ import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
 import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 import { type Issue as IssueType } from "@prisma/client";
-import { AiOutlinePlus } from "react-icons/ai";
+// import { AiOutlinePlus } from "react-icons/ai";
+// import { IssueSelectEpic } from "../issue-select-epic";
 
 const Issue: React.FC<{
   issue: IssueType;
@@ -27,12 +28,12 @@ const Issue: React.FC<{
   const { setIssueId, issueId } = useSelectedIssueContext();
 
   return (
-    <Draggable draggableId={issue.id} index={index}>
+    <Draggable draggableId={issue.key} index={index}>
       {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
         <div
           role="button"
-          data-state={issueId == issue.id ? "selected" : "not-selected"}
-          onClick={() => setIssueId(issue.id)}
+          data-state={issueId == issue.key ? "selected" : "not-selected"}
+          onClick={() => setIssueId(issue.key)}
           ref={innerRef}
           {...draggableProps}
           {...dragHandleProps}
@@ -48,7 +49,7 @@ const Issue: React.FC<{
             <IssueIcon issueType={issue.type} />
             <div className="whitespace-nowrap text-gray-600">{issue.key}</div>
             <IssueTitle
-              key={issue.id + issue.name}
+              key={issue.key + issue.name}
               className="py-1.5"
               isEditing={isEditing}
               setIsEditing={setIsEditing}
@@ -68,28 +69,15 @@ const Issue: React.FC<{
               >
                 <MdEdit className="text-sm" />
               </Button>
-              <div
-                data-state={issue.parentId ? "epic" : "noEpic"}
-                className="whitespace-nowrap rounded-[3px] bg-indigo-500 bg-opacity-30 px-2 text-xs font-bold text-indigo-700 [&[data-state=noEpic]]:hidden"
-              >
-                {issue.parentId}
-                {/* TODO: Conditional to check if parent is epic */}
-              </div>
-              <div
-                data-state={issue.parentId ? "epic" : "noEpic"}
-                className=" invisible w-0 whitespace-nowrap rounded-[3px] px-0 font-bold text-gray-800 group-hover:visible [&[data-state=epic]]:hidden"
-              >
-                <Button
-                  onClick={(e) => e.stopPropagation()}
-                  className="flex items-center bg-gray-200 px-2 py-0.5 font-medium"
-                  customPadding
-                  customColors
-                >
-                  <AiOutlinePlus className="text-sm" />
-                  Epic
-                </Button>
-                {/* TODO: Conditional to check if parent is epic */}
-              </div>
+              <EpicName issue={issue} />
+              {/* <IssueSelectEpic issue={issue}>
+                {issue.parentKey ? (
+                ) : (
+                  <div className="invisible whitespace-nowrap group-hover:visible group-focus:visible">
+                    <AddEpic />
+                  </div>
+                )}
+              </IssueSelectEpic> */}
             </div>
           </div>
           <IssueContextMenu isEditing={isEditing}>
@@ -102,7 +90,7 @@ const Issue: React.FC<{
               </button>
             </NotImplemented>
             <IssueSelectStatus
-              key={issue.id + issue.status}
+              key={issue.key + issue.status}
               currentStatus={issue.status}
               issueId={issue.key}
             />
@@ -127,5 +115,25 @@ const Issue: React.FC<{
     </Draggable>
   );
 };
+
+const EpicName: React.FC<{ issue: IssueType }> = ({ issue }) => {
+  return (
+    <div
+      data-state={issue.parentKey ? "epic" : "noEpic"}
+      className="whitespace-nowrap rounded-[3px] bg-[#ece4fc] px-2 text-xs font-bold text-indigo-900 [&[data-state=noEpic]]:hidden"
+    >
+      {issue.parentKey}
+    </div>
+  );
+};
+
+// const AddEpic: React.FC = () => {
+//   return (
+//     <div className="flex items-center bg-gray-100 px-2 text-gray-500 hover:bg-gray-200">
+//       <AiOutlinePlus className="text-lg" />
+//       <span className="text-base font-medium">Epic</span>
+//     </div>
+//   );
+// };
 
 export { Issue };
