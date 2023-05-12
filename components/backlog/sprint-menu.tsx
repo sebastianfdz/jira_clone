@@ -25,16 +25,21 @@ const SprintDropdownMenu: React.FC<{
 
   const queryClient = useQueryClient();
 
-  const { mutate: updateSprint, error } = useMutation(api.sprints.patchSprint, {
-    onSuccess: () => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      queryClient.invalidateQueries(["sprints"]);
-      toast.success({
-        message: `Deleted sprint ${sprint.name}`,
-        description: "Sprint deleted",
-      });
-    },
-  });
+  const { mutate: deleteSprint, error } = useMutation(
+    api.sprints.deleteSprint,
+    {
+      onSuccess: () => {
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        queryClient.invalidateQueries(["sprints"]);
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        queryClient.invalidateQueries(["issues"]);
+        toast.success({
+          message: `Deleted sprint ${sprint.name}`,
+          description: "Sprint deleted",
+        });
+      },
+    }
+  );
 
   useEffect(() => {
     console.log(error);
@@ -46,9 +51,13 @@ const SprintDropdownMenu: React.FC<{
     }
   }, [error]);
 
-  const handleSprintAction = (id: MenuOptionType["id"]) => {
+  const handleSprintAction = (
+    id: MenuOptionType["id"],
+    e: React.SyntheticEvent
+  ) => {
+    e.stopPropagation();
     if (id == "delete") {
-      updateSprint({ sprintId: sprint.id, isDeleted: true });
+      deleteSprint({ sprintId: sprint.id });
     }
   };
 
@@ -66,7 +75,7 @@ const SprintDropdownMenu: React.FC<{
           <DropdownGroup>
             {menuOptions.map((action) => (
               <DropdownItem
-                onSelect={() => handleSprintAction(action.id)}
+                onClick={(e) => handleSprintAction(action.id, e)}
                 key={action.id}
                 textValue={action.label}
                 className={clsx(
