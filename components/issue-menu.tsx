@@ -17,13 +17,20 @@ import {
   ContextLabel,
   ContextPortal,
 } from "@/components/ui/context-menu";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { api } from "@/utils/api";
+import { type Issue as IssueType } from "@prisma/client";
+import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 
 type MenuOptionsType = {
   actions: MenuOptionType[];
   moveTo: MenuOptionType[];
 };
 
-const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
+const IssueDropdownMenu: React.FC<{
+  children: ReactNode;
+  issue: IssueType;
+}> = ({ children, issue }) => {
   const menuOptions: MenuOptionsType = {
     actions: [
       { id: "add-flag", label: "Add Flag" },
@@ -33,6 +40,30 @@ const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
       { id: "delete", label: "Delete" },
     ],
     moveTo: [],
+  };
+
+  const { issueId, setIssueId } = useSelectedIssueContext();
+
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteIssue } = useMutation(api.issues.deleteIssue, {
+    onSuccess: (data) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      queryClient.invalidateQueries(["issues"]);
+      if (issueId == data.id) {
+        setIssueId(null);
+      }
+    },
+  });
+
+  const handleIssueAction = (
+    id: MenuOptionType["id"],
+    e: React.SyntheticEvent
+  ) => {
+    e.stopPropagation();
+    if (id == "delete") {
+      deleteIssue({ issue_key: issue.key });
+    }
   };
   return (
     <Dropdown>
@@ -50,6 +81,7 @@ const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
           <DropdownGroup>
             {menuOptions.actions.map((action) => (
               <DropdownItem
+                onClick={(e) => handleIssueAction(action.id, e)}
                 key={action.id}
                 textValue={action.label}
                 className={clsx(
@@ -66,6 +98,7 @@ const IssueDropdownMenu: React.FC<{ children: ReactNode }> = ({ children }) => {
           <DropdownGroup>
             {menuOptions.actions.map((action) => (
               <DropdownItem
+                onClick={(e) => handleIssueAction(action.id, e)}
                 key={action.id}
                 textValue={action.label}
                 className={clsx(
