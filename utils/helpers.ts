@@ -46,13 +46,17 @@ export const capitalizeMany = (str: string) => {
 };
 
 export const getIssueCountByStatus = (issues: IssueType[]) => {
-  return issues.reduce((acc, issue) => {
-    if (!acc[issue.status]) {
-      acc[issue.status] = 0;
-    }
-    acc[issue.status]++;
-    return acc;
-  }, {} as IssueCountType);
+  return issues.reduce(
+    (acc, issue) => {
+      acc[issue.status]++;
+      return acc;
+    },
+    {
+      TODO: 0,
+      IN_PROGRESS: 0,
+      DONE: 0,
+    } as IssueCountType
+  );
 };
 
 export const hexToRgba = (hex: string, opacity: number) => {
