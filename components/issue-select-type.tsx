@@ -47,8 +47,8 @@ const IssueSelectType: React.FC<{
         ) : null}
       </SelectTrigger>
       <SelectPortal className="z-10">
-        <SelectContent className="">
-          <SelectViewport className="top-10 w-52 rounded-md border border-gray-300 bg-white py-2 shadow-md">
+        <SelectContent position="popper">
+          <SelectViewport className="w-52 rounded-md border border-gray-300 bg-white py-2 shadow-md">
             <span className="pl-3 text-xs text-gray-500">
               CHANGE ISSUE TYPE
             </span>

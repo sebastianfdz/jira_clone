@@ -115,8 +115,8 @@ const IssueSelectStatus: React.FC<{
           </SelectIcon>
         </SelectTrigger>
         <SelectPortal className="z-10">
-          <SelectContent>
-            <SelectViewport className="top-10 w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
+          <SelectContent position="popper">
+            <SelectViewport className="w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
               <SelectGroup>
                 {statuses.map((status) => (
                   <SelectItem

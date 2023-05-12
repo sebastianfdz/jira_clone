@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import clsx from "clsx";
 import {
   Select,
@@ -12,27 +12,29 @@ import {
   SelectViewport,
 } from "@/components/ui/select";
 import { IssueIcon } from "./issue-icon";
+import { type Issue as IssueType } from "@prisma/client";
 
 const IssueSelectEpic: React.FC<{
-  currentEpic: { key: string; title: string };
-}> = ({ currentEpic }) => {
+  issue: IssueType;
+  children: ReactNode;
+}> = ({ issue, children }) => {
   const epics: { key: string; title: string }[] = Array.from(
     Array(10).keys()
   ).map((el) => {
     return { key: `P-SEBB-${el}`, title: `Epic title ${el}` };
   });
 
-  const [selected, setSelected] = useState<string>(currentEpic.key);
+  const [selected, setSelected] = useState<string | null>(issue.parentId);
   return (
     <Select onValueChange={setSelected}>
       <SelectTrigger className="flex items-center gap-x-1 rounded-md bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2">
-        <SelectValue defaultValue={selected}>
-          <IssueIcon issueType="EPIC" />
+        <SelectValue defaultValue={selected ?? undefined}>
+          {children}
         </SelectValue>
       </SelectTrigger>
       <SelectPortal className="z-10">
-        <SelectContent>
-          <SelectViewport className="top-10 w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
+        <SelectContent position="popper">
+          <SelectViewport className="w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
             <span className="pl-3 text-xs text-gray-500">EPICS</span>
             <SelectGroup>
               {epics.map((status) => (
