@@ -12,6 +12,8 @@ import { IssueList } from "./issue-list";
 import { getIssueCountByStatus } from "@/utils/helpers";
 import { IssueStatusCount } from "./issue-status-count";
 import { type Issue as IssueType, type Sprint } from "@prisma/client";
+import { SprintDropdownMenu } from "./sprint-menu";
+import { DropdownTrigger } from "../ui/dropdown-menu";
 
 const SprintList: React.FC<{
   sprint: Sprint;
@@ -65,9 +67,17 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
         <Button>
           <span className="whitespace-nowrap">Complete Sprint</span>
         </Button>
-        <Button>
-          <BsThreeDots className="sm:text-xl" />
-        </Button>
+
+        <SprintDropdownMenu sprint={sprint}>
+          <DropdownTrigger
+            asChild
+            className="rounded-m flex items-center gap-x-1 px-1.5 py-0.5 text-xs font-semibold focus:ring-2"
+          >
+            <div className="rounded-sm bg-gray-200 px-1.5 py-1.5 text-gray-600 hover:cursor-pointer hover:bg-gray-300 [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white">
+              <BsThreeDots className="sm:text-xl" />
+            </div>
+          </DropdownTrigger>
+        </SprintDropdownMenu>
       </div>
     </div>
   );
