@@ -24,7 +24,12 @@ export async function POST() {
 }
 
 export async function GET() {
-  const sprints = await prisma.sprint.findMany();
+  const sprints = await prisma.sprint.findMany({
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
   // return NextResponse.json<GetSprintsResponse>({ sprints });
   return NextResponse.json({ sprints });
 }
