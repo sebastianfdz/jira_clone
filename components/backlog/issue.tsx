@@ -111,12 +111,12 @@ const Issue: React.FC<{
               alt={`${issue.assignee?.name ?? "Unassigned"} avatar`}
               className="mx-1"
             />
-            <IssueDropdownMenu>
+            <IssueDropdownMenu issue={issue}>
               <DropdownTrigger
                 asChild
-                className="rounded-m flex items-center gap-x-1 bg-opacity-30 px-1.5 py-0.5 text-xs font-semibold text-white focus:ring-2 "
+                className="rounded-m ml-1 flex items-center gap-x-2 bg-opacity-30 px-1.5 text-xs font-semibold focus:ring-2 "
               >
-                <div className="invisible rounded-sm px-2 py-1.5 text-gray-700 group-hover:visible group-hover:bg-gray-200 group-hover:hover:bg-gray-300 [&[data-state=open]]:visible [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white">
+                <div className="invisible rounded-sm px-1.5 py-1.5 text-gray-700 group-hover:visible group-hover:bg-gray-200 group-hover:hover:bg-gray-300 [&[data-state=open]]:visible [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white">
                   <BsThreeDots className="sm:text-xl" />
                 </div>
               </DropdownTrigger>
