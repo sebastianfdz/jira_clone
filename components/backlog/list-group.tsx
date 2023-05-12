@@ -49,13 +49,17 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
           <div key={sprint.id} className="my-3">
             <SprintList
               sprint={sprint}
-              issues={issues.filter((issue) => issue.sprintId === sprint.id)}
+              issues={issues.filter(
+                (issue) => issue.sprintId === sprint.id && issue.type !== "EPIC"
+              )}
             />
           </div>
         ))}
         <BacklogList
           id="backlog"
-          issues={issues.filter((issue) => issue.sprintId === null)}
+          issues={issues.filter(
+            (issue) => issue.sprintId === null && issue.type !== "EPIC"
+          )}
         />
       </DragDropContext>
     </div>

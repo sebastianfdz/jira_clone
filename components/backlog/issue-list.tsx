@@ -60,7 +60,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
               {issues
                 .sort((a, b) => a.listPosition - b.listPosition)
                 .map((issue, index) => (
-                  <Issue key={issue.id} index={index} issue={issue} />
+                  <Issue key={issue.key} index={index} issue={issue} />
                 ))}
             </div>
             {placeholder}

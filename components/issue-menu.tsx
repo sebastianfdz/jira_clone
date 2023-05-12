@@ -50,7 +50,7 @@ const IssueDropdownMenu: React.FC<{
     onSuccess: (data) => {
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       queryClient.invalidateQueries(["issues"]);
-      if (issueId == data.id) {
+      if (issueId == data.key) {
         setIssueId(null);
       }
     },

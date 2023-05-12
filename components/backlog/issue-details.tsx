@@ -38,13 +38,13 @@ const IssueDetails: React.FC<{
 }> = ({ issueId, setIssueId, className }) => {
   const { data: issues } = useQuery(["issues"], api.issues.getIssues, {
     onSuccess: (data) => {
-      setIssueInfo(data.find((issue) => issue.id === issueId));
+      setIssueInfo(data.find((issue) => issue.key === issueId));
     },
   });
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
   const [issueInfo, setIssueInfo] = useState(() =>
-    issues?.find((issue) => issue.id === issueId)
+    issues?.find((issue) => issue.key === issueId)
   );
 
   useLayoutEffect(() => {
@@ -54,7 +54,7 @@ const IssueDetails: React.FC<{
   }, []);
 
   useEffect(() => {
-    setIssueInfo(issues?.find((issue) => issue.id === issueId));
+    setIssueInfo(issues?.find((issue) => issue.key === issueId));
   }, [issueId, issues]);
 
   if (!issueInfo) return <div />;
@@ -136,7 +136,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
       >
         <IssueTitle
           className="px-1 py-1"
-          key={issue.id + issue.name}
+          key={issue.key + issue.name}
           isEditing={isEditing}
           setIsEditing={setIsEditing}
           issue={issue}
@@ -146,7 +146,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
       <div>[attach_button][add_child_button][link_issue_button]</div>
       <div className="relative flex items-center gap-x-3">
         <IssueSelectStatus
-          key={issue.id + issue.status}
+          key={issue.key + issue.status}
           currentStatus={issue.status}
           issueId={issue.key}
           variant="lg"
@@ -207,7 +207,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
       type="single"
       collapsible
     >
-      <AccordionItem value={`details-${issue.id ?? 0}`}>
+      <AccordionItem value={`details-${issue.key ?? 0}`}>
         <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-gray-100 [&[data-state=open]>svg]:rotate-180 [&[data-state=open]]:border-b">
           <div className="flex items-center gap-x-1">
             <span className="text-sm">Details</span>
