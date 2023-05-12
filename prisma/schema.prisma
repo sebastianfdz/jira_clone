@@ -54,7 +54,7 @@ model Issue {
     reporter     Json
     /// [UserType]
     assignee     Json?
-    parentId     String?
+    parentKey    String?
     sprintId     String?
     isDeleted    Boolean     @default(false)
     createdAt    DateTime    @default(now())
