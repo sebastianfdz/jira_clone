@@ -36,7 +36,7 @@ const IssueSelectType: React.FC<{
   }
   return (
     <Select onValueChange={handleSelect}>
-      <SelectTrigger className="flex items-center gap-x-1 rounded-md bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2">
+      <SelectTrigger className="flex items-center gap-x-1 rounded-[3px] bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2">
         <SelectValue>
           <IssueIcon issueType={selected} />
         </SelectValue>

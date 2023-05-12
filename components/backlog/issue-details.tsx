@@ -80,7 +80,7 @@ const IssueDetailsHeader: React.FC<{
 }> = ({ issue, setIssueId }) => {
   if (!issue) return <div />;
   return (
-    <div className="flex h-fit w-full items-center justify-between">
+    <div className="flex h-fit w-full items-center justify-between p-0.5">
       <IssuePath issue={issue} setIssueId={setIssueId} />
       <div className="relative flex items-center gap-x-0.5">
         <NotImplemented feature="watch">
@@ -135,7 +135,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
         className="transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
       >
         <IssueTitle
-          className="px-1 py-1"
+          className="mr-1 px-1 py-1"
           key={issue.key + issue.name}
           isEditing={isEditing}
           setIsEditing={setIsEditing}

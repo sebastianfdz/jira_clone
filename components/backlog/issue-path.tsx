@@ -85,7 +85,7 @@ const IssuePath: React.FC<{
 
 const AddEpic: React.FC = () => {
   return (
-    <div className="flex items-center p-1.5 font-normal text-gray-500">
+    <div className="flex items-center font-normal text-gray-500">
       <AiOutlinePlus className="text-sm" />
       <span>Add Epic</span>
     </div>
