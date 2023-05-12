@@ -8,7 +8,6 @@ import {
 import { FaChevronRight } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { IssueList } from "./issue-list";
-import { getIssueCountByStatus } from "@/utils/helpers";
 import { IssueStatusCount } from "./issue-status-count";
 import { api } from "@/utils/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -41,7 +40,6 @@ const BacklogList: React.FC<{
 };
 
 const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
-  const [statusCount] = useState(() => getIssueCountByStatus(issues ?? []));
   const queryClient = useQueryClient();
   const { mutate: createSprint } = useMutation(api.sprints.postSprint);
 
@@ -71,7 +69,7 @@ const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
         </Fragment>
       </AccordionTrigger>
       <div className="flex items-center gap-x-2 py-2">
-        <IssueStatusCount statusCount={statusCount} />
+        <IssueStatusCount issues={issues} />
         <Button onClick={handleCreateSprint}>
           <span className="whitespace-nowrap">Create Sprint</span>
         </Button>

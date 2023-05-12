@@ -9,7 +9,6 @@ import { FaChevronRight } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import { IssueList } from "./issue-list";
-import { getIssueCountByStatus } from "@/utils/helpers";
 import { IssueStatusCount } from "./issue-status-count";
 import { type Issue as IssueType, type Sprint } from "@prisma/client";
 import { SprintDropdownMenu } from "./sprint-menu";
@@ -44,8 +43,6 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
   issues,
   sprint,
 }) => {
-  const [statusCount] = useState(() => getIssueCountByStatus(issues));
-
   return (
     <div className="flex w-full items-center justify-between pl-2 text-sm">
       <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
@@ -63,7 +60,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
         </Fragment>
       </AccordionTrigger>
       <div className="flex items-center gap-x-2">
-        <IssueStatusCount statusCount={statusCount} />
+        <IssueStatusCount issues={issues} />
         <Button>
           <span className="whitespace-nowrap">Complete Sprint</span>
         </Button>
