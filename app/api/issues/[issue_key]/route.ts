@@ -42,7 +42,7 @@ const patchSchema = z.object({
       avatar: z.string().url(),
     })
     .optional(),
-  parentId: z.string().optional(),
+  parentKey: z.string().nullable().optional(),
   sprintId: z.string().optional(),
   isDeleted: z.boolean().optional(),
 });
@@ -78,8 +78,11 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
     assignee,
     isDeleted,
     sprintId,
-    parentId,
+    parentKey,
   } = validated.data;
+
+  console.log("parentKey", parentKey);
+  console.log("parentKey == undefined", parentKey === undefined);
 
   const current = await prisma.issue.findUnique({
     where: {
@@ -105,7 +108,7 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
       assignee: assignee ?? current.assignee ?? undefined,
       isDeleted: isDeleted ?? current.isDeleted,
       sprintId: sprintId ?? current.sprintId,
-      parentId: parentId ?? current.parentId,
+      parentKey: parentKey === undefined ? current.parentKey : parentKey,
     },
   });
 
