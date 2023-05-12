@@ -9,16 +9,17 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <ClerkProvider>
       <ClientProvider>
         <html lang="en">
-          <body>{children}</body>
-
-          <Toaster
-            position="bottom-left"
-            reverseOrder={false}
-            containerStyle={{
-              height: "92vh",
-              marginLeft: "3vw",
-            }}
-          />
+          <body>
+            {children}
+            <Toaster
+              position="bottom-left"
+              reverseOrder={false}
+              containerStyle={{
+                height: "92vh",
+                marginLeft: "3vw",
+              }}
+            />
+          </body>
         </html>
       </ClientProvider>
     </ClerkProvider>
