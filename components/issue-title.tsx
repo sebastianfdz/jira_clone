@@ -74,6 +74,9 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
                 if (e.key === "Enter") {
                   handleNameChange(e);
                 }
+                if (e.key === "Escape") {
+                  setIsEditing(false);
+                }
               }}
             />
             <div
