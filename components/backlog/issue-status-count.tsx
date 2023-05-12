@@ -1,11 +1,19 @@
 "use client";
-import { type IssueCountType } from "@/utils/types";
+import { getIssueCountByStatus } from "@/utils/helpers";
+// import { type IssueCountType } from "@/utils/types";
+import { type Issue as IssueType } from "@prisma/client";
 import clsx from "clsx";
-import { Fragment } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-const IssueStatusCount: React.FC<{ statusCount: IssueCountType }> = ({
-  statusCount,
-}) => {
+const IssueStatusCount: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
+  const [statusCount, setStatusCount] = useState(() =>
+    getIssueCountByStatus(issues ?? [])
+  );
+
+  useEffect(() => {
+    setStatusCount(() => getIssueCountByStatus(issues ?? []));
+  }, [issues]);
+
   return (
     <Fragment>
       {Object.entries(statusCount ?? {})?.map(([status, count]) => (
