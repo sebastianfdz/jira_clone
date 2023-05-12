@@ -3,6 +3,12 @@ import { ClerkProvider } from "@clerk/nextjs/app-beta";
 import { Toaster } from "react-hot-toast";
 
 import "@/styles/globals.css";
+import { type Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Jira Clone 🚀",
+  description: "A clone of Jira built with Next.js",
+};
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
