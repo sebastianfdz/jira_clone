@@ -1,4 +1,6 @@
 import { type ReactNode } from "react";
+import { useIssues } from "@/hooks/useIssues";
+import { type IssueType } from "@/utils/types";
 import { type MenuOptionType } from "@/utils/types";
 import clsx from "clsx";
 import {
@@ -17,10 +19,6 @@ import {
   ContextLabel,
   ContextPortal,
 } from "@/components/ui/context-menu";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/utils/api";
-import { type Issue as IssueType } from "@prisma/client";
-import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 
 type MenuOptionsType = {
   actions: MenuOptionType[];
@@ -42,19 +40,7 @@ const IssueDropdownMenu: React.FC<{
     moveTo: [],
   };
 
-  const { issueId, setIssueId } = useSelectedIssueContext();
-
-  const queryClient = useQueryClient();
-
-  const { mutate: deleteIssue } = useMutation(api.issues.deleteIssue, {
-    onSuccess: (data) => {
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      queryClient.invalidateQueries(["issues"]);
-      if (issueId == data.key) {
-        setIssueId(null);
-      }
-    },
-  });
+  const { deleteIssue } = useIssues();
 
   const handleIssueAction = (
     id: MenuOptionType["id"],
@@ -96,7 +82,7 @@ const IssueDropdownMenu: React.FC<{
             MOVE TO
           </DropdownLabel>
           <DropdownGroup>
-            {menuOptions.actions.map((action) => (
+            {menuOptions.moveTo.map((action) => (
               <DropdownItem
                 onClick={(e) => handleIssueAction(action.id, e)}
                 key={action.id}
@@ -120,7 +106,7 @@ const IssueContextMenu: React.FC<{
   children: ReactNode;
   isEditing: boolean;
 }> = ({ children, isEditing }) => {
-  const menuOptions = {
+  const menuOptions: MenuOptionsType = {
     actions: [
       { id: "add-flag", label: "Add Flag" },
       { id: "change-parent", label: "Change Parent" },
@@ -159,7 +145,7 @@ const IssueContextMenu: React.FC<{
               MOVE TO
             </ContextLabel>
             <ContextGroup>
-              {menuOptions.actions.map((action) => (
+              {menuOptions.moveTo.map((action) => (
                 <ContextItem
                   key={action.id}
                   textValue={action.label}
