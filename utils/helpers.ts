@@ -1,6 +1,8 @@
 import { type IssueCountType } from "./types";
 import { type IssueType } from "@/utils/types";
 
+type IssueT = IssueType | IssueType["parent"];
+
 export function getBaseUrl() {
   if (typeof window !== "undefined") return ""; // browser should use relative url
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
@@ -13,25 +15,42 @@ export function getHeaders() {
   };
 }
 
-export function moveItemWithinArray(
-  arr: unknown[],
-  oldIndex: number,
-  newIndex: number
-) {
-  const arrClone = [...arr];
-  arrClone.splice(newIndex, 0, arrClone.splice(oldIndex, 1)[0]);
-  return arrClone;
+export function moveIssueWithinList(payload: {
+  issueList: IssueT[];
+  oldIndex: number;
+  newIndex: number;
+}) {
+  const { issueList, oldIndex, newIndex } = payload;
+  const issueListClone = [...issueList];
+  const [removedItem] = issueListClone.splice(oldIndex, 1);
+
+  if (!removedItem) return issueListClone;
+
+  issueListClone.splice(newIndex, 0, removedItem);
+
+  return issueListClone.map((issue, index) => {
+    return <IssueT>{
+      ...issue,
+      listPosition: index,
+    };
+  });
 }
 
-export function insertItemIntoArray(
-  arr: unknown[],
-  item: unknown,
-  index: number
-) {
-  // Snippet taken from https://github.com/oldboyxx/jira_clone
-  const arrClone = [...arr];
-  arrClone.splice(index, 0, item);
-  return arrClone;
+export function insertIssueIntoList(payload: {
+  issueList: IssueT[];
+  issue: IssueT;
+  index: number;
+  listId: string | null;
+}) {
+  const { issueList, issue, index } = payload;
+  const issueListClone = [...issueList];
+  issueListClone.splice(index, 0, issue);
+  return issueListClone.map((issue, index) => {
+    return <IssueT>{
+      ...issue,
+      listPosition: index,
+    };
+  });
 }
 
 export function capitalize(str: string) {
@@ -62,4 +81,14 @@ export function getIssueCountByStatus(issues: IssueType[]) {
 export function isEpic(issue: IssueType | IssueType["parent"] | null) {
   if (!issue) return false;
   return issue.type == "EPIC";
+}
+
+export function sprintId(id: string | null | undefined) {
+  return id == "backlog" ? null : id;
+}
+
+export function isNullish<T>(
+  value: T | null | undefined
+): value is null | undefined {
+  return value == null || value == undefined;
 }
