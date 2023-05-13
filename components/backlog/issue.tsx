@@ -15,7 +15,8 @@ import { IssueSelectStatus } from "../issue-select-status";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
 import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
+import { isEpic } from "@/utils/helpers";
 // import { AiOutlinePlus } from "react-icons/ai";
 // import { IssueSelectEpic } from "../issue-select-epic";
 
@@ -69,7 +70,7 @@ const Issue: React.FC<{
               >
                 <MdEdit className="text-sm" />
               </Button>
-              <EpicName issue={issue} />
+              {isEpic(issue.parent) ? <EpicName issue={issue.parent} /> : null}
               {/* <IssueSelectEpic issue={issue}>
                 {issue.parentKey ? (
                 ) : (
@@ -116,13 +117,10 @@ const Issue: React.FC<{
   );
 };
 
-const EpicName: React.FC<{ issue: IssueType }> = ({ issue }) => {
+const EpicName: React.FC<{ issue: IssueType["parent"] }> = ({ issue }) => {
   return (
-    <div
-      data-state={issue.parentKey ? "epic" : "noEpic"}
-      className="whitespace-nowrap rounded-[3px] bg-[#ece4fc] px-2 text-xs font-bold text-indigo-900 [&[data-state=noEpic]]:hidden"
-    >
-      {issue.parentKey}
+    <div className="whitespace-nowrap rounded-[3px] bg-[#ece4fc] px-2 text-xs font-bold text-indigo-900">
+      {issue.name}
     </div>
   );
 };
