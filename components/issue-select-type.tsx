@@ -1,6 +1,8 @@
 import { useState } from "react";
 import clsx from "clsx";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
+import { IssueIcon } from "./issue-icon";
+import { FaChevronDown } from "react-icons/fa";
 import {
   Select,
   SelectContent,
@@ -12,19 +14,13 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
-import { IssueIcon } from "./issue-icon";
-import { FaChevronDown } from "react-icons/fa";
 
 const IssueSelectType: React.FC<{
   currentType: IssueType["type"];
   dropdownIcon?: boolean;
   onSelect?: (type: IssueType["type"]) => void;
 }> = ({ currentType, dropdownIcon, onSelect }) => {
-  const types: { value: IssueType["type"]; color: string }[] = [
-    { value: "STORY", color: "#84cc16" },
-    { value: "TASK", color: "#4bade8" },
-    { value: "BUG", color: "#ef4444" },
-  ];
+  const types: IssueType["type"][] = ["STORY", "TASK", "BUG"];
   const [selected, setSelected] = useState(currentType);
 
   function handleSelect(selected: string) {
@@ -55,15 +51,15 @@ const IssueSelectType: React.FC<{
             <SelectGroup>
               {types.map((status) => (
                 <SelectItem
-                  key={status.value}
-                  value={status.value}
+                  key={status}
+                  value={status}
                   className={clsx(
                     "border-transparent py-2 pl-3 text-sm hover:cursor-default hover:bg-gray-50"
                   )}
                 >
                   <div className="flex">
-                    <IssueIcon issueType={status.value} />
-                    <span className={clsx("px-2 text-xs")}>{status.value}</span>
+                    <IssueIcon issueType={status} />
+                    <span className={clsx("px-2 text-xs")}>{status}</span>
                   </div>
                 </SelectItem>
               ))}
