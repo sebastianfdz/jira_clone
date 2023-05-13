@@ -5,7 +5,7 @@ import { IssueSelectType } from "../issue-select-type";
 import { Button } from "../ui/button";
 import { MdCheck, MdClose } from "react-icons/md";
 import { Spinner } from "../ui/spinner";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
 
 const EmtpyIssue: React.FC<{
   className?: string;
