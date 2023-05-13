@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/server/db";
 import { IssueStatus, type Issue, IssueType } from "@prisma/client";
 import { z } from "zod";
+import { insertIssueIntoList, moveIssueWithinList } from "@/utils/helpers";
 
 export type GetIssueDetailsResponse = {
   issue: (Issue & { parent: Issue | null }) | null;
@@ -51,7 +52,7 @@ const patchSchema = z.object({
     })
     .optional(),
   parentKey: z.string().nullable().optional(),
-  sprintId: z.string().optional(),
+  sprintId: z.string().nullable().optional(),
   isDeleted: z.boolean().optional(),
 });
 
@@ -89,9 +90,6 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
     parentKey,
   } = validated.data;
 
-  console.log("parentKey", parentKey);
-  console.log("parentKey == undefined", parentKey === undefined);
-
   const current = await prisma.issue.findUnique({
     where: {
       key: issue_key,
@@ -100,6 +98,21 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
 
   if (!current) {
     return new Response("Issue not found", { status: 404 });
+  }
+
+  if (listPosition !== undefined && sprintId !== undefined) {
+    // HANDLE DND ACTION
+    const updatedIssues = await handleListPositionChange({
+      sourceSprint: current.sprintId,
+      destinationSprint: sprintId,
+      sourcePosition: current.listPosition,
+      destinationPosition: listPosition,
+      current,
+    });
+
+    return NextResponse.json({
+      issue: updatedIssues.filter((issue) => issue.key == issue_key)[0],
+    });
   }
 
   const issue = await prisma.issue.update({
@@ -138,4 +151,65 @@ export async function DELETE(req: NextRequest, { params }: PatchParams) {
 
   // return NextResponse.json<PostIssueResponse>({ issue });
   return NextResponse.json({ issue });
+}
+
+async function handleListPositionChange(payload: {
+  sourceSprint: string | null;
+  destinationSprint: string | null;
+  sourcePosition: number;
+  destinationPosition: number;
+  current: Issue;
+}) {
+  const {
+    sourceSprint,
+    destinationSprint,
+    sourcePosition,
+    destinationPosition,
+    current,
+  } = payload;
+
+  let newIssues: Issue[] = [];
+  if (sourceSprint === destinationSprint) {
+    // MOVE WITHIN LIST
+    const issueList = await prisma.issue.findMany({
+      where: { sprintId: sourceSprint },
+      orderBy: { listPosition: "asc" },
+    });
+    newIssues = moveIssueWithinList({
+      issueList,
+      oldIndex: sourcePosition,
+      newIndex: destinationPosition,
+    });
+  } else {
+    // MOVE BETWEEN LISTS
+    const issueList = await prisma.issue.findMany({
+      where: { sprintId: destinationSprint },
+      orderBy: { listPosition: "asc" },
+    });
+    const updatedCurrent = await prisma.issue.update({
+      where: { key: current.key },
+      data: { sprintId: destinationSprint },
+    });
+
+    newIssues = insertIssueIntoList({
+      issueList,
+      issue: updatedCurrent,
+      index: destinationPosition,
+      listId: destinationSprint,
+    });
+  }
+
+  const updatedIssues = await Promise.all(
+    newIssues.map(async (issue, index) => {
+      return await prisma.issue.update({
+        where: {
+          key: issue.key,
+        },
+        data: {
+          listPosition: index,
+        },
+      });
+    })
+  );
+  return updatedIssues;
 }
