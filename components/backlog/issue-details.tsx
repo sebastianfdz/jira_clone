@@ -1,15 +1,15 @@
 "use client";
 import React, {
   Fragment,
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
+import { useIssues } from "@/hooks/useIssues";
 import Image from "next/image";
 import clsx from "clsx";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/utils/api";
 import { useUser } from "@clerk/nextjs";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
@@ -23,7 +23,7 @@ import { IssuePath } from "./issue-path";
 import { LightningIcon } from "../icons";
 import { IssueTitle } from "../issue-title";
 import { IssueSelectStatus } from "../issue-select-status";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
 import {
   Accordion,
   AccordionContent,
@@ -36,16 +36,16 @@ const IssueDetails: React.FC<{
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
   className?: string;
 }> = ({ issueId, setIssueId, className }) => {
-  const { data: issues } = useQuery(["issues"], api.issues.getIssues, {
-    onSuccess: (data) => {
-      setIssueInfo(data.find((issue) => issue.key === issueId));
-    },
-  });
+  const { issues } = useIssues();
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
-  const [issueInfo, setIssueInfo] = useState(() =>
-    issues?.find((issue) => issue.key === issueId)
+  const getIssue = useCallback(
+    (issueId: string | null) => {
+      return issues?.find((issue) => issue.key === issueId);
+    },
+    [issues]
   );
+  const [issueInfo, setIssueInfo] = useState(() => getIssue(issueId));
 
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
@@ -54,10 +54,10 @@ const IssueDetails: React.FC<{
   }, []);
 
   useEffect(() => {
-    setIssueInfo(issues?.find((issue) => issue.key === issueId));
-  }, [issueId, issues]);
+    setIssueInfo(() => getIssue(issueId));
+  }, [issueId, getIssue]);
 
-  if (!issueInfo) return <div />;
+  if (!issueInfo || !issues) return <div />;
 
   return (
     <div
@@ -75,7 +75,7 @@ const IssueDetails: React.FC<{
 };
 
 const IssueDetailsHeader: React.FC<{
-  issue: IssueType | undefined;
+  issue: IssueType;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ issue, setIssueId }) => {
   if (!issue) return <div />;
@@ -173,33 +173,24 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
 const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
-  const { mutate: updateIssue } = useMutation(api.issues.patchIssue);
+  const { updateIssue } = useIssues();
 
   const { user } = useUser();
-  const queryClient = useQueryClient();
 
   function handleAutoAssign() {
     if (!user) {
       console.error("No user found");
       return;
     }
-    updateIssue(
-      {
-        issue_key: issue.key,
-        assignee: {
-          id: user.id,
-          name: user?.fullName ?? "",
-          email: user?.emailAddresses[0]?.emailAddress ?? "",
-          avatar: user?.profileImageUrl ?? "",
-        },
+    updateIssue({
+      issue_key: issue.key,
+      assignee: {
+        id: user.id,
+        name: user?.fullName ?? "",
+        email: user?.emailAddresses[0]?.emailAddress ?? "",
+        avatar: user?.profileImageUrl ?? "",
       },
-      {
-        onSuccess: () => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          queryClient.invalidateQueries(["issues"]);
-        },
-      }
-    );
+    });
   }
   return (
     <Accordion
