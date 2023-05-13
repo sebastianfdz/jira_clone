@@ -39,7 +39,7 @@ export const useIssues = () => {
         // If the mutation fails, use the context returned from onMutate to roll back
         queryClient.setQueryData(["issues"], context?.previousIssues);
         toast.error({
-          message: `Something went wrong while updating the issue ${newIssue.issue_key}}`,
+          message: `Something went wrong while updating the issue ${newIssue.issue_key}`,
           description: "Please try again later.",
         });
       },
