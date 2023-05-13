@@ -1,17 +1,17 @@
 "use client";
 import { Fragment, useEffect, useState } from "react";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { FaChevronRight } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { IssueList } from "./issue-list";
 import { IssueStatusCount } from "./issue-status-count";
 import { api } from "@/utils/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const BacklogList: React.FC<{
   id: string;
