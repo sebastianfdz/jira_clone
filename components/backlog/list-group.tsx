@@ -1,19 +1,20 @@
 "use client";
+import { useIssues } from "@/hooks/useIssues";
+import { useQuery } from "@tanstack/react-query";
+import clsx from "clsx";
+import { api } from "@/utils/api";
+import { BacklogList } from "./list-backlog";
+import { SprintList } from "./list-sprint";
+import { insertItemIntoArray, moveItemWithinArray } from "@/utils/helpers";
+import { type IssueType } from "@/utils/types";
 import {
   DragDropContext,
   type DraggableLocation,
   type DropResult,
 } from "react-beautiful-dnd";
-import { BacklogList } from "./list-backlog";
-import { SprintList } from "./list-sprint";
-import clsx from "clsx";
-import { insertItemIntoArray, moveItemWithinArray } from "@/utils/helpers";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/utils/api";
-import { type Issue as IssueType } from "@prisma/client";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
-  const { data: issues } = useQuery(["issues"], api.issues.getIssues);
+  const { issues } = useIssues();
   const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
 
   const onDragEnd = (result: DropResult) => {
@@ -49,18 +50,11 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
           <div key={sprint.id} className="my-3">
             <SprintList
               sprint={sprint}
-              issues={issues.filter(
-                (issue) => issue.sprintId === sprint.id && issue.type !== "EPIC"
-              )}
+              issues={filterOutEpics(issues, sprint.id)}
             />
           </div>
         ))}
-        <BacklogList
-          id="backlog"
-          issues={issues.filter(
-            (issue) => issue.sprintId === null && issue.type !== "EPIC"
-          )}
-        />
+        <BacklogList id="backlog" issues={filterOutEpics(issues, null)} />
       </DragDropContext>
     </div>
   );
@@ -70,6 +64,12 @@ ListGroup.displayName = "ListGroup";
 
 function sprintId(id: string) {
   return id == "backlog" ? null : id;
+}
+
+function filterOutEpics(issues: IssueType[], sprintId: string | null) {
+  return issues.filter(
+    (issue) => issue.sprintId === sprintId && issue.type !== "EPIC"
+  );
 }
 
 function moveIssueWithinColumn(
