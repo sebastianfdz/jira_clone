@@ -1,36 +1,64 @@
 "use client";
 import { Button } from "../ui/button";
 import { IssueSelectType } from "../issue-select-type";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
 import { IssueSelectEpic } from "../issue-select-epic";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/utils/api";
 import { toast } from "../toast";
 import { IssueIcon } from "../issue-icon";
 import { AiOutlinePlus } from "react-icons/ai";
+import { isEpic } from "@/utils/helpers";
+import { type ReactNode } from "react";
+import { useIssues } from "@/hooks/useIssues";
 
 const IssuePath: React.FC<{
   issue: IssueType;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ issue, setIssueId }) => {
-  const queryClient = useQueryClient();
+  if (isEpic(issue))
+    return (
+      <div className="flex items-center">
+        <IssueIcon issueType={issue.type} />
+        <Button
+          onClick={() => setIssueId(issue.key)}
+          customColors
+          className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
+        >
+          <span className="whitespace-nowrap">{issue.key}</span>
+        </Button>
+      </div>
+    );
 
-  const { mutate: updateIssue } = useMutation(api.issues.patchIssue, {
-    onMutate: (data) => {
-      // Optimistic update
-      queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
-        return old?.map((issue) => {
-          if (issue.key == data.issue_key && data.type) {
-            return {
-              ...issue,
-              type: data.type,
-            };
-          }
-          return issue;
-        });
-      });
-    },
-  });
+  if (issue.parent && isEpic(issue.parent))
+    return (
+      <ParentContainer issue={issue} setIssueId={setIssueId}>
+        <IssueSelectEpic issue={issue}>
+          <IssueIcon issueType={issue.parent.type} />
+        </IssueSelectEpic>
+      </ParentContainer>
+    );
+
+  if (issue.parent)
+    return (
+      <ParentContainer issue={issue} setIssueId={setIssueId}>
+        <IssueIcon issueType={issue.parent.type} />
+      </ParentContainer>
+    );
+
+  return (
+    <ParentContainer issue={issue} setIssueId={setIssueId}>
+      <IssueSelectEpic issue={issue}>
+        <AddEpic />
+      </IssueSelectEpic>
+    </ParentContainer>
+  );
+};
+
+const ParentContainer: React.FC<{
+  children: ReactNode;
+  issue: IssueType;
+  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ children, issue, setIssueId }) => {
+  const { updateIssue } = useIssues();
 
   function handleSelectType(type: IssueType["type"]) {
     updateIssue(
@@ -40,8 +68,6 @@ const IssuePath: React.FC<{
       },
       {
         onSuccess: (data) => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          queryClient.invalidateQueries(["issues"]);
           toast.success({
             message: `Issue type updated to ${data.type}`,
             description: "Issue type changed",
@@ -50,19 +76,16 @@ const IssuePath: React.FC<{
       }
     );
   }
-
   return (
     <div className="flex gap-x-3">
       <div className="flex items-center">
-        <IssueSelectEpic issue={issue}>
-          {issue.parentKey ? <IssueIcon issueType="EPIC" /> : <AddEpic />}
-        </IssueSelectEpic>
+        {children}
         <Button
-          onClick={() => setIssueId(issue.parentKey)}
+          onClick={() => setIssueId(issue.parent?.key ?? null)}
           customColors
           className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
         >
-          <span className="whitespace-nowrap">{issue.parentKey}</span>
+          <span className="whitespace-nowrap">{issue.parent?.key}</span>
         </Button>
       </div>
       <span className="py-1.5 text-gray-500">/</span>

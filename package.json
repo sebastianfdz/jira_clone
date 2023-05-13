@@ -10,7 +10,8 @@
     "start": "next start"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.16.4",
+    "@clerk/clerk-js": "^4.39.0",
+    "@clerk/nextjs": "^4.17.3",
     "@prisma/client": "^4.11.0",
     "@radix-ui/react-accordion": "^1.1.1",
     "@radix-ui/react-context-menu": "^2.1.3",
