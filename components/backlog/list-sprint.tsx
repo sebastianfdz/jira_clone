@@ -1,18 +1,19 @@
 "use client";
 import { Fragment, useEffect, useState } from "react";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { FaChevronRight } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import { IssueList } from "./issue-list";
 import { IssueStatusCount } from "./issue-status-count";
-import { type Issue as IssueType, type Sprint } from "@prisma/client";
+import { type Sprint } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
 import { SprintDropdownMenu } from "./sprint-menu";
 import { DropdownTrigger } from "../ui/dropdown-menu";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 const SprintList: React.FC<{
   sprint: Sprint;
