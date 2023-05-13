@@ -17,14 +17,23 @@ const postSchema = z.object({
 });
 
 export type PostIssueBody = z.infer<typeof postSchema>;
-export type GetIssuesResponse = { issues: Issue[] };
+export type GetIssuesResponse = { issues: (Issue & { parent: Issue })[] };
 export type PostIssueResponse = { issue: Issue };
 
 export async function GET() {
   const issues = await prisma.issue.findMany();
-  const active_issues = issues.filter((issue) => !issue.isDeleted);
-  // return NextResponse.json<GetIssuesResponse>({ issues: active_issues });
-  return NextResponse.json({ issues: active_issues });
+  const activeIssues = issues.filter((issue) => !issue.isDeleted);
+
+  const issuesWithparents = activeIssues.map((issue) => {
+    if (issue.parentKey) {
+      const parent = activeIssues.find((i) => i.key === issue.parentKey);
+      return { ...issue, parent };
+    }
+    return issue;
+  });
+
+  // return NextResponse.json<GetIssuesResponse>({ issues: activeIssues });
+  return NextResponse.json({ issues: issuesWithparents });
 }
 
 export async function POST(req: NextRequest) {
