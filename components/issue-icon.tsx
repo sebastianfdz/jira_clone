@@ -22,7 +22,7 @@ const Icon: React.FC<{ children: ReactNode; className?: string }> = ({
 
 const TaskIcon = () => {
   return (
-    <Icon className="h-fit bg-[#4bade8]">
+    <Icon className="h-fit bg-task">
       <FaCheck className=" p-0.5 text-white" />
     </Icon>
   );
@@ -30,7 +30,7 @@ const TaskIcon = () => {
 
 const StoryIcon = () => {
   return (
-    <Icon className="h-fit bg-lime-500">
+    <Icon className="h-fit bg-story">
       <BsBookmarkFill className="p-0.5" />
     </Icon>
   );
@@ -38,7 +38,7 @@ const StoryIcon = () => {
 
 const BugIcon = () => {
   return (
-    <Icon className="h-fit bg-red-500">
+    <Icon className="h-fit bg-bug">
       <BsFillRecordFill />
     </Icon>
   );
@@ -46,7 +46,7 @@ const BugIcon = () => {
 
 const EpicIcon = () => {
   return (
-    <Icon className="h-fit bg-purple-600">
+    <Icon className="h-fit bg-epic">
       <HiLightningBolt />
     </Icon>
   );
