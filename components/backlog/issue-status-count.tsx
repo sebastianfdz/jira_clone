@@ -1,7 +1,6 @@
 "use client";
 import { getIssueCountByStatus } from "@/utils/helpers";
-// import { type IssueCountType } from "@/utils/types";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
 import clsx from "clsx";
 import { Fragment, useCallback, useEffect, useState } from "react";
 
@@ -21,9 +20,9 @@ const IssueStatusCount: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
         <span
           key={status}
           className={clsx(
-            status == "TODO" && "bg-zinc-300 text-black",
-            status == "IN_PROGRESS" && "bg-blue-700 text-white",
-            status == "DONE" && "bg-green-700 text-white",
+            status == "TODO" && "bg-todo text-black",
+            status == "IN_PROGRESS" && "bg-inprogress text-white",
+            status == "DONE" && "bg-done text-white",
             "flex h-5 items-center justify-center rounded-full px-1.5 py-0.5 text-sm font-semibold"
           )}
         >
