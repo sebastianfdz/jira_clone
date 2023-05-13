@@ -1,10 +1,12 @@
 import { Fragment, useState } from "react";
+import { useIssues } from "@/hooks/useIssues";
 import { FaChevronDown } from "react-icons/fa";
 import clsx from "clsx";
-import { type IssueStatus, type Issue as IssueType } from "@prisma/client";
+import { type IssueStatus } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
 import { NotImplemented } from "@/components/not-implemented";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/utils/api";
+import { capitalizeMany } from "@/utils/helpers";
+import { statuses } from "@/app/mockDb/db";
 import {
   Select,
   SelectContent,
@@ -17,8 +19,6 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
-import { capitalizeMany } from "@/utils/helpers";
-import { statuses } from "@/app/mockDb/db";
 
 export type StatusObject = {
   value: IssueType["status"];
@@ -48,41 +48,16 @@ const IssueSelectStatus: React.FC<{
     TODO: "TO DO",
   };
 
-  const queryClient = useQueryClient();
-
-  const { mutate: updateIssue, isLoading: isUpdating } = useMutation(
-    api.issues.patchIssue,
-    {
-      onSuccess: () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        queryClient.invalidateQueries(["issues"]);
-      },
-      onMutate: (data) => {
-        // Optimistic update
-        queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
-          return old?.map((issue) => {
-            if (issue.key == data.issue_key && data.status) {
-              return {
-                ...issue,
-                status: data.status,
-              };
-            }
-            return issue;
-          });
-        });
-        return new Promise<void>((resolve) => resolve());
-      },
-    }
-  );
+  const { updateIssue, isUpdating } = useIssues();
 
   function handleSelectChange(value: IssueType["status"]) {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const newStatus = statuses.find((status) => status.value == value)!;
-    setSelected(newStatus);
     updateIssue({
       issue_key: issueId,
       status: value,
     });
+    setSelected(newStatus);
   }
 
   return (
@@ -91,6 +66,7 @@ const IssueSelectStatus: React.FC<{
         <SelectTrigger
           onClick={(e) => e.stopPropagation()}
           disabled={isUpdating}
+          // TODO: Colors could be managed with data-state?
           style={{
             backgroundColor:
               variant == "sm" ? selected.smBgColor : selected.lgBgColor,
@@ -130,12 +106,8 @@ const IssueSelectStatus: React.FC<{
                     )}
                   >
                     <span
-                      style={{
-                        color: status.smTextColor,
-                      }}
-                      className={clsx(
-                        "rounded-md bg-opacity-30 px-2 text-xs font-semibold"
-                      )}
+                      style={{ color: status.smTextColor }}
+                      className="rounded-md bg-opacity-30 px-2 text-xs font-semibold"
                     >
                       {statusMap[status.value]}
                     </span>
