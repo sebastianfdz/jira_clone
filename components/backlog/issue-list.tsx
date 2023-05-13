@@ -1,14 +1,13 @@
 "use client";
+import { Fragment, useState } from "react";
+import { useIssues } from "@/hooks/useIssues";
 import { Droppable } from "react-beautiful-dnd";
 import { AccordionContent } from "../ui/accordion";
-import { Fragment, useState } from "react";
 import { Issue } from "./issue";
 import { Button } from "../ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { EmtpyIssue } from "./issue-empty";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/utils/api";
-import { type Issue as IssueType } from "@prisma/client";
+import { type IssueType } from "@/utils/types";
 import { useUser } from "@clerk/nextjs";
 
 const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
@@ -16,8 +15,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   issues,
 }) => {
   const { user } = useUser();
-  const { mutate: createIssue, isLoading } = useMutation(api.issues.postIssue);
-  const queryClient = useQueryClient();
+  const { createIssue, isCreating } = useIssues();
   const [isEditing, setIsEditing] = useState(false);
 
   function handleCreateIssue({
@@ -42,11 +40,6 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
       {
         onSuccess: () => {
           setIsEditing(false);
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          queryClient.invalidateQueries(["issues"]);
-        },
-        onError: (error) => {
-          console.error("Eroror => ", error);
         },
       }
     );
@@ -83,7 +76,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
         className="[&[data-state=closed]]:hidden"
         onCreate={({ name, type }) => handleCreateIssue({ name, type })}
         onCancel={() => setIsEditing(false)}
-        isCreating={isLoading}
+        isCreating={isCreating}
       />
     </AccordionContent>
   );
