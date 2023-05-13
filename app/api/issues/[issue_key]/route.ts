@@ -4,7 +4,7 @@ import { IssueStatus, type Issue, IssueType } from "@prisma/client";
 import { z } from "zod";
 
 export type GetIssueDetailsResponse = {
-  issue: Issue | null;
+  issue: (Issue & { parent: Issue | null }) | null;
 };
 
 export async function GET(
@@ -17,8 +17,16 @@ export async function GET(
       key: issue_key,
     },
   });
+  if (!issue?.parentKey) {
+    return NextResponse.json({ issue: { ...issue, parent: null } });
+  }
+  const parent = await prisma.issue.findUnique({
+    where: {
+      key: issue.parentKey,
+    },
+  });
   // return NextResponse.json<GetIssueDetailsResponse>({ issue });
-  return NextResponse.json({ issue });
+  return NextResponse.json({ issue: { ...issue, parent } });
 }
 const patchSchema = z.object({
   name: z.string().optional(),
