@@ -1,10 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { useIssues } from "@/hooks/useIssues";
+import clsx from "clsx";
 import { Button } from "./ui/button";
 import { MdCheck, MdClose } from "react-icons/md";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type Issue as IssueType } from "@prisma/client";
-import { api } from "@/utils/api";
-import clsx from "clsx";
+import { type IssueType } from "@/utils/types";
 
 type IssueTitleProps = {
   isEditing: boolean;
@@ -22,36 +21,15 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
       }
     }, [isEditing, ref]);
 
-    const queryClient = useQueryClient();
-
-    const { mutate: updateIssue } = useMutation(api.issues.patchIssue, {
-      onSuccess: () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        queryClient.invalidateQueries(["issues"]);
-      },
-      onMutate: (data) => {
-        // Optimistic update
-        queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
-          return old?.map((issue) => {
-            if (issue.key == data.issue_key && data.name) {
-              return {
-                ...issue,
-                name: data.name,
-              };
-            }
-            return issue;
-          });
-        });
-      },
-    });
+    const { updateIssue } = useIssues();
 
     function handleNameChange(e: React.SyntheticEvent) {
       e.stopPropagation();
-      setIsEditing(false);
       updateIssue({
         issue_key: issue.key,
         name: currentTitle,
       });
+      setIsEditing(false);
     }
 
     return (
