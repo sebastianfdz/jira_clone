@@ -18,10 +18,8 @@ export const useIssues = () => {
       onMutate: async (newIssue) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
         await queryClient.cancelQueries({ queryKey: ["issues"] });
-
         // Snapshot the previous value
         const previousIssues = queryClient.getQueryData(["issues"]);
-
         // Optimistically update to the new value
         queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
           const newIssues = old?.map((issue) => {
@@ -77,18 +75,16 @@ export const useIssues = () => {
   const { mutate: deleteIssue, isLoading: isDeleting } = useMutation(
     api.issues.deleteIssue,
     {
+      // OPTIMISTIC UPDATE
       onMutate: async (deletedIssue) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
         await queryClient.cancelQueries({ queryKey: ["issues"] });
-
         // Snapshot the previous value
         const previousIssues = queryClient.getQueryData(["issues"]);
-
         // Optimistically delete the issue
         queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
           return old?.filter((issue) => issue.key !== deletedIssue.issue_key);
         });
-
         // Return a context object with the snapshotted value
         return { previousIssues };
       },
