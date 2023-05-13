@@ -1,5 +1,9 @@
 import { type ReactNode, useState } from "react";
+import { useIssues } from "@/hooks/useIssues";
 import clsx from "clsx";
+import { IssueIcon } from "./issue-icon";
+import { type IssueType } from "@/utils/types";
+import { isEpic } from "@/utils/helpers";
 import {
   Select,
   SelectContent,
@@ -11,55 +15,19 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
-import { IssueIcon } from "./issue-icon";
-import { type Issue as IssueType } from "@prisma/client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/utils/api";
 
 const IssueSelectEpic: React.FC<{
   issue: IssueType;
   children: ReactNode;
   className?: string;
 }> = ({ issue, children, className }) => {
-  // const epics: { key: string; title: string }[] = Array.from(
-  //   Array(10).keys()
-  // ).map((el) => {
-  //   return { key: `P-SEBB-${el}`, title: `Epic title ${el}` };
-  // });
-
-  const { data: issues } = useQuery(["issues"], api.issues.getIssues);
-  const { mutate: updateIssue } = useMutation(api.issues.patchIssue, {
-    onMutate: (data) => {
-      // Optimistic update
-      queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
-        return old?.map((issue) => {
-          if (issue.key == data.issue_key && data.parentKey !== undefined) {
-            return {
-              ...issue,
-              parentKey: data.parentKey,
-            };
-          }
-          return issue;
-        });
-      });
-    },
-  });
-
+  const { issues, updateIssue } = useIssues();
   const [selected, setSelected] = useState<string | null>(issue.parentKey);
-  const queryClient = useQueryClient();
   function handleSelect(key: string | null) {
-    updateIssue(
-      {
-        issue_key: issue.key,
-        parentKey: key,
-      },
-      {
-        onSuccess: () => {
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          queryClient.invalidateQueries(["issues"]);
-        },
-      }
-    );
+    updateIssue({
+      issue_key: issue.key,
+      parentKey: key,
+    });
     setSelected(key);
   }
   return (
@@ -78,7 +46,7 @@ const IssueSelectEpic: React.FC<{
             <span className="pl-3 text-xs text-gray-500">EPICS</span>
             <SelectGroup>
               {issues
-                ?.filter((issue) => issue.type == "EPIC")
+                ?.filter((issue) => isEpic(issue))
                 .map((issue) => (
                   <SelectItem
                     key={issue.key}
@@ -87,13 +55,9 @@ const IssueSelectEpic: React.FC<{
                       "border-l-[3px] border-transparent py-2 pl-3 text-sm hover:cursor-pointer  hover:bg-gray-50 [&[data-state=checked]]:bg-gray-200"
                     )}
                   >
-                    <div className="flex">
-                      <IssueIcon issueType="EPIC" />
-                      <span
-                        className={clsx(
-                          "rounded-md bg-opacity-30 pl-4 text-sm"
-                        )}
-                      >
+                    <div className="flex items-center">
+                      <IssueIcon issueType={issue.type} />
+                      <span className="rounded-md bg-opacity-30 pl-4 text-sm">
                         {issue.name}
                       </span>
                     </div>
