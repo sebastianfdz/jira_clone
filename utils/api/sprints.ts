@@ -22,7 +22,7 @@ export const sprintsRoutes = {
       );
       return data.sprint;
     } catch (error) {
-      return error;
+      console.error(error);
     }
   },
   getSprints: async () => {
