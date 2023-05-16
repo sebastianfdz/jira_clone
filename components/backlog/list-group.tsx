@@ -5,17 +5,29 @@ import clsx from "clsx";
 import { api } from "@/utils/api";
 import { BacklogList } from "./list-backlog";
 import { SprintList } from "./list-sprint";
-import { type IssueType } from "@/utils/types";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
 import { isNullish, sprintId } from "@/utils/helpers";
+import { useCallback } from "react";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();
+
+  const filterOutEpics = useCallback(
+    (sprintId: string | null) => {
+      return (
+        issues?.filter(
+          (issue) => issue.sprintId === sprintId && issue.type !== "EPIC"
+        ) ?? []
+      );
+    },
+    [issues]
+  );
+
   const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
 
   const onDragEnd = (result: DropResult) => {
-    const { destination } = result;
-    if (isNullish(destination)) return;
+    const { destination, source } = result;
+    if (isNullish(destination) || isNullish(source)) return;
     updateIssue({
       issue_key: result.draggableId,
       sprintId: sprintId(destination.droppableId),
@@ -23,30 +35,21 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
     });
   };
 
-  if (!issues || !sprints) return <div />;
+  if (!sprints) return <div />;
   return (
     <div className={clsx("min-h-full min-w-max overflow-y-auto", className)}>
       <DragDropContext onDragEnd={onDragEnd}>
         {sprints.map((sprint) => (
           <div key={sprint.id} className="my-3">
-            <SprintList
-              sprint={sprint}
-              issues={filterOutEpics(issues, sprint.id)}
-            />
+            <SprintList sprint={sprint} issues={filterOutEpics(sprint.id)} />
           </div>
         ))}
-        <BacklogList id="backlog" issues={filterOutEpics(issues, null)} />
+        <BacklogList id="backlog" issues={filterOutEpics(null)} />
       </DragDropContext>
     </div>
   );
 };
 
 ListGroup.displayName = "ListGroup";
-
-function filterOutEpics(issues: IssueType[], sprintId: string | null) {
-  return issues.filter(
-    (issue) => issue.sprintId === sprintId && issue.type !== "EPIC"
-  );
-}
 
 export { ListGroup };
