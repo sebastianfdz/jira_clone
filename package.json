@@ -19,7 +19,7 @@
     "@radix-ui/react-navigation-menu": "^1.1.2",
     "@radix-ui/react-popover": "^1.0.5",
     "@radix-ui/react-select": "^1.2.1",
-    "@tanstack/react-query": "^4.28.0",
+    "@tanstack/react-query": "^4.29.7",
     "axios": "^1.4.0",
     "clsx": "^1.2.1",
     "next": "^13.4.1",
