@@ -9,6 +9,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { EmtpyIssue } from "./issue-empty";
 import { type IssueType } from "@/utils/types";
 import { useUser } from "@clerk/nextjs";
+import clsx from "clsx";
 
 const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   sprintId,
@@ -48,16 +49,20 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
     <AccordionContent className="pt-2">
       <Droppable key={sprintId} droppableId={sprintId ?? "backlog"}>
         {({ droppableProps, innerRef, placeholder }) => (
-          <Fragment>
-            <div {...droppableProps} ref={innerRef}>
+          <div
+            {...droppableProps}
+            ref={innerRef}
+            className={clsx(issues.length == 0 && "min-h-[1px]")}
+          >
+            <Fragment>
               {issues
                 .sort((a, b) => a.listPosition - b.listPosition)
                 .map((issue, index) => (
                   <Issue key={issue.key} index={index} issue={issue} />
                 ))}
-            </div>
+            </Fragment>
             {placeholder}
-          </Fragment>
+          </div>
         )}
       </Droppable>
 
