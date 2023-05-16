@@ -3,6 +3,12 @@ import { api } from "@/utils/api";
 import { type IssueType } from "@/utils/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelectedIssueContext } from "./useSelectedIssue";
+import { type PatchIssueBody } from "@/app/api/issues/[issue_key]/route";
+import {
+  insertIssueIntoList,
+  isNullish,
+  moveIssueWithinList,
+} from "@/utils/helpers";
 
 export const useIssues = () => {
   const { issueId, setIssueId } = useSelectedIssueContext();
@@ -21,22 +27,30 @@ export const useIssues = () => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
         await queryClient.cancelQueries(["issues"]);
         // Snapshot the previous value
-        const previousIssues = queryClient.getQueryData(["issues"]);
+        const previousIssues = queryClient.getQueryData<
+          (IssueType | IssueType["parent"])[]
+        >(["issues"]);
         // Optimistically update the issue
-        queryClient.setQueryData(
-          ["issues"],
-          (old?: (IssueType | IssueType["parent"])[]) => {
-            const newIssues = (old ?? []).map((issue) => {
-              const { issue_key, ...updatedProps } = newIssue;
-              if (issue.key === issue_key) {
-                // Assign the new prop values to the issue
-                Object.assign(issue, updatedProps);
-              }
-              return issue;
-            });
-            return newIssues;
-          }
-        );
+        if (!isNullish(newIssue.listPosition) && !isNullish(previousIssues)) {
+          // If listPosition is defined, we are dragging and dropping
+          handleOptimisticDrangAndDrop({ previousIssues, newIssue });
+        } else {
+          // Otherwise, we are generically updating the issue
+          queryClient.setQueryData(
+            ["issues"],
+            (old?: (IssueType | IssueType["parent"])[]) => {
+              const newIssues = (old ?? []).map((issue) => {
+                const { issue_key, ...updatedProps } = newIssue;
+                if (issue.key === issue_key) {
+                  // Assign the new prop values to the issue
+                  return Object.assign(issue, updatedProps);
+                }
+                return issue;
+              });
+              return newIssues;
+            }
+          );
+        }
         // Return a context object with the snapshotted value
         return { previousIssues };
       },
@@ -114,118 +128,71 @@ export const useIssues = () => {
     }
   );
 
-  // function passProps({
-  //   issue,
-  //   _issue,
-  // }: {
-  //   issue: IssueType | IssueType["parent"];
-  //   _issue: PatchIssueBody;
-  // }) {
-  //   if (_issue.listPosition && _issue.sprintId) {
-  //     return {
-  //       ...issue,
-  //       listPosition: _issue.listPosition,
-  //       sprintId: _issue.sprintId,
-  //     };
-  //   }
-  //   if (_issue.assignee) {
-  //     return { ...issue, assignee: _issue.assignee };
-  //   }
-  //   if (_issue.status) {
-  //     return { ...issue, status: _issue.status };
-  //   }
-  //   if (_issue.name) {
-  //     return { ...issue, name: _issue.name };
-  //   }
-  //   if (_issue.description) {
-  //     return { ...issue, description: _issue.description };
-  //   }
-  //   if (_issue.type) {
-  //     return { ...issue, type: _issue.type };
-  //   }
-  //   if (_issue.reporter) {
-  //     return { ...issue, reporter: _issue.reporter };
-  //   }
-  //   return issue;
-  // }
+  function handleOptimisticDrangAndDrop({
+    previousIssues,
+    newIssue,
+  }: {
+    previousIssues: (IssueType | IssueType["parent"])[];
+    newIssue: { issue_key: string } & PatchIssueBody;
+  }) {
+    const { issue_key, listPosition, sprintId } = newIssue;
+    const oldIssue = previousIssues.find((issue) => issue.key === issue_key);
+    if (
+      isNullish(listPosition) ||
+      isNullish(oldIssue) ||
+      sprintId === undefined
+    ) {
+      return;
+    }
 
-  // function handleOptimisticDnd({
-  //   newIssue,
-  //   previousIssues,
-  // }: {
-  //   newIssue: { issue_key: string } & PatchIssueBody;
-  //   previousIssues: IssueType[] | undefined;
-  // }) {
-  //   if (!newIssue.listPosition) return;
-  //   const previousIssue = previousIssues?.find(
-  //     (issue) => issue.key == newIssue.issue_key
-  //   );
-  //   if (!previousIssue) return;
-  //   if (previousIssue.sprintId == newIssue.sprintId) {
-  //     // Handle drag and drop within the same sprint
-  //     queryClient.setQueryData(
-  //       ["issues"],
-  //       (old: (IssueType | IssueType["parent"])[] | undefined) => {
-  //         if (!old || !newIssue.listPosition) return;
-  //         const sortedOld = [...old]
-  //           .filter((issue) => issue.sprintId == newIssue.sprintId)
-  //           .sort((a, b) => a.listPosition - b.listPosition);
-  //         const newIssues = moveIssueWithinList({
-  //           issueList: sortedOld,
-  //           oldIndex: previousIssue.listPosition,
-  //           newIndex: newIssue.listPosition,
-  //         });
+    queryClient.setQueryData(
+      ["issues"],
+      (old?: (IssueType | IssueType["parent"])[]) => {
+        if (isNullish(old)) return;
+        if (sprintId === oldIssue.sprintId) {
+          // The issue is being moved within the same sprint
+          const affectedIssues = old.filter(
+            (issue) => issue.sprintId === sprintId
+          );
+          const unaffectedIssues = old.filter(
+            (issue) => issue.sprintId !== sprintId
+          );
 
-  //         return [
-  //           ...newIssues.map((issue, index) => ({
-  //             ...issue,
-  //             listPosition: index,
-  //           })),
-  //           ...old.filter((issue) => issue.sprintId != newIssue.sprintId),
-  //         ];
-  //       }
-  //     );
-  //   } else {
-  //     // Handle drag and drop between sprints
-  //     queryClient.setQueryData(
-  //       ["issues"],
-  //       (old: (IssueType | IssueType["parent"])[] | undefined) => {
-  //         if (!old || !newIssue.listPosition) return;
-  //         const newIssues = moveIssueWithinList({
-  //           issueList: old.filter(
-  //             (issue) => issue.sprintId == newIssue.sprintId
-  //           ),
-  //           oldIndex: previousIssue.listPosition,
-  //           newIndex: newIssue.listPosition,
-  //         }).map((issue, index) => ({
-  //           ...issue,
-  //           listPosition: index,
-  //         }));
+          const newAffectedIssues = moveIssueWithinList({
+            issueList: affectedIssues,
+            oldIndex: oldIssue.listPosition,
+            newIndex: listPosition,
+          });
+          return [...unaffectedIssues, ...newAffectedIssues];
+        } else {
+          // The issue is being moved to a different sprint
+          const { sprintId: oldSprintId } = oldIssue;
+          const oldSprintIssues = old.filter(
+            (issue) =>
+              issue.sprintId === oldIssue.sprintId && issue.key !== oldIssue.key
+          );
 
-  //         return [
-  //           ...newIssues,
-  //           ...old.filter((issue) => issue.sprintId != newIssue.sprintId),
-  //         ];
-  //       }
-  //     );
-  //   }
+          const destinationList = old.filter(
+            (issue) => issue.sprintId === sprintId
+          );
 
-  //   // queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
-  //   //   const newIssues = old?.map((issue) => {
-  //   //     if (issue.key == newIssue.issue_key && newIssue.listPosition) {
-  //   //       // Assign the new values to the issue
-  //   //       isDraggingUp
-  //   //         ? (newIssue.listPosition += 0.1)
-  //   //         : (newIssue.listPosition += 0.1);
-  //   //       Object.assign(issue, newIssue);
-  //   //     }
+          const newSprintIssues = insertIssueIntoList({
+            issueList: destinationList,
+            issue: Object.assign(oldIssue, { listPosition, sprintId }),
+            index: listPosition,
+          });
 
-  //   //     return issue;
-  //   //   });
-  //   //   console.log("newIssues", newIssues);
-  //   //   return newIssues;
-  //   // });
-  // }
+          const unaffectedIssues = old.filter(
+            (issue) =>
+              issue.sprintId !== sprintId && issue.sprintId !== oldSprintId
+          );
+
+          return [...unaffectedIssues, ...oldSprintIssues, ...newSprintIssues];
+        }
+      }
+    );
+  }
+
   return {
     issues,
     updateIssue,
