@@ -72,8 +72,8 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
   const validated = patchSchema.safeParse(body);
 
   if (!validated.success) {
-    const message =
-      "Invalid body. " + (validated.error.errors[0]?.message ?? "");
+    // eslint-disable-next-line
+    const message = "Invalid body. " + validated.error.errors[0]?.message ?? "";
     return new Response(message, { status: 400 });
   }
 
