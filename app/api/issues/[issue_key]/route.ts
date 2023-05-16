@@ -195,7 +195,6 @@ async function handleListPositionChange(payload: {
       issueList,
       issue: updatedCurrent,
       index: destinationPosition,
-      listId: destinationSprint,
     });
   }
 
