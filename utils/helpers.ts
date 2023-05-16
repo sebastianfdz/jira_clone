@@ -21,7 +21,9 @@ export function moveIssueWithinList(payload: {
   newIndex: number;
 }) {
   const { issueList, oldIndex, newIndex } = payload;
-  const issueListClone = [...issueList];
+  const issueListClone = [...issueList].sort(
+    (a, b) => a.listPosition - b.listPosition
+  );
   const [removedItem] = issueListClone.splice(oldIndex, 1);
 
   if (!removedItem) return issueListClone;
@@ -40,10 +42,11 @@ export function insertIssueIntoList(payload: {
   issueList: IssueT[];
   issue: IssueT;
   index: number;
-  listId: string | null;
 }) {
   const { issueList, issue, index } = payload;
-  const issueListClone = [...issueList];
+  const issueListClone = [...issueList].sort(
+    (a, b) => a.listPosition - b.listPosition
+  );
   issueListClone.splice(index, 0, issue);
   return issueListClone.map((issue, index) => {
     return <IssueT>{
