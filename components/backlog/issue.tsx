@@ -48,7 +48,12 @@ const Issue: React.FC<{
             className="flex w-fit items-center gap-x-2 [&[data-state=editing]]:w-full"
           >
             <IssueIcon issueType={issue.type} />
-            <div className="whitespace-nowrap text-gray-600">{issue.key}</div>
+            <div
+              data-state={issue.status}
+              className="whitespace-nowrap text-gray-500 [&[data-state=DONE]]:line-through"
+            >
+              {issue.key}
+            </div>
             <IssueTitle
               key={issue.key + issue.name}
               className="py-1.5"
