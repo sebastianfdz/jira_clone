@@ -8,7 +8,9 @@ export const useIssues = () => {
   const { issueId, setIssueId } = useSelectedIssueContext();
   const queryClient = useQueryClient();
   // GET
-  const { data: issues } = useQuery(["issues"], api.issues.getIssues);
+  const { data: issues } = useQuery(["issues"], api.issues.getIssues, {
+    refetchOnMount: false,
+  });
 
   // UPDATE
   const { mutate: updateIssue, isLoading: isUpdating } = useMutation(
@@ -17,21 +19,24 @@ export const useIssues = () => {
       // OPTIMISTIC UPDATE
       onMutate: async (newIssue) => {
         // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-        await queryClient.cancelQueries({ queryKey: ["issues"] });
+        await queryClient.cancelQueries(["issues"]);
         // Snapshot the previous value
         const previousIssues = queryClient.getQueryData(["issues"]);
-        // Optimistically update to the new value
-        queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
-          const newIssues = old?.map((issue) => {
-            if (issue.key == newIssue.issue_key) {
-              // Assign the new values to the issue
-              Object.assign(issue, newIssue);
-            }
-            return issue;
-          });
-          return newIssues;
-        });
-
+        // Optimistically update the issue
+        queryClient.setQueryData(
+          ["issues"],
+          (old?: (IssueType | IssueType["parent"])[]) => {
+            const newIssues = (old ?? []).map((issue) => {
+              const { issue_key, ...updatedProps } = newIssue;
+              if (issue.key === issue_key) {
+                // Assign the new prop values to the issue
+                Object.assign(issue, updatedProps);
+              }
+              return issue;
+            });
+            return newIssues;
+          }
+        );
         // Return a context object with the snapshotted value
         return { previousIssues };
       },
@@ -108,6 +113,119 @@ export const useIssues = () => {
       },
     }
   );
+
+  // function passProps({
+  //   issue,
+  //   _issue,
+  // }: {
+  //   issue: IssueType | IssueType["parent"];
+  //   _issue: PatchIssueBody;
+  // }) {
+  //   if (_issue.listPosition && _issue.sprintId) {
+  //     return {
+  //       ...issue,
+  //       listPosition: _issue.listPosition,
+  //       sprintId: _issue.sprintId,
+  //     };
+  //   }
+  //   if (_issue.assignee) {
+  //     return { ...issue, assignee: _issue.assignee };
+  //   }
+  //   if (_issue.status) {
+  //     return { ...issue, status: _issue.status };
+  //   }
+  //   if (_issue.name) {
+  //     return { ...issue, name: _issue.name };
+  //   }
+  //   if (_issue.description) {
+  //     return { ...issue, description: _issue.description };
+  //   }
+  //   if (_issue.type) {
+  //     return { ...issue, type: _issue.type };
+  //   }
+  //   if (_issue.reporter) {
+  //     return { ...issue, reporter: _issue.reporter };
+  //   }
+  //   return issue;
+  // }
+
+  // function handleOptimisticDnd({
+  //   newIssue,
+  //   previousIssues,
+  // }: {
+  //   newIssue: { issue_key: string } & PatchIssueBody;
+  //   previousIssues: IssueType[] | undefined;
+  // }) {
+  //   if (!newIssue.listPosition) return;
+  //   const previousIssue = previousIssues?.find(
+  //     (issue) => issue.key == newIssue.issue_key
+  //   );
+  //   if (!previousIssue) return;
+  //   if (previousIssue.sprintId == newIssue.sprintId) {
+  //     // Handle drag and drop within the same sprint
+  //     queryClient.setQueryData(
+  //       ["issues"],
+  //       (old: (IssueType | IssueType["parent"])[] | undefined) => {
+  //         if (!old || !newIssue.listPosition) return;
+  //         const sortedOld = [...old]
+  //           .filter((issue) => issue.sprintId == newIssue.sprintId)
+  //           .sort((a, b) => a.listPosition - b.listPosition);
+  //         const newIssues = moveIssueWithinList({
+  //           issueList: sortedOld,
+  //           oldIndex: previousIssue.listPosition,
+  //           newIndex: newIssue.listPosition,
+  //         });
+
+  //         return [
+  //           ...newIssues.map((issue, index) => ({
+  //             ...issue,
+  //             listPosition: index,
+  //           })),
+  //           ...old.filter((issue) => issue.sprintId != newIssue.sprintId),
+  //         ];
+  //       }
+  //     );
+  //   } else {
+  //     // Handle drag and drop between sprints
+  //     queryClient.setQueryData(
+  //       ["issues"],
+  //       (old: (IssueType | IssueType["parent"])[] | undefined) => {
+  //         if (!old || !newIssue.listPosition) return;
+  //         const newIssues = moveIssueWithinList({
+  //           issueList: old.filter(
+  //             (issue) => issue.sprintId == newIssue.sprintId
+  //           ),
+  //           oldIndex: previousIssue.listPosition,
+  //           newIndex: newIssue.listPosition,
+  //         }).map((issue, index) => ({
+  //           ...issue,
+  //           listPosition: index,
+  //         }));
+
+  //         return [
+  //           ...newIssues,
+  //           ...old.filter((issue) => issue.sprintId != newIssue.sprintId),
+  //         ];
+  //       }
+  //     );
+  //   }
+
+  //   // queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
+  //   //   const newIssues = old?.map((issue) => {
+  //   //     if (issue.key == newIssue.issue_key && newIssue.listPosition) {
+  //   //       // Assign the new values to the issue
+  //   //       isDraggingUp
+  //   //         ? (newIssue.listPosition += 0.1)
+  //   //         : (newIssue.listPosition += 0.1);
+  //   //       Object.assign(issue, newIssue);
+  //   //     }
+
+  //   //     return issue;
+  //   //   });
+  //   //   console.log("newIssues", newIssues);
+  //   //   return newIssues;
+  //   // });
+  // }
   return {
     issues,
     updateIssue,
