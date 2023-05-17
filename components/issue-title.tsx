@@ -45,7 +45,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
               value={currentTitle}
               onChange={(e) => setCurrentTitle(e.target.value)}
               className={clsx(
-                "border-box box-content w-full min-w-max px-1",
+                "border-box box-content w-full min-w-max px-1 outline-2 outline-blue-400",
                 className
               )}
               onKeyDown={(e) => {
