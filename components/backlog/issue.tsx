@@ -125,7 +125,7 @@ const Issue: React.FC<{
 const EpicName: React.FC<{ issue: IssueType["parent"] }> = ({ issue }) => {
   return (
     <div className="whitespace-nowrap rounded-[3px] bg-[#ece4fc] px-2 text-xs font-bold text-indigo-900">
-      {issue.name}
+      {issue.name.toUpperCase()}
     </div>
   );
 };
