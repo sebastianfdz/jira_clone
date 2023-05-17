@@ -15,13 +15,14 @@ const ListGroup: React.FC<{ search: string; className?: string }> = ({
   className,
 }) => {
   const { issues, updateIssue } = useIssues();
+  const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
 
   const filterIssues = useCallback(
     (issues: IssueType[] | undefined, sprintId: string | null) => {
-      const sprintIssues =
-        issues?.filter(
-          (issue) => issue.sprintId === sprintId && !isEpic(issue)
-        ) ?? [];
+      if (!issues) return [];
+      const sprintIssues = issues.filter(
+        (issue) => issue.sprintId === sprintId && !isEpic(issue)
+      );
       if (search === "") return sprintIssues;
       else {
         return sprintIssues.filter(
@@ -34,8 +35,6 @@ const ListGroup: React.FC<{ search: string; className?: string }> = ({
     },
     [search]
   );
-
-  const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
