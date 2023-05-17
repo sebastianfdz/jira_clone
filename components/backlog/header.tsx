@@ -13,8 +13,10 @@ const BacklogHeader: React.FC<{
     <div className="flex h-fit flex-col">
       <div className="text-sm text-gray-500">Projects / Clone</div>
       <h1>Backlog </h1>
-      <SearchBar search={search} setSearch={setSearch} />
-      [members][add_member][epic_filter][type_filter]
+      <div className="my-3 flex items-center gap-x-5">
+        <SearchBar search={search} setSearch={setSearch} />
+        [members][add_member][epic_filter][type_filter]
+      </div>
     </div>
   );
 };
