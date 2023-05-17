@@ -6,21 +6,33 @@ import { api } from "@/utils/api";
 import { BacklogList } from "./list-backlog";
 import { SprintList } from "./list-sprint";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
-import { isNullish, sprintId } from "@/utils/helpers";
+import { isEpic, isNullish, sprintId } from "@/utils/helpers";
+import { type IssueType } from "@/utils/types";
 import { useCallback } from "react";
 
-const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
+const ListGroup: React.FC<{ search: string; className?: string }> = ({
+  search,
+  className,
+}) => {
   const { issues, updateIssue } = useIssues();
 
-  const filterOutEpics = useCallback(
-    (sprintId: string | null) => {
-      return (
+  const filterIssues = useCallback(
+    (issues: IssueType[] | undefined, sprintId: string | null) => {
+      const sprintIssues =
         issues?.filter(
-          (issue) => issue.sprintId === sprintId && issue.type !== "EPIC"
-        ) ?? []
-      );
+          (issue) => issue.sprintId === sprintId && !isEpic(issue)
+        ) ?? [];
+      if (search === "") return sprintIssues;
+      else {
+        return sprintIssues.filter(
+          (issue) =>
+            issue.name.toLowerCase().includes(search.toLowerCase()) ||
+            issue.assignee?.name.toLowerCase().includes(search.toLowerCase()) ||
+            issue.key.toLowerCase().includes(search.toLowerCase())
+        );
+      }
     },
-    [issues]
+    [search]
   );
 
   const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
@@ -41,10 +53,13 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
       <DragDropContext onDragEnd={onDragEnd}>
         {sprints.map((sprint) => (
           <div key={sprint.id} className="my-3">
-            <SprintList sprint={sprint} issues={filterOutEpics(sprint.id)} />
+            <SprintList
+              sprint={sprint}
+              issues={filterIssues(issues, sprint.id)}
+            />
           </div>
         ))}
-        <BacklogList id="backlog" issues={filterOutEpics(null)} />
+        <BacklogList id="backlog" issues={filterIssues(issues, null)} />
       </DragDropContext>
     </div>
   );
