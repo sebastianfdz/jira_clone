@@ -27,6 +27,15 @@ model Project {
     createdAt       DateTime  @default(now())
     updatedAt       DateTime? @updatedAt
     deletedAt       DateTime?
+    members         Member[]
+}
+
+model Member {
+    id        String  @id
+    projectId String
+    project   Project @relation(fields: [projectId], references: [id])
+
+    @@index([projectId])
 }
 
 enum IssueType {
@@ -50,10 +59,12 @@ model Issue {
     status       IssueStatus @default(TODO)
     type         IssueType   @default(TASK)
     listPosition Int
-    /// [UserType]
-    reporter     Json
-    /// [UserType]
-    assignee     Json?
+    // /// [UserType]
+    // reporter     Json
+    // /// [UserType]
+    // assignee     Json?
+    reporterId   String      @default("1")
+    assigneeId   String?
     parentKey    String?
     sprintId     String?
     isDeleted    Boolean     @default(false)
@@ -65,14 +76,6 @@ model Issue {
     Sprint       Sprint?     @relation(fields: [sprintId], references: [id])
 
     @@index([sprintId])
-}
-
-model User {
-    id        String  @id @default(uuid())
-    email     String  @unique
-    firstName String
-    lastName  String
-    avatar    String?
 }
 
 enum SprintStatus {
