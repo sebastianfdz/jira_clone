@@ -63,7 +63,7 @@ const EmtpyIssue: React.FC<{
       />
       {isCreating ? (
         <div className="absolute right-2 z-10">
-          <Spinner size="md" />
+          <Spinner size="sm" />
         </div>
       ) : (
         <div className="absolute right-2 z-10 flex gap-x-1">
