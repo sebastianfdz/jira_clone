@@ -8,11 +8,11 @@ const Spinner: React.FC<{ size?: "sm" | "md" | "lg"; white?: boolean }> = ({
     <div
       aria-label="loading"
       className={clsx(
-        size === "sm" && "h-6 w-6",
+        size === "sm" && "h-4 w-4",
         size === "md" && "h-8 w-8",
         size === "lg" && "h-12 w-12",
-        white ? "border-white" : "border-blue-500",
-        "animate-spin rounded-full border-4 border-solid border-t-transparent"
+        white ? "border-white" : "border-blue-900",
+        "animate-spin rounded-full border-2 border-solid border-t-transparent"
       )}
     />
   );
