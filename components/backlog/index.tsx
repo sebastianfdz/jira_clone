@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect } from "react";
+import React, { Fragment, useLayoutEffect, useState } from "react";
 import { type Project } from "@prisma/client";
 import Split from "react-split";
 import { ListGroup } from "./list-group";
@@ -7,11 +7,13 @@ import { IssueDetails } from "./issue-details";
 import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
 import "@/styles/split.css";
 import clsx from "clsx";
+import { BacklogHeader } from "./header";
 
 const Backlog: React.FC<{
   project: Project;
 }> = ({}) => {
   const { issueId, setIssueId } = useSelectedIssueContext();
+  const [search, setSearch] = useState("");
 
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -22,20 +24,23 @@ const Backlog: React.FC<{
   }, []);
 
   return (
-    <div
-      ref={renderContainerRef}
-      className="min-w-full max-w-max overflow-hidden"
-    >
-      <Split
-        sizes={issueId ? [60, 40] : [100, 0]}
-        gutterSize={issueId ? 2 : 0}
-        className="flex max-h-full w-full"
-        minSize={0}
+    <Fragment>
+      <BacklogHeader search={search} setSearch={setSearch} />
+      <div
+        ref={renderContainerRef}
+        className="min-w-full max-w-max overflow-hidden"
       >
-        <ListGroup className={clsx(issueId && "pb-5 pr-4")} />
-        <IssueDetails setIssueId={setIssueId} issueId={issueId} />
-      </Split>
-    </div>
+        <Split
+          sizes={issueId ? [60, 40] : [100, 0]}
+          gutterSize={issueId ? 2 : 0}
+          className="flex max-h-full w-full"
+          minSize={0}
+        >
+          <ListGroup search={search} className={clsx(issueId && "pb-5 pr-4")} />
+          <IssueDetails setIssueId={setIssueId} issueId={issueId} />
+        </Split>
+      </div>
+    </Fragment>
   );
 };
 
