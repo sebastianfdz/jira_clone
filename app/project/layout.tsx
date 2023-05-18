@@ -1,7 +1,7 @@
 "use client";
 import { Sidebar } from "@/components/sidebar";
 import { TopNavbar } from "@/components/top-navbar";
-import { FiltersProvider } from "@/hooks/useFilters";
+import { FiltersProvider } from "@/context/useFilters";
 import * as Tooltip from "@radix-ui/react-tooltip";
 
 const ProjectLayout = ({ children }: { children: React.ReactNode }) => {
