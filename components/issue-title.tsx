@@ -35,10 +35,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
     return (
       <Fragment>
         {isEditing ? (
-          <div
-            data-state={isEditing ? "editing" : "not-editing"}
-            className="relative flex w-fit [&[data-state=editing]]:w-full"
-          >
+          <div className="relative flex w-full">
             <input
               type="text"
               ref={ref}
@@ -57,10 +54,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
                 }
               }}
             />
-            <div
-              data-state={isEditing ? "editing" : "not-editing"}
-              className="absolute -bottom-10 right-0 z-10 hidden gap-x-1 [&[data-state=editing]]:flex"
-            >
+            <div className="absolute -bottom-10 right-0 z-10 flex gap-x-1">
               <Button
                 className="mt-2 aspect-square bg-gray-50 p-2.5 shadow-md transition-all hover:bg-gray-100"
                 onClick={handleNameChange}
