@@ -8,15 +8,15 @@ import { Button } from "../ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
 import { EmtpyIssue } from "./issue-empty";
 import { type IssueType } from "@/utils/types";
-import { useUser } from "@clerk/nextjs";
 import clsx from "clsx";
+import { useUser } from "@clerk/clerk-react";
 
 const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   sprintId,
   issues,
 }) => {
-  const { user } = useUser();
   const { createIssue, isCreating } = useIssues();
+  const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
 
   function handleCreateIssue({
@@ -26,18 +26,13 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
     name: string;
     type: IssueType["type"];
   }) {
-    const reporter = {
-      id: user?.id ?? "1",
-      name: user?.fullName ?? "John Doe",
-      email: user?.emailAddresses[0]?.emailAddress ?? "jon@doe.com",
-      avatar:
-        user?.profileImageUrl ??
-        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde",
-    }; // TODO: get from auth
-    const listPosition =
-      issues.filter((issue) => issue.sprintId === sprintId).length + 1;
     createIssue(
-      { name, type, sprintId, reporter, listPosition },
+      {
+        name,
+        type,
+        sprintId,
+        reporterId: user?.id ?? null,
+      },
       {
         onSuccess: () => {
           setIsEditing(false);
