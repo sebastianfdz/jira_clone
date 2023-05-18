@@ -106,3 +106,11 @@ export function filterUserForClient(user: ClerkUser) {
     avatar: user.profileImageUrl,
   };
 }
+
+export function filterIssuesSearch(issue: IssueType, search: string) {
+  return (
+    issue.name.toLowerCase().includes(search.toLowerCase()) ||
+    issue.assignee?.name.toLowerCase().includes(search.toLowerCase()) ||
+    issue.key.toLowerCase().includes(search.toLowerCase())
+  );
+}
