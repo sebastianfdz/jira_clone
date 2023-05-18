@@ -2,7 +2,7 @@ import { toast } from "@/components/toast";
 import { api } from "@/utils/api";
 import { type IssueType } from "@/utils/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSelectedIssueContext } from "./useSelectedIssue";
+import { useSelectedIssueContext } from "@/context/useSelectedIssue";
 import { type PatchIssueBody } from "@/app/api/issues/[issue_key]/route";
 import {
   insertIssueIntoList,
