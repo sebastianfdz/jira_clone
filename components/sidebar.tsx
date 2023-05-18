@@ -96,7 +96,7 @@ const Sidebar = () => {
     },
   ];
   return (
-    <div className="flex h-full w-72 flex-col gap-y-5 bg-gray-50 p-3 shadow-inner">
+    <div className="flex h-full w-64 flex-col gap-y-5 bg-gray-50 p-3 shadow-inner">
       <div className="my-5 flex items-center gap-x-2 px-3">
         <div className="flex aspect-square items-center justify-center rounded-sm bg-orange-500 p-3 text-xs font-bold text-white"></div>
         <div>
