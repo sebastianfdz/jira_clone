@@ -64,7 +64,7 @@ const IssueDetails: React.FC<{
       ref={renderContainerRef}
       data-state={issueId ? "open" : "closed"}
       className={clsx(
-        "z-10 flex w-full min-w-max flex-col overflow-y-auto pl-4 [&[data-state=closed]]:hidden",
+        "z-10 flex w-full min-w-max flex-col overflow-y-auto pl-4 pr-2 [&[data-state=closed]]:hidden",
         className
       )}
     >
@@ -135,7 +135,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
         className="transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
       >
         <IssueTitle
-          className="mr-1 px-1 py-1"
+          className="mr-1 max-w-md py-1"
           key={issue.key + issue.name}
           isEditing={isEditing}
           setIsEditing={setIsEditing}
