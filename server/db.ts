@@ -2,15 +2,17 @@ import { PrismaClient } from "@prisma/client";
 
 import { env } from "@/env.mjs";
 
+export type User = {
+  id: string;
+  name: string;
+  email: string;
+  avatar: string;
+};
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace PrismaJson {
-    type UserType = {
-      id: string;
-      name: string;
-      email: string;
-      avatar: string;
-    };
+    type UserType = User;
   }
 }
 
