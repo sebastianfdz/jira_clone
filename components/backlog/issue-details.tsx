@@ -9,7 +9,6 @@ import React, {
 } from "react";
 import { useIssues } from "@/hooks/useIssues";
 import Image from "next/image";
-import clsx from "clsx";
 import { useUser } from "@clerk/nextjs";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
