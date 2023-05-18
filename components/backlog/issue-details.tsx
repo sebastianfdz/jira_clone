@@ -34,8 +34,7 @@ import {
 const IssueDetails: React.FC<{
   issueId: string | null;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
-  className?: string;
-}> = ({ issueId, setIssueId, className }) => {
+}> = ({ issueId, setIssueId }) => {
   const { issues } = useIssues();
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -63,10 +62,7 @@ const IssueDetails: React.FC<{
     <div
       ref={renderContainerRef}
       data-state={issueId ? "open" : "closed"}
-      className={clsx(
-        "z-10 flex w-full min-w-max flex-col overflow-y-auto pl-4 pr-2 [&[data-state=closed]]:hidden",
-        className
-      )}
+      className="z-10 flex w-full flex-col overflow-y-auto pl-4 pr-2 [&[data-state=closed]]:hidden"
     >
       <IssueDetailsHeader issue={issueInfo} setIssueId={setIssueId} />
       <IssueDetailsInfo key={issueId} issue={issueInfo} />
@@ -135,7 +131,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
         className="transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
       >
         <IssueTitle
-          className="mr-1 max-w-md py-1"
+          className="mr-1 py-1"
           key={issue.key + issue.name}
           isEditing={isEditing}
           setIsEditing={setIsEditing}
