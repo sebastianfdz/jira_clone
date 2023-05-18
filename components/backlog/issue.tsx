@@ -54,7 +54,7 @@ const Issue: React.FC<{
             </div>
             <IssueTitle
               key={issue.key + issue.name}
-              className="py-1.5"
+              className="truncate py-1.5"
               isEditing={isEditing}
               setIsEditing={setIsEditing}
               issue={issue}

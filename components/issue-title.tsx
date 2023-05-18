@@ -42,7 +42,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
               value={currentTitle}
               onChange={(e) => setCurrentTitle(e.target.value)}
               className={clsx(
-                "border-box box-content w-full min-w-max px-1 outline-2 outline-blue-400",
+                "w-full min-w-max whitespace-pre-wrap px-1 outline-2 outline-blue-400",
                 className
               )}
               onKeyDown={(e) => {
@@ -75,7 +75,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
           </div>
         ) : (
           <div className="w-full overflow-x-hidden">
-            <p className={clsx("truncate", className)}>{issue.name}</p>
+            <p className={clsx("", className)}>{issue.name}</p>
           </div>
         )}
       </Fragment>
