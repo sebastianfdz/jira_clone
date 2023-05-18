@@ -36,22 +36,6 @@ const patchSchema = z.object({
   type: z.nativeEnum(IssueType).optional(),
   status: z.nativeEnum(IssueStatus).optional(),
   listPosition: z.number().optional(),
-  // reporter: z
-  //   .object({
-  //     id: z.string(),
-  //     name: z.string(),
-  //     email: z.string().email(),
-  //     avatar: z.string().url(),
-  //   })
-  //   .optional(),
-  // assignee: z
-  //   .object({
-  //     id: z.string(),
-  //     name: z.string(),
-  //     email: z.string().email(),
-  //     avatar: z.string().url(),
-  //   })
-  //   .optional(),
   assigneeId: z.string().nullable().optional(),
   reporterId: z.string().optional(),
   parentKey: z.string().nullable().optional(),
@@ -86,10 +70,8 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
     type,
     status,
     listPosition,
-    // reporter,
     assigneeId,
     reporterId,
-    // assignee,
     isDeleted,
     sprintId,
     parentKey,
@@ -130,8 +112,6 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
       status: status ?? current.status,
       type: type ?? current.type,
       listPosition: listPosition ?? current.listPosition,
-      // reporter: reporter ?? current.reporter,
-      // assignee: assignee ?? current.assignee ?? undefined,
       assigneeId: assigneeId ?? current.assigneeId,
       reporterId: reporterId ?? current.reporterId,
       isDeleted: isDeleted ?? current.isDeleted,
