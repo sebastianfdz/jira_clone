@@ -38,12 +38,12 @@ const Issue: React.FC<{
           {...dragHandleProps}
           className={clsx(
             isDragging ? "bg-blue-100" : "bg-white",
-            "group flex w-full min-w-max items-center justify-between border-[0.3px] border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 [&[data-state=selected]]:bg-blue-100"
+            "group flex w-full max-w-full items-center justify-between border-[0.3px] border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 [&[data-state=selected]]:bg-blue-100"
           )}
         >
           <div
             data-state={isEditing ? "editing" : "not-editing"}
-            className="flex w-fit items-center gap-x-2 [&[data-state=editing]]:w-full"
+            className="flex w-fit items-center gap-x-2 [&[data-state=editing]]:w-full [&[data-state=not-editing]]:overflow-x-hidden"
           >
             <IssueIcon issueType={issue.type} />
             <div
@@ -76,10 +76,10 @@ const Issue: React.FC<{
               {isEpic(issue.parent) ? <EpicName issue={issue.parent} /> : null}
             </div>
           </div>
-          <IssueContextMenu isEditing={isEditing}>
+          <IssueContextMenu isEditing={isEditing} className="flex-auto">
             <ContextTrigger className="h-8 w-full" />
           </IssueContextMenu>
-          <div className="relative flex items-center justify-between">
+          <div className="2 relative flex items-center justify-end">
             <NotImplemented feature="child issues">
               <button>
                 <ChildrenTreeIcon className="mx-2 text-gray-600" />
