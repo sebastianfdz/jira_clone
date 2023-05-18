@@ -1,41 +1,57 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/server/db";
+import { type User, prisma } from "@/server/db";
 import { type Issue } from "@prisma/client";
 import { z } from "zod";
+import { clerkClient } from "@clerk/nextjs/server";
+import { filterUserForClient } from "@/utils/helpers";
 
 const postSchema = z.object({
   name: z.string(),
   type: z.enum(["BUG", "STORY", "TASK", "EPIC"]),
   sprintId: z.string().nullable(),
-  reporter: z.object({
-    id: z.string(),
-    name: z.string(),
-    email: z.string().email(),
-    avatar: z.string().url(),
-  }),
-  listPosition: z.number(),
+  reporterId: z.string().nullable(),
+  // listPosition: z.number(),
 });
 
 export type PostIssueBody = z.infer<typeof postSchema>;
-export type GetIssuesResponse = { issues: (Issue & { parent: Issue })[] };
+export type GetIssuesResponse = {
+  issues: (Issue & {
+    parent: Issue;
+    assignee: User | null;
+    reporter: User | null;
+  })[];
+};
 export type PostIssueResponse = { issue: Issue };
 
 export async function GET() {
   const issues = await prisma.issue.findMany();
   const activeIssues = issues.filter((issue) => !issue.isDeleted);
+  const userIds = issues
+    .map((issue) => [issue.assigneeId, issue.reporterId] as string[])
+    .flat()
+    .filter(Boolean);
 
-  const issuesWithparents = activeIssues.map((issue) => {
-    if (issue.parentKey) {
-      const parent = activeIssues.find((i) => i.key === issue.parentKey);
-      return { ...issue, parent };
-    }
-    return issue;
+  const users = (
+    await clerkClient.users.getUserList({
+      userId: userIds,
+      limit: 110,
+    })
+  ).map(filterUserForClient);
+
+  console.log("users => ", users);
+
+  const issuesForClient = activeIssues.map((issue) => {
+    const parent = activeIssues.find((i) => i.key === issue.parentKey) ?? null;
+    const assignee = users.find((u) => u.id === issue.assigneeId) ?? null;
+    const reporter = users.find((u) => u.id === issue.reporterId) ?? null;
+    return { ...issue, parent, assignee, reporter };
   });
 
   // return NextResponse.json<GetIssuesResponse>({ issues: activeIssues });
-  return NextResponse.json({ issues: issuesWithparents });
+  return NextResponse.json({ issues: issuesForClient });
 }
 
+// POST
 export async function POST(req: NextRequest) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
@@ -48,19 +64,26 @@ export async function POST(req: NextRequest) {
     return new Response(message, { status: 400 });
   }
 
-  const { name, type, reporter, sprintId, listPosition } = validated.data;
+  const { name, type, reporterId, sprintId } = validated.data;
 
   const issues = await prisma.issue.findMany();
+  const currentSprintIssues = await prisma.issue.findMany({
+    where: {
+      sprintId,
+      isDeleted: false,
+    },
+  });
   const k = issues.length + 1;
+  const positionToInsert = currentSprintIssues.length + 1;
 
   const issue = await prisma.issue.create({
     data: {
       key: `ISSUE-${k}`,
       name,
       type,
-      reporter,
+      reporterId: reporterId ?? "user_2PwZmH2xP5aE0svR6hDH4AwDlcu", // Rogan as default reporter
       sprintId,
-      listPosition,
+      listPosition: positionToInsert,
     },
   });
 
