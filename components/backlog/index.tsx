@@ -24,15 +24,12 @@ const Backlog: React.FC<{
   return (
     <Fragment>
       <BacklogHeader project={project} />
-      <div
-        ref={renderContainerRef}
-        className="min-w-full max-w-max overflow-hidden"
-      >
+      <div ref={renderContainerRef} className="min-w-full max-w-max">
         <Split
           sizes={issueId ? [60, 40] : [100, 0]}
           gutterSize={issueId ? 2 : 0}
           className="flex max-h-full w-full"
-          minSize={0}
+          minSize={issueId ? 400 : 0}
         >
           <ListGroup className={clsx(issueId && "pb-5 pr-4")} />
           <IssueDetails setIssueId={setIssueId} issueId={issueId} />
