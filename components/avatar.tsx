@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import Image from "next/image";
-import { Fragment } from "react";
 import { FaUser } from "react-icons/fa";
+import { TooltipWrapper } from "./ui/tooltip";
 type AvatarProps = {
   src: string | null;
   alt: string;
@@ -10,7 +10,7 @@ type AvatarProps = {
 };
 const Avatar = ({ src, alt, size = 32, className, ...props }: AvatarProps) => {
   return (
-    <Fragment>
+    <TooltipWrapper text={alt}>
       {src ? (
         <div style={{ width: size, height: size }} className={className}>
           <Image
@@ -33,7 +33,7 @@ const Avatar = ({ src, alt, size = 32, className, ...props }: AvatarProps) => {
           <FaUser className="text-white" />
         </div>
       )}
-    </Fragment>
+    </TooltipWrapper>
   );
 };
 
