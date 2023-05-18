@@ -9,6 +9,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { isEpic } from "@/utils/helpers";
 import { type ReactNode } from "react";
 import { useIssues } from "@/hooks/useIssues";
+import { TooltipWrapper } from "../ui/tooltip";
 
 const IssuePath: React.FC<{
   issue: IssueType;
@@ -18,13 +19,15 @@ const IssuePath: React.FC<{
     return (
       <div className="flex items-center">
         <IssueIcon issueType={issue.type} />
-        <Button
-          onClick={() => setIssueId(issue.key)}
-          customColors
-          className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
-        >
-          <span className="whitespace-nowrap">{issue.key}</span>
-        </Button>
+        <TooltipWrapper text={`${issue.key}: ${issue.name}`} side="top">
+          <Button
+            onClick={() => setIssueId(issue.key)}
+            customColors
+            className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
+          >
+            <span className="whitespace-nowrap">{issue.key}</span>
+          </Button>
+        </TooltipWrapper>
       </div>
     );
 
@@ -80,13 +83,7 @@ const ParentContainer: React.FC<{
     <div className="flex gap-x-3">
       <div className="flex items-center">
         {children}
-        <Button
-          onClick={() => setIssueId(issue.parent?.key ?? null)}
-          customColors
-          className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
-        >
-          <span className="whitespace-nowrap">{issue.parent?.key}</span>
-        </Button>
+        <IssueLink issue={issue.parent} setIssueId={setIssueId} />
       </div>
       <span className="py-1.5 text-gray-500">/</span>
       <div className="relative flex items-center">
@@ -95,14 +92,29 @@ const ParentContainer: React.FC<{
           currentType={issue.type}
           onSelect={handleSelectType}
         />
-        <Button
-          customColors
-          className="bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
-        >
-          <span className="whitespace-nowrap">{issue.key.toUpperCase()}</span>
-        </Button>
+        <TooltipWrapper text={`${issue.key}: ${issue.name}`} side="top">
+          <IssueLink issue={issue} setIssueId={setIssueId} />
+        </TooltipWrapper>
       </div>
     </div>
+  );
+};
+
+const IssueLink: React.FC<{
+  issue: IssueType | IssueType["parent"] | null;
+  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ issue, setIssueId }) => {
+  if (!issue) return <div />;
+  return (
+    <TooltipWrapper text={`${issue.key}: ${issue.name}`} side="top">
+      <Button
+        onClick={() => setIssueId(issue?.key ?? null)}
+        customColors
+        className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
+      >
+        <span className="whitespace-nowrap">{issue?.key}</span>
+      </Button>
+    </TooltipWrapper>
   );
 };
 
