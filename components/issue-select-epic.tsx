@@ -15,6 +15,7 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
+import { TooltipWrapper } from "./ui/tooltip";
 
 const IssueSelectEpic: React.FC<{
   issue: IssueType;
@@ -32,14 +33,22 @@ const IssueSelectEpic: React.FC<{
   }
   return (
     <Select onValueChange={handleSelect}>
-      <SelectTrigger
-        onClick={(e) => e.stopPropagation()}
-        className="flex items-center gap-x-1 rounded-[3px] p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2"
+      <TooltipWrapper
+        text={`Epic - ${selected ? "Change" : "Add"} epic`}
+        side="top"
       >
-        <SelectValue defaultValue={selected ?? undefined} className={className}>
-          {children}
-        </SelectValue>
-      </SelectTrigger>
+        <SelectTrigger
+          onClick={(e) => e.stopPropagation()}
+          className="flex items-center gap-x-1 rounded-[3px] p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2"
+        >
+          <SelectValue
+            defaultValue={selected ?? undefined}
+            className={className}
+          >
+            {children}
+          </SelectValue>
+        </SelectTrigger>
+      </TooltipWrapper>
       <SelectPortal className="z-10">
         <SelectContent position="popper">
           <SelectViewport className="min-w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
