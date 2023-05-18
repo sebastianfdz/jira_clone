@@ -4,16 +4,18 @@ import clsx from "clsx";
 import { Button } from "./ui/button";
 import { MdCheck, MdClose } from "react-icons/md";
 import { type IssueType } from "@/utils/types";
+import { TooltipWrapper } from "./ui/tooltip";
 
 type IssueTitleProps = {
   isEditing: boolean;
   setIsEditing: React.Dispatch<React.SetStateAction<boolean>>;
   issue: IssueType;
   className?: string;
+  useTooltip?: boolean;
 };
 
 const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
-  ({ isEditing, setIsEditing, issue, className }, ref) => {
+  ({ isEditing, setIsEditing, issue, className, useTooltip }, ref) => {
     const [currentTitle, setCurrentTitle] = useState(issue.name);
     useEffect(() => {
       if (isEditing) {
@@ -75,7 +77,13 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
           </div>
         ) : (
           <div className="w-full overflow-x-hidden">
-            <p className={clsx("", className)}>{issue.name}</p>
+            {useTooltip ? (
+              <TooltipWrapper text={issue.name}>
+                <p className={className}>{issue.name}</p>
+              </TooltipWrapper>
+            ) : (
+              <p className={className}>{issue.name}</p>
+            )}
           </div>
         )}
       </Fragment>
