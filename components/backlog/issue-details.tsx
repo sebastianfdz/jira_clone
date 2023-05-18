@@ -101,7 +101,7 @@ const IssueDetailsHeader: React.FC<{
         <IssueDropdownMenu issue={issue}>
           <DropdownTrigger
             asChild
-            className="rounded-m flex items-center gap-x-1 bg-opacity-30 p-2 text-xs font-semibold text-white focus:ring-2 [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white"
+            className="rounded-m flex items-center gap-x-1 bg-opacity-30 p-2 text-xs font-semibold focus:ring-2 [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white"
           >
             <div className="rounded-[3px] text-gray-800 hover:bg-gray-200">
               <BsThreeDots className="sm:text-xl" />
@@ -174,8 +174,8 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
   const { updateIssue } = useIssues();
-
   const { user } = useUser();
+  const [openAccordion, setOpenAccordion] = useState("details");
 
   function handleAutoAssign() {
     if (!user) {
@@ -184,21 +184,18 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
     }
     updateIssue({
       issue_key: issue.key,
-      assignee: {
-        id: user.id,
-        name: user?.fullName ?? "",
-        email: user?.emailAddresses[0]?.emailAddress ?? "",
-        avatar: user?.profileImageUrl ?? "",
-      },
+      assigneeId: user.id,
     });
   }
   return (
     <Accordion
+      onValueChange={setOpenAccordion}
+      value={openAccordion}
       className="my-3 w-min min-w-full rounded-[3px] border"
       type="single"
       collapsible
     >
-      <AccordionItem value={`details-${issue.key ?? 0}`}>
+      <AccordionItem value={"details"}>
         <AccordionTrigger className="flex w-full items-center justify-between p-2 font-medium hover:bg-gray-100 [&[data-state=open]>svg]:rotate-180 [&[data-state=open]]:border-b">
           <div className="flex items-center gap-x-1">
             <span className="text-sm">Details</span>
@@ -220,7 +217,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
               Assignee
             </span>
             <div className="flex flex-col">
-              <div className="flex items-center">
+              <div className="flex items-center gap-x-3">
                 <Image
                   width={20}
                   height={20}
@@ -229,7 +226,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
                     "https://www.gravatar.com/avatar?d=mp"
                   }
                   alt={`${issue.assignee?.name ?? "Unassigned"} avatar`}
-                  className="mr-2 rounded-full"
+                  className="rounded-full"
                 />
                 <div className="flex flex-col">
                   <span className="whitespace-nowrap text-sm">
@@ -258,7 +255,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
             <span className="text-sm font-semibold text-gray-600">
               Reporter
             </span>
-            <div className="flex items-center">
+            <div className="flex items-center gap-x-3 ">
               <Image
                 width={20}
                 height={20}
@@ -267,7 +264,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
                   "https://www.gravatar.com/avatar?d=mp"
                 }
                 alt={`${issue.reporter?.name ?? "Unassigned"} avatar`}
-                className="mr-2 rounded-full"
+                className="rounded-full"
               />
               <span className="whitespace-nowrap text-sm">
                 {issue.reporter?.name}
