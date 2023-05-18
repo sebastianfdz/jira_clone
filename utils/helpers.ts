@@ -1,5 +1,7 @@
 import { type IssueCountType } from "./types";
 import { type IssueType } from "@/utils/types";
+import type { User as ClerkUser } from "@clerk/nextjs/dist/api";
+import { type User } from "@/server/db";
 
 type IssueT = IssueType | IssueType["parent"];
 
@@ -94,4 +96,13 @@ export function isNullish<T>(
   value: T | null | undefined
 ): value is null | undefined {
   return value == null || value == undefined;
+}
+
+export function filterUserForClient(user: ClerkUser) {
+  return <User>{
+    id: user.id,
+    name: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
+    email: user?.emailAddresses[0]?.emailAddress ?? "",
+    avatar: user.profileImageUrl,
+  };
 }
