@@ -80,8 +80,8 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
             </div>
           </div>
         ) : (
-          <div className={clsx("whitespace-nowrap ", className)}>
-            {issue.name}
+          <div className="w-full overflow-x-hidden">
+            <p className={clsx("truncate", className)}>{issue.name}</p>
           </div>
         )}
       </Fragment>
