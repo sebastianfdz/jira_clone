@@ -14,6 +14,8 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
+import { TooltipWrapper } from "./ui/tooltip";
+import { capitalize } from "@/utils/helpers";
 
 const IssueSelectType: React.FC<{
   currentType: IssueType["type"];
@@ -32,16 +34,21 @@ const IssueSelectType: React.FC<{
   }
   return (
     <Select onValueChange={handleSelect}>
-      <SelectTrigger className="flex items-center gap-x-1 rounded-[3px] bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2">
-        <SelectValue>
-          <IssueIcon issueType={selected} />
-        </SelectValue>
-        {dropdownIcon ? (
-          <SelectIcon>
-            <FaChevronDown className="text-gray-500" />
-          </SelectIcon>
-        ) : null}
-      </SelectTrigger>
+      <TooltipWrapper
+        text={`${capitalize(selected)} - Change issue type`}
+        side="top"
+      >
+        <SelectTrigger className="flex items-center gap-x-1 rounded-[3px] bg-opacity-30 p-1.5 text-xs font-semibold text-white hover:bg-gray-200 focus:ring-2">
+          <SelectValue>
+            <IssueIcon issueType={selected} />
+          </SelectValue>
+          {dropdownIcon ? (
+            <SelectIcon>
+              <FaChevronDown className="text-gray-500" />
+            </SelectIcon>
+          ) : null}
+        </SelectTrigger>
+      </TooltipWrapper>
       <SelectPortal className="z-10">
         <SelectContent position="popper">
           <SelectViewport className="w-52 rounded-md border border-gray-300 bg-white py-2 shadow-md">
