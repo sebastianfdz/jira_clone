@@ -105,7 +105,8 @@ const IssueDropdownMenu: React.FC<{
 const IssueContextMenu: React.FC<{
   children: ReactNode;
   isEditing: boolean;
-}> = ({ children, isEditing }) => {
+  className?: string;
+}> = ({ children, isEditing, className }) => {
   const menuOptions: MenuOptionsType = {
     actions: [
       { id: "add-flag", label: "Add Flag" },
@@ -119,7 +120,7 @@ const IssueContextMenu: React.FC<{
   return (
     <div
       data-state={isEditing ? "editing" : "not-editing"}
-      className="flex w-full [&[data-state=editing]]:hidden"
+      className={clsx("flex [&[data-state=editing]]:hidden", className)}
     >
       <Context>
         {children}
