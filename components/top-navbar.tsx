@@ -1,12 +1,11 @@
 "use client";
-import { SignInButton, useUser, useAuth, UserButton } from "@clerk/nextjs";
+import { SignInButton, useUser, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { AiFillGithub } from "react-icons/ai";
 
 const TopNavbar: React.FC = () => {
   const { user } = useUser();
-  const { isSignedIn } = useAuth();
   return (
     <div className="flex h-12 w-full items-center justify-between border-b px-4">
       <div className="flex items-center gap-x-2">
@@ -26,7 +25,7 @@ const TopNavbar: React.FC = () => {
           <span className="text-sm font-medium">Github Repo</span>
         </Button>
       </div>
-      {isSignedIn ? (
+      {user ? (
         <div className="flex items-center gap-x-2">
           <span className="text-sm font-medium text-gray-600">
             {user?.fullName ?? user?.emailAddresses[0]?.emailAddress ?? "Guest"}
@@ -38,12 +37,9 @@ const TopNavbar: React.FC = () => {
           <span className="text-xs text-gray-400">
             Currently using guest account
           </span>
-          <Button
-            customColors
-            className="bg-blue-500 text-sm text-white hover:bg-blue-600"
-          >
+          <div className="rounded-sm bg-blue-500 px-3 py-1.5 text-sm text-white hover:bg-blue-600">
             <SignInButton />
-          </Button>
+          </div>
         </div>
       )}
     </div>
