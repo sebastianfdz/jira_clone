@@ -6,34 +6,40 @@ import { api } from "@/utils/api";
 import { BacklogList } from "./list-backlog";
 import { SprintList } from "./list-sprint";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
-import { isEpic, isNullish, sprintId } from "@/utils/helpers";
 import { type IssueType } from "@/utils/types";
 import { useCallback } from "react";
+import { useFiltersContext } from "@/context/useFilters";
+import {
+  filterIssuesSearch,
+  isEpic,
+  isNullish,
+  sprintId,
+} from "@/utils/helpers";
 
-const ListGroup: React.FC<{ search: string; className?: string }> = ({
-  search,
-  className,
-}) => {
+const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();
+  const { search, assignees } = useFiltersContext();
   const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
 
   const filterIssues = useCallback(
     (issues: IssueType[] | undefined, sprintId: string | null) => {
       if (!issues) return [];
-      const sprintIssues = issues.filter(
+      let sprintIssues = issues.filter(
         (issue) => issue.sprintId === sprintId && !isEpic(issue)
       );
-      if (search === "") return sprintIssues;
-      else {
-        return sprintIssues.filter(
-          (issue) =>
-            issue.name.toLowerCase().includes(search.toLowerCase()) ||
-            issue.assignee?.name.toLowerCase().includes(search.toLowerCase()) ||
-            issue.key.toLowerCase().includes(search.toLowerCase())
+      if (search.length) {
+        sprintIssues = sprintIssues.filter((issue) =>
+          filterIssuesSearch(issue, search)
         );
       }
+      if (assignees.length) {
+        sprintIssues = sprintIssues.filter((issue) =>
+          assignees.includes(issue.assignee?.id ?? "unassigned")
+        );
+      }
+      return sprintIssues;
     },
-    [search]
+    [search, assignees]
   );
 
   const onDragEnd = (result: DropResult) => {
