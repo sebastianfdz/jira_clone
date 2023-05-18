@@ -1,17 +1,20 @@
 "use client";
 import { Sidebar } from "@/components/sidebar";
 import { TopNavbar } from "@/components/top-navbar";
-import { Fragment } from "react";
+import { FiltersProvider } from "@/hooks/useFilters";
+import * as Tooltip from "@radix-ui/react-tooltip";
 
 const ProjectLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Fragment>
+    <Tooltip.Provider>
       <TopNavbar />
       <div className="flex h-[calc(100vh_-_3rem)] w-full">
         <Sidebar />
-        <main className="w-full">{children}</main>
+        <FiltersProvider>
+          <main className="w-full">{children}</main>
+        </FiltersProvider>
       </div>
-    </Fragment>
+    </Tooltip.Provider>
   );
 };
 
