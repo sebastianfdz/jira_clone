@@ -14,11 +14,9 @@ import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
 import { IssueSelectStatus } from "../issue-select-status";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
-import { useSelectedIssueContext } from "@/hooks/useSelectedIssue";
+import { useSelectedIssueContext } from "@/context/useSelectedIssue";
 import { type IssueType } from "@/utils/types";
 import { isEpic } from "@/utils/helpers";
-// import { AiOutlinePlus } from "react-icons/ai";
-// import { IssueSelectEpic } from "../issue-select-epic";
 
 const Issue: React.FC<{
   issue: IssueType;
@@ -76,14 +74,6 @@ const Issue: React.FC<{
                 <MdEdit className="text-sm" />
               </Button>
               {isEpic(issue.parent) ? <EpicName issue={issue.parent} /> : null}
-              {/* <IssueSelectEpic issue={issue}>
-                {issue.parentKey ? (
-                ) : (
-                  <div className="invisible whitespace-nowrap group-hover:visible group-focus:visible">
-                    <AddEpic />
-                  </div>
-                )}
-              </IssueSelectEpic> */}
             </div>
           </div>
           <IssueContextMenu isEditing={isEditing}>
@@ -102,7 +92,11 @@ const Issue: React.FC<{
             />
             <Avatar
               src={issue.assignee?.avatar ?? null}
-              alt={`${issue.assignee?.name ?? "Unassigned"} avatar`}
+              alt={
+                issue.assignee
+                  ? `Assignee: ${issue.assignee?.name}`
+                  : "Unassigned"
+              }
               className="mx-1"
             />
             <IssueDropdownMenu issue={issue}>
@@ -129,14 +123,5 @@ const EpicName: React.FC<{ issue: IssueType["parent"] }> = ({ issue }) => {
     </div>
   );
 };
-
-// const AddEpic: React.FC = () => {
-//   return (
-//     <div className="flex items-center bg-gray-100 px-2 text-gray-500 hover:bg-gray-200">
-//       <AiOutlinePlus className="text-lg" />
-//       <span className="text-base font-medium">Epic</span>
-//     </div>
-//   );
-// };
 
 export { Issue };
