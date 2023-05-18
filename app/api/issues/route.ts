@@ -10,7 +10,6 @@ const postSchema = z.object({
   type: z.enum(["BUG", "STORY", "TASK", "EPIC"]),
   sprintId: z.string().nullable(),
   reporterId: z.string().nullable(),
-  // listPosition: z.number(),
 });
 
 export type PostIssueBody = z.infer<typeof postSchema>;
