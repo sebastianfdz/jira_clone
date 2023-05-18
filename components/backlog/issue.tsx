@@ -17,6 +17,7 @@ import { IssueTitle } from "../issue-title";
 import { useSelectedIssueContext } from "@/context/useSelectedIssue";
 import { type IssueType } from "@/utils/types";
 import { isEpic } from "@/utils/helpers";
+import { TooltipWrapper } from "../ui/tooltip";
 
 const Issue: React.FC<{
   issue: IssueType;
@@ -52,14 +53,17 @@ const Issue: React.FC<{
             >
               {issue.key}
             </div>
+
             <IssueTitle
               key={issue.key + issue.name}
-              className="truncate py-1.5"
+              className="truncate py-1.5 hover:cursor-pointer hover:underline"
               isEditing={isEditing}
               setIsEditing={setIsEditing}
               issue={issue}
+              useTooltip={true}
               ref={inputRef}
             />
+
             <div
               data-state={isEditing ? "editing" : "not-editing"}
               className="flex items-center gap-x-1 [&[data-state=editing]]:hidden"
