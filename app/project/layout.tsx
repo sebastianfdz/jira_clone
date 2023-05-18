@@ -11,7 +11,7 @@ const ProjectLayout = ({ children }: { children: React.ReactNode }) => {
       <div className="flex h-[calc(100vh_-_3rem)] w-full">
         <Sidebar />
         <FiltersProvider>
-          <main className="w-full">{children}</main>
+          <main className="w-full max-w-[calc(100vw_-_16rem)]">{children}</main>
         </FiltersProvider>
       </div>
     </Tooltip.Provider>
