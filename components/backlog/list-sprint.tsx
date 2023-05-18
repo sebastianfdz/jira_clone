@@ -28,7 +28,7 @@ const SprintList: React.FC<{
     <Accordion
       onValueChange={setOpenAccordion}
       value={openAccordion}
-      className="rounded-lg bg-gray-100 p-2"
+      className="overflow-hidden rounded-lg bg-gray-100 p-2"
       type="single"
       collapsible
     >
@@ -45,7 +45,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
   sprint,
 }) => {
   return (
-    <div className="flex w-full items-center justify-between pl-2 text-sm">
+    <div className="flex w-full min-w-max items-center justify-between pl-2 text-sm">
       <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
         <Fragment>
           <FaChevronRight
