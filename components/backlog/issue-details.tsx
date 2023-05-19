@@ -39,7 +39,8 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import { Avatar } from "../avatar";
 import { useKeydownListener } from "@/hooks/useKeydownListener";
-import { Editor } from "../text-editor";
+import { Editor } from "@/components/text-editor/index";
+import { type SerializedEditorState } from "lexical";
 
 const IssueDetails: React.FC<{
   issueId: string | null;
@@ -185,8 +186,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
           </Button>
         </NotImplemented>
       </div>
-      <h2>Description</h2>
-      <div>[add_description]</div>
+      <Description />
       <IssueDetailsInfoAccordion issue={issue} />
       <IssueMetaInfo issue={issue} />
       <Comments />
@@ -194,9 +194,49 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
   );
 };
 
+const Description: React.FC = () => {
+  const [showTextEditor, setShowTextEditor] = useState(false);
+
+  function handleEdit(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    event.preventDefault();
+    setShowTextEditor(true);
+  }
+
+  function handleSave(state: SerializedEditorState | null) {
+    console.log("description state: ", state);
+    setShowTextEditor(false);
+  }
+
+  function handleCancel() {
+    setShowTextEditor(false);
+  }
+  return (
+    <Fragment>
+      <h2>Description</h2>
+      <div>
+        {showTextEditor ? (
+          <Editor
+            action="description"
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
+        ) : (
+          <input
+            onMouseDown={handleEdit}
+            type="text"
+            placeholder="Add a description..."
+            className="w-full rounded-[3px] p-1 transition-all duration-200 placeholder:text-sm hover:bg-gray-200 focus:outline-blue-400"
+          />
+        )}
+      </div>
+    </Fragment>
+  );
+};
+
 const Comments: React.FC = () => {
   const scrollRef = useRef(null);
   const [showTextEditor, setShowTextEditor] = useState(false);
+
   useKeydownListener(scrollRef, ["m", "M"], handleEdit);
   function handleEdit(ref: React.RefObject<HTMLElement>) {
     setShowTextEditor(true);
@@ -206,32 +246,24 @@ const Comments: React.FC = () => {
       }
     }, 100);
   }
+
+  function handleSave(state: SerializedEditorState | null) {
+    console.log("comment state: ", state);
+    setShowTextEditor(false);
+  }
+  function handleCancel() {
+    setShowTextEditor(false);
+  }
   return (
     <Fragment>
       <h2>Comments</h2>
-      <div className="mb-10 mt-2 flex w-full gap-x-2">
+      <div className="mb-10 mt-2 w-full">
         {showTextEditor ? (
-          <div>
-            <Editor />
-            <div className="my-3">
-              <Button
-                onClick={() => setShowTextEditor(false)}
-                customColors
-                customPadding
-                className="bg-inprogress px-4 py-1.5 text-sm font-medium text-white"
-              >
-                Save
-              </Button>
-              <Button
-                onClick={() => setShowTextEditor(false)}
-                customColors
-                customPadding
-                className="px-4 py-1.5 text-sm font-medium"
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
+          <Editor
+            action="comment"
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
         ) : (
           <AddComment onAddComment={() => handleEdit(scrollRef)} />
         )}
@@ -256,7 +288,7 @@ const AddComment: React.FC<{
       />
       <div className="w-full">
         <input
-          onClick={onAddComment}
+          onMouseDown={onAddComment}
           placeholder="Add a comment..."
           className="w-full rounded-[3px] border border-gray-300 px-4 py-2 placeholder:text-sm"
         />
