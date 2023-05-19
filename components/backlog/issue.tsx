@@ -17,7 +17,6 @@ import { IssueTitle } from "../issue-title";
 import { useSelectedIssueContext } from "@/context/useSelectedIssue";
 import { type IssueType } from "@/utils/types";
 import { isEpic } from "@/utils/helpers";
-import { TooltipWrapper } from "../ui/tooltip";
 
 const Issue: React.FC<{
   issue: IssueType;
