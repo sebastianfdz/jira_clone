@@ -19,6 +19,7 @@ import {
   SharedHistoryContext,
   useSharedHistoryContext,
 } from "./context/shared-history";
+import CodeHighlightPlugin from "./plugins/code-highlight-plugin";
 
 function onChange(
   state: EditorState,
@@ -80,6 +81,7 @@ export const Editor: React.FC<{
                 }
               />
             </div>
+            <CodeHighlightPlugin />
             <ListPlugin />
             <AutoFocusPlugin />
             <OnChangePlugin
