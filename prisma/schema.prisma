@@ -69,7 +69,7 @@ model Issue {
     sprintId     String?
     isDeleted    Boolean     @default(false)
     createdAt    DateTime    @default(now())
-    updatedAt    DateTime?   @updatedAt
+    updatedAt    DateTime    @updatedAt
     deletedAt    DateTime?
     comments     Comment[]
     logs         Log[]
