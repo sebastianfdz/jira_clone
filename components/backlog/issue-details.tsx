@@ -8,6 +8,10 @@ import React, {
   useState,
 } from "react";
 import { useIssues } from "@/hooks/useIssues";
+import { CgAttachment } from "react-icons/cg";
+import { ChildrenTreeIcon } from "../icons";
+
+import { BiLink } from "react-icons/bi";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
@@ -23,12 +27,19 @@ import { LightningIcon } from "../icons";
 import { IssueTitle } from "../issue-title";
 import { IssueSelectStatus } from "../issue-select-status";
 import { type IssueType } from "@/utils/types";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "../ui/accordion";
+import { dateToLongString } from "@/utils/helpers";
+import { useQuery } from "@tanstack/react-query";
+import { api } from "@/utils/api";
+import { Avatar } from "../avatar";
+import { useKeydownListener } from "@/hooks/useKeydownListener";
+import { Editor } from "../text-editor";
 
 const IssueDetails: React.FC<{
   issueId: string | null;
@@ -138,7 +149,26 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
           ref={nameRef}
         />
       </h1>
-      <div>[attach_button][add_child_button][link_issue_button]</div>
+      <div className="flex gap-x-2 text-gray-700">
+        <NotImplemented feature="attachment">
+          <Button customColors className="bg-gray-100 hover:bg-gray-200">
+            <CgAttachment className="rotate-45 text-xl" />
+          </Button>
+        </NotImplemented>
+        <Button customColors className="bg-gray-100 hover:bg-gray-200">
+          <ChildrenTreeIcon />
+        </Button>
+        <NotImplemented feature="link">
+          <Button customColors className="bg-gray-100 hover:bg-gray-200">
+            <BiLink className="text-xl" />
+          </Button>
+        </NotImplemented>
+        <NotImplemented feature="add apps">
+          <Button customColors className="bg-gray-100 hover:bg-gray-200">
+            <BsThreeDots className="text-xl" />
+          </Button>
+        </NotImplemented>
+      </div>
       <div className="relative flex items-center gap-x-3">
         <IssueSelectStatus
           key={issue.key + issue.status}
@@ -158,10 +188,101 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
       <h2>Description</h2>
       <div>[add_description]</div>
       <IssueDetailsInfoAccordion issue={issue} />
-      <div>[meta]</div>
-      <div>[activity]</div>
-      <div>[add_comment ]</div>
+      <IssueMetaInfo issue={issue} />
+      <Comments />
     </Fragment>
+  );
+};
+
+const Comments: React.FC = () => {
+  const scrollRef = useRef(null);
+  const [showTextEditor, setShowTextEditor] = useState(false);
+  useKeydownListener(scrollRef, ["m", "M"], handleEdit);
+  function handleEdit(ref: React.RefObject<HTMLElement>) {
+    setShowTextEditor(true);
+    setTimeout(() => {
+      if (ref.current) {
+        ref.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 100);
+  }
+  return (
+    <Fragment>
+      <h2>Comments</h2>
+      <div className="mb-10 mt-2 flex w-full gap-x-2">
+        {showTextEditor ? (
+          <div>
+            <Editor />
+            <div className="my-3">
+              <Button
+                onClick={() => setShowTextEditor(false)}
+                customColors
+                customPadding
+                className="bg-inprogress px-4 py-1.5 text-sm font-medium text-white"
+              >
+                Save
+              </Button>
+              <Button
+                onClick={() => setShowTextEditor(false)}
+                customColors
+                customPadding
+                className="px-4 py-1.5 text-sm font-medium"
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <AddComment onAddComment={() => handleEdit(scrollRef)} />
+        )}
+        <div ref={scrollRef} id="dummy-scroll-div" />
+      </div>
+    </Fragment>
+  );
+};
+
+const AddComment: React.FC<{
+  onAddComment: () => void;
+}> = ({ onAddComment }) => {
+  const { user } = useUser();
+  return (
+    <div className="flex w-full gap-x-2">
+      <Avatar
+        className="mt-2"
+        src={user?.profileImageUrl ?? "https://www.gravatar.com/avatar?d=mp"}
+        alt={
+          user ? `${user?.firstName ?? ""} ${user?.lastName ?? ""}` : "Guest"
+        }
+      />
+      <div className="w-full">
+        <input
+          onClick={onAddComment}
+          placeholder="Add a comment..."
+          className="w-full rounded-[3px] border border-gray-300 px-4 py-2 placeholder:text-sm"
+        />
+        <p className="my-2 text-xs text-gray-500">
+          <span className="font-bold">Pro tip:</span>
+          <span> press </span>
+          <span className="rounded-[3px] bg-gray-300 px-1 py-0.5 font-bold">
+            M
+          </span>
+          <span> to comment </span>
+        </p>
+      </div>
+    </div>
+  );
+};
+
+const IssueMetaInfo: React.FC<{ issue: IssueType }> = ({ issue }) => {
+  return (
+    <div className="mb-3 flex flex-col gap-y-3">
+      <span className="text-xs text-gray-500">
+        {"Created " + dateToLongString(issue.createdAt)}
+      </span>
+      <span className="text-xs text-gray-500">
+        {"Updated " + dateToLongString(issue.updatedAt)}
+      </span>
+    </div>
   );
 };
 
@@ -169,6 +290,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
   const { updateIssue } = useIssues();
+  const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
   const { user } = useUser();
   const [openAccordion, setOpenAccordion] = useState("details");
 
@@ -243,7 +365,10 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
           <div className="my-4 grid grid-cols-3 items-center">
             <span className="text-sm font-semibold text-gray-600">Sprint</span>
             <div className="flex items-center">
-              <span className="text-sm">{issue.sprintId ?? "None"}</span>
+              <span className="text-sm text-gray-700">
+                {sprints?.find((sprint) => sprint?.id == issue.sprintId)
+                  ?.name ?? "None"}
+              </span>
             </div>
           </div>
           <div className="my-2 grid grid-cols-3  items-center">
