@@ -58,18 +58,19 @@ export const Editor: React.FC = () => {
         }}
       >
         <Toolbar />
-
-        <RichTextPlugin
-          ErrorBoundary={LexicalErrorBoundary}
-          contentEditable={
-            <ContentEditable className="min-h-[200px] w-full resize-none overflow-hidden text-ellipsis px-2.5 py-4 outline-none" />
-          }
-          placeholder={
-            <div className="pointer-events-none absolute left-[10px] top-[15px] select-none">
-              Enter some text...
-            </div>
-          }
-        />
+        <div className="relative">
+          <RichTextPlugin
+            ErrorBoundary={LexicalErrorBoundary}
+            contentEditable={
+              <ContentEditable className="min-h-[200px] w-full resize-none overflow-hidden text-ellipsis px-2.5 py-4 outline-none" />
+            }
+            placeholder={
+              <div className="pointer-events-none absolute top-4 select-none px-3 text-sm text-gray-500">
+                Add your comment here...
+              </div>
+            }
+          />
+        </div>
         {/* <OnChangePlugin onChange={onChange} /> */}
         <HistoryPlugin externalHistoryState={historyState} />
       </LexicalComposer>
