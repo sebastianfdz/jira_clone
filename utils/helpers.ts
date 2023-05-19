@@ -114,3 +114,10 @@ export function filterIssuesSearch(issue: IssueType, search: string) {
     issue.key.toLowerCase().includes(search.toLowerCase())
   );
 }
+
+export function dateToLongString(date: Date) {
+  const dateString = new Date(date).toDateString();
+  const timeStirng = new Date(date).toLocaleTimeString();
+
+  return dateString + " at " + timeStirng;
+}
