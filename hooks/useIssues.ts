@@ -14,9 +14,13 @@ export const useIssues = () => {
   const { issueId, setIssueId } = useSelectedIssueContext();
   const queryClient = useQueryClient();
   // GET
-  const { data: issues } = useQuery(["issues"], api.issues.getIssues, {
-    refetchOnMount: false,
-  });
+  const { data: issues, isLoading: issuesLoading } = useQuery(
+    ["issues"],
+    api.issues.getIssues,
+    {
+      refetchOnMount: false,
+    }
+  );
 
   // UPDATE
   const { mutate: updateIssue, isLoading: isUpdating } = useMutation(
@@ -195,6 +199,7 @@ export const useIssues = () => {
 
   return {
     issues,
+    issuesLoading,
     updateIssue,
     isUpdating,
     createIssue,
