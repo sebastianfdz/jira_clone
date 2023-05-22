@@ -91,7 +91,7 @@ model Sprint {
 model Comment {
     id        String    @id @default(uuid())
     content   String    @db.Text()
-    author    String
+    authorId  String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
@@ -99,20 +99,18 @@ model Comment {
     logId     String?
     Issue     Issue?    @relation(fields: [issueKey], references: [key])
 
-    @@index([author])
     @@index([issueKey])
 }
 
 model Log {
     id        String    @id @default(uuid())
     content   String    @db.Text()
-    author    String
+    authorId  String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
     issueKey  String?
     Issue     Issue?    @relation(fields: [issueKey], references: [key])
 
-    @@index([author])
     @@index([issueKey])
 }
