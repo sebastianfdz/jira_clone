@@ -55,14 +55,10 @@ model Issue {
     id           String      @id @default(uuid())
     key          String      @unique
     name         String
-    description  String?     @default("")
+    description  String?     @db.Text()
     status       IssueStatus @default(TODO)
     type         IssueType   @default(TASK)
     listPosition Int
-    // /// [UserType]
-    // reporter     Json
-    // /// [UserType]
-    // assignee     Json?
     reporterId   String      @default("1")
     assigneeId   String?
     parentKey    String?
@@ -99,7 +95,7 @@ model Sprint {
 
 model Comment {
     id        String    @id @default(uuid())
-    content   String
+    content   String    @db.Text()
     author    String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
@@ -114,7 +110,7 @@ model Comment {
 
 model Log {
     id        String    @id @default(uuid())
-    content   String
+    content   String    @db.Text()
     author    String
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
