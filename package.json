@@ -28,7 +28,6 @@
     "lexical": "^0.10.0",
     "lodash.debounce": "^4.0.8",
     "next": "^13.4.1",
-    "prisma-json-types-generator": "^2.3.1",
     "react": "18.2.0",
     "react-beautiful-dnd": "^13.1.1",
     "react-dom": "18.2.0",
