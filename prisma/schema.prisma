@@ -5,11 +5,6 @@ generator client {
     provider = "prisma-client-js"
 }
 
-generator json {
-    provider = "prisma-json-types-generator"
-    // namespace = "PrismaJson"
-}
-
 datasource db {
     provider     = "mysql"
     url          = env("DATABASE_URL")
@@ -100,12 +95,12 @@ model Comment {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    issueId   String?
+    issueKey  String?
     logId     String?
-    Issue     Issue?    @relation(fields: [issueId], references: [id])
+    Issue     Issue?    @relation(fields: [issueKey], references: [key])
 
     @@index([author])
-    @@index([issueId])
+    @@index([issueKey])
 }
 
 model Log {
@@ -115,9 +110,9 @@ model Log {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    issueId   String?
-    Issue     Issue?    @relation(fields: [issueId], references: [id])
+    issueKey  String?
+    Issue     Issue?    @relation(fields: [issueKey], references: [key])
 
     @@index([author])
-    @@index([issueId])
+    @@index([issueKey])
 }
