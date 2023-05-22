@@ -9,13 +9,6 @@ export type User = {
   avatar: string;
 };
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace PrismaJson {
-    type UserType = User;
-  }
-}
-
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
