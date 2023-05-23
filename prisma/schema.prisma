@@ -95,7 +95,7 @@ model Comment {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
-    issueKey  String?
+    issueKey  String
     logId     String?
     Issue     Issue?    @relation(fields: [issueKey], references: [key])
 
