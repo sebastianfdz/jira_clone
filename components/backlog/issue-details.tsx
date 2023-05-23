@@ -39,8 +39,10 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import { Avatar } from "../avatar";
 import { useKeydownListener } from "@/hooks/useKeydownListener";
-import { Editor } from "@/components/text-editor/index";
+import { Editor } from "@/components/text-editor/editor";
 import { type SerializedEditorState } from "lexical";
+import { useSelectedIssueContext } from "@/context/useSelectedIssue";
+import { EditorPreview } from "../text-editor/preview";
 
 const IssueDetails: React.FC<{
   issueId: string | null;
@@ -130,6 +132,7 @@ const IssueDetailsHeader: React.FC<{
 const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
   issue,
 }) => {
+  const { issueId } = useSelectedIssueContext();
   const nameRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   if (!issue) return <div />;
@@ -186,7 +189,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
           </Button>
         </NotImplemented>
       </div>
-      <Description />
+      <Description issue={issue} key={String(issueId) + issue.key} />
       <IssueDetailsInfoAccordion issue={issue} />
       <IssueMetaInfo issue={issue} />
       <Comments />
@@ -194,39 +197,48 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
   );
 };
 
-const Description: React.FC = () => {
-  const [showTextEditor, setShowTextEditor] = useState(false);
+const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const { updateIssue } = useIssues();
+  const [content, setContent] = useState<SerializedEditorState | undefined>(
+    (issue.description
+      ? JSON.parse(issue.description)
+      : undefined) as SerializedEditorState
+  );
 
   function handleEdit(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.preventDefault();
-    setShowTextEditor(true);
+    setIsEditing(true);
   }
 
-  function handleSave(state: SerializedEditorState | null) {
+  function handleSave(state: SerializedEditorState | undefined) {
     console.log("description state: ", state);
-    setShowTextEditor(false);
+    setContent(state);
+    updateIssue({
+      issue_key: issue.key,
+      description: state ? JSON.stringify(state) : undefined,
+    });
+    setIsEditing(false);
   }
 
   function handleCancel() {
-    setShowTextEditor(false);
+    setIsEditing(false);
   }
   return (
     <Fragment>
       <h2>Description</h2>
       <div>
-        {showTextEditor ? (
+        {isEditing ? (
           <Editor
             action="description"
+            content={content}
             onSave={handleSave}
             onCancel={handleCancel}
           />
         ) : (
-          <input
-            onMouseDown={handleEdit}
-            type="text"
-            placeholder="Add a description..."
-            className="w-full rounded-[3px] p-1 transition-all duration-200 placeholder:text-sm hover:bg-gray-200 focus:outline-blue-400"
-          />
+          <div onMouseDown={handleEdit}>
+            <EditorPreview action="description" content={content} />
+          </div>
         )}
       </div>
     </Fragment>
@@ -235,11 +247,11 @@ const Description: React.FC = () => {
 
 const Comments: React.FC = () => {
   const scrollRef = useRef(null);
-  const [showTextEditor, setShowTextEditor] = useState(false);
+  const [isWritingComment, setIsWritingComment] = useState(false);
 
   useKeydownListener(scrollRef, ["m", "M"], handleEdit);
   function handleEdit(ref: React.RefObject<HTMLElement>) {
-    setShowTextEditor(true);
+    setIsWritingComment(true);
     setTimeout(() => {
       if (ref.current) {
         ref.current.scrollIntoView({ behavior: "smooth" });
@@ -247,20 +259,21 @@ const Comments: React.FC = () => {
     }, 100);
   }
 
-  function handleSave(state: SerializedEditorState | null) {
+  function handleSave(state: SerializedEditorState | undefined) {
     console.log("comment state: ", state);
-    setShowTextEditor(false);
+    setIsWritingComment(false);
   }
   function handleCancel() {
-    setShowTextEditor(false);
+    setIsWritingComment(false);
   }
   return (
     <Fragment>
       <h2>Comments</h2>
       <div className="mb-10 mt-2 w-full">
-        {showTextEditor ? (
+        {isWritingComment ? (
           <Editor
             action="comment"
+            content={undefined}
             onSave={handleSave}
             onCancel={handleCancel}
           />
