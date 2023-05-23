@@ -95,6 +95,7 @@ model Comment {
     createdAt DateTime  @default(now())
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
+    isEdited  Boolean   @default(false)
     issueKey  String
     logId     String?
     Issue     Issue?    @relation(fields: [issueKey], references: [key])
