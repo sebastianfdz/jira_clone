@@ -1,39 +1,21 @@
 "use client";
 import React, { useState } from "react";
-import { type SerializedEditorState } from "lexical";
 import LexicalErrorBoundary from "@lexical/react/LexicalErrorBoundary";
 import { RichTextPlugin } from "@lexical/react/LexicalRichTextPlugin";
 import { ContentEditable } from "@lexical/react/LexicalContentEditable";
 import { ListPlugin } from "@lexical/react/LexicalListPlugin";
 import CodeHighlightPlugin from "./plugins/code-highlight-plugin";
-import { EditorWrapper } from "./wrapper";
-
-export const DEFAULT_CONTENT = {
-  root: {
-    children: [
-      {
-        type: "paragraph",
-        version: 1,
-      },
-    ],
-    direction: "ltr",
-    format: "",
-    indent: 0,
-    type: "root",
-    version: 1,
-  },
-} as SerializedEditorState;
+import { EditorComposer } from "./context/lexical-composer";
+import { type EditorContentType } from "./editor";
 
 export const EditorPreview: React.FC<{
   action: "description" | "comment";
-  content?: SerializedEditorState;
+  content: EditorContentType;
 }> = ({ action, content }) => {
-  const [jsonState] = useState<SerializedEditorState | undefined>(
-    content ? content : undefined
-  );
+  const [jsonState] = useState<EditorContentType>(content);
 
   return (
-    <EditorWrapper readonly={true} jsonState={jsonState}>
+    <EditorComposer readonly={true} jsonState={jsonState}>
       <div className="relative w-full rounded-[3px] bg-white">
         <RichTextPlugin
           ErrorBoundary={LexicalErrorBoundary}
@@ -49,6 +31,6 @@ export const EditorPreview: React.FC<{
       </div>
       <CodeHighlightPlugin />
       <ListPlugin />
-    </EditorWrapper>
+    </EditorComposer>
   );
 };
