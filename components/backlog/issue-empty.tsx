@@ -27,6 +27,10 @@ const EmtpyIssue: React.FC<{
     }
   }
 
+  function handleSelect(type: IssueType["type"]) {
+    setType(type);
+    setTimeout(() => focusInput(), 50);
+  }
   function handleCreateIssue(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -46,10 +50,7 @@ const EmtpyIssue: React.FC<{
       <IssueSelectType
         currentType={type}
         dropdownIcon
-        onSelect={(type) => {
-          setType(type);
-          setTimeout(() => focusInput(), 50);
-        }}
+        onSelect={handleSelect}
       />
       <input
         ref={inputRef}
