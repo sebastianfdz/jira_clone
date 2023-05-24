@@ -9,6 +9,11 @@ import {
   type PatchIssueBody,
   type GetIssueDetailsResponse,
 } from "@/app/api/issues/[issue_key]/route";
+import {
+  type GetIssueCommentResponse,
+  type GetIssueCommentsResponse,
+  type PostCommentBody,
+} from "@/app/api/issues/[issue_key]/comments/route";
 
 const baseUrl = getBaseUrl();
 
@@ -53,5 +58,45 @@ export const issuesRoutes = {
     );
 
     return data?.issue;
+  },
+  addCommentToIssue: async (
+    payload: {
+      issue_key: string;
+    } & PostCommentBody
+  ) => {
+    const { issue_key, content, authorId } = payload;
+    console.log("payload", payload);
+    const { data } = await axios.post<GetIssueCommentResponse>(
+      `${baseUrl}/api/issues/${issue_key}/comments`,
+      { content, authorId },
+      { headers: getHeaders() }
+    );
+
+    return data?.comment;
+  },
+  getIssueComments: async ({ issue_key }: { issue_key: string }) => {
+    const { data } = await axios.get<GetIssueCommentsResponse>(
+      `${baseUrl}/api/issues/${issue_key}/comments`
+    );
+
+    console.log("data", data);
+    return data?.comments;
+  },
+
+  updateIssueComment: async ({
+    issue_key,
+    content,
+    commentId,
+  }: {
+    issue_key: string;
+    commentId: string;
+    content: string;
+  }) => {
+    const { data } = await axios.patch<GetIssueCommentResponse>(
+      `${baseUrl}/api/issues/${issue_key}/comments/${commentId}`,
+      { content },
+      { headers: getHeaders() }
+    );
+    return data?.comment;
   },
 };
