@@ -31,7 +31,7 @@ const Members = () => {
   const unassigned = {
     id: "unassigned",
     name: "Unassigned",
-    avatar: "",
+    avatar: undefined,
     email: "",
   };
 
