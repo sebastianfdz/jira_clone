@@ -1,38 +1,21 @@
-import clsx from "clsx";
 import Image from "next/image";
-import { FaUser } from "react-icons/fa";
 import { TooltipWrapper } from "./ui/tooltip";
 type AvatarProps = {
-  src: string | null;
+  src: string | null | undefined;
   alt: string;
   size?: number;
-  className?: string;
 };
-const Avatar = ({ src, alt, size = 32, className, ...props }: AvatarProps) => {
+const Avatar = ({ src, alt, size = 32, ...props }: AvatarProps) => {
   return (
     <TooltipWrapper text={alt}>
-      {src ? (
-        <div style={{ width: size, height: size }} className={className}>
-          <Image
-            className="rounded-full"
-            src={src}
-            alt={alt}
-            height={size}
-            width={size}
-            {...props}
-          />
-        </div>
-      ) : (
-        <div
-          className={clsx(
-            "flex items-center justify-center rounded-full bg-gray-400 ",
-            className
-          )}
-          style={{ width: size, height: size }}
-        >
-          <FaUser className="text-white" />
-        </div>
-      )}
+      <Image
+        src={src ?? "https://www.gravatar.com/avatar?d=mp"}
+        alt={alt}
+        height={size}
+        width={size}
+        className="h-fit rounded-full"
+        {...props}
+      />
     </TooltipWrapper>
   );
 };
