@@ -57,7 +57,7 @@ export const Editor: React.FC<{
                 <ContentEditable className="min-h-[100px] w-full resize-none overflow-hidden text-ellipsis px-2.5 py-4 outline-none" />
               }
               placeholder={
-                <div className="pointer-events-none absolute top-7 select-none px-3 text-sm text-gray-500">
+                <div className="pointer-events-none absolute top-6 select-none px-3 text-sm text-gray-500">
                   Add your {action} here...
                 </div>
               }
