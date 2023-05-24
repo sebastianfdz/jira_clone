@@ -25,6 +25,16 @@ export async function POST() {
 
 export async function GET() {
   const sprints = await prisma.sprint.findMany({
+    where: {
+      OR: [
+        {
+          status: "ACTIVE",
+        },
+        {
+          status: "PENDING",
+        },
+      ],
+    },
     orderBy: {
       createdAt: "asc",
     },
