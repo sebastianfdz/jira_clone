@@ -44,6 +44,13 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
   issues,
   sprint,
 }) => {
+  function getSprintAction(sprint: Sprint) {
+    if (sprint.status === "ACTIVE") {
+      return "Complete Sprint";
+    } else {
+      return "Start Sprint";
+    }
+  }
   return (
     <div className="flex w-full min-w-max items-center justify-between pl-2 text-sm">
       <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
@@ -63,7 +70,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
       <div className="flex items-center gap-x-2">
         <IssueStatusCount issues={issues} />
         <Button>
-          <span className="whitespace-nowrap">Complete Sprint</span>
+          <span className="whitespace-nowrap">{getSprintAction(sprint)}</span>
         </Button>
 
         <SprintDropdownMenu sprint={sprint}>
