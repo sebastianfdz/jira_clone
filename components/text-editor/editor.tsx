@@ -13,6 +13,7 @@ import ToolbarPlugin from "./plugins/toolbar-plugin";
 import { useSharedHistoryContext } from "./context/shared-history";
 import CodeHighlightPlugin from "./plugins/code-highlight-plugin";
 import { EditorComposer } from "./context/lexical-composer";
+import clsx from "clsx";
 
 export type EditorContentType = SerializedEditorState | undefined;
 
@@ -34,20 +35,26 @@ export const Editor: React.FC<{
   content: EditorContentType;
   onSave?: (state: EditorContentType) => void;
   onCancel?: () => void;
-}> = ({ action, onSave, onCancel, content }) => {
+  className?: string;
+}> = ({ action, onSave, onCancel, content, className }) => {
   const { historyState } = useSharedHistoryContext();
   const [jsonState, setJsonState] = useState<EditorContentType>(content);
 
   return (
     <Fragment>
-      <div className="w-full rounded-[3px] border border-gray-200 bg-white shadow-sm">
+      <div
+        className={clsx(
+          "w-full rounded-[3px] border border-gray-200 bg-white shadow-sm",
+          className
+        )}
+      >
         <EditorComposer readonly={false} jsonState={jsonState}>
           <ToolbarPlugin />
           <div className="relative">
             <RichTextPlugin
               ErrorBoundary={LexicalErrorBoundary}
               contentEditable={
-                <ContentEditable className="min-h-[200px] w-full resize-none overflow-hidden text-ellipsis px-2.5 py-4 outline-none" />
+                <ContentEditable className="min-h-[100px] w-full resize-none overflow-hidden text-ellipsis px-2.5 py-4 outline-none" />
               }
               placeholder={
                 <div className="pointer-events-none absolute top-7 select-none px-3 text-sm text-gray-500">
