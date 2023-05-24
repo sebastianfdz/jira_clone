@@ -58,6 +58,7 @@ const IssueDetails: React.FC<{
 }> = ({ issueId, setIssueId }) => {
   const { issues } = useIssues();
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
+  const [isInViewport, viewportRef] = useIsInViewport({ threshold: 1 });
 
   const getIssue = useCallback(
     (issueId: string | null) => {
@@ -83,10 +84,14 @@ const IssueDetails: React.FC<{
     <div
       ref={renderContainerRef}
       data-state={issueId ? "open" : "closed"}
-      className="z-10 flex w-full flex-col overflow-y-auto pl-4 pr-2 [&[data-state=closed]]:hidden"
+      className="relative z-10 flex w-full flex-col overflow-y-auto pl-4 pr-2 [&[data-state=closed]]:hidden"
     >
-      <IssueDetailsHeader issue={issueInfo} setIssueId={setIssueId} />
-      <IssueDetailsInfo key={issueId} issue={issueInfo} />
+      <IssueDetailsHeader
+        issue={issueInfo}
+        setIssueId={setIssueId}
+        isInViewport={isInViewport}
+      />
+      <IssueDetailsInfo issue={issueInfo} ref={viewportRef} />
     </div>
   );
 };
@@ -94,10 +99,14 @@ const IssueDetails: React.FC<{
 const IssueDetailsHeader: React.FC<{
   issue: IssueType;
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ issue, setIssueId }) => {
+  isInViewport: boolean;
+}> = ({ issue, setIssueId, isInViewport }) => {
   if (!issue) return <div />;
   return (
-    <div className="flex h-fit w-full items-center justify-between p-0.5">
+    <div
+      data-state={isInViewport ? "inViewport" : "notInViewport"}
+      className="sticky top-0 z-10 flex h-fit w-full items-center justify-between border-b-2 border-transparent bg-white p-0.5 [&[data-state=notInViewport]]:border-gray-200"
+    >
       <IssuePath issue={issue} setIssueId={setIssueId} />
       <div className="relative flex items-center gap-x-0.5">
         <NotImplemented feature="watch">
@@ -137,9 +146,10 @@ const IssueDetailsHeader: React.FC<{
   );
 };
 
-const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
-  issue,
-}) => {
+const IssueDetailsInfo = React.forwardRef<
+  HTMLDivElement,
+  { issue: IssueType | undefined }
+>(({ issue }, ref) => {
   const { issueId } = useSelectedIssueContext();
   const nameRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -147,6 +157,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
   return (
     <Fragment>
       <h1
+        ref={ref}
         role="button"
         onClick={() => setIsEditing(true)}
         data-state={isEditing ? "editing" : "notEditing"}
@@ -203,7 +214,9 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
       <Comments issue={issue} />
     </Fragment>
   );
-};
+});
+
+IssueDetailsInfo.displayName = "IssueDetailsInfo";
 
 const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const [isEditing, setIsEditing] = useState(false);
