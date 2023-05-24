@@ -1,20 +1,38 @@
 "use client";
+import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { TopNavbar } from "@/components/top-navbar";
 import { FiltersProvider } from "@/context/useFilters";
-import * as Tooltip from "@radix-ui/react-tooltip";
+import { Toaster } from "react-hot-toast";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const ProjectLayout = ({ children }: { children: React.ReactNode }) => {
+  const [isBrowser, setIsBrowser] = useState(false);
+  const [queryClient] = useState(() => new QueryClient());
+
+  useEffect(() => {
+    if (typeof window !== "undefined") setIsBrowser(true);
+  }, []);
+
+  if (!isBrowser) return null;
   return (
-    <Tooltip.Provider>
+    <QueryClientProvider client={queryClient}>
+      <Toaster
+        position="bottom-left"
+        reverseOrder={false}
+        containerStyle={{
+          height: "92vh",
+          marginLeft: "3vw",
+        }}
+      />
       <TopNavbar />
-      <div className="flex h-[calc(100vh_-_3rem)] w-full">
+      <main className="flex h-[calc(100vh_-_3rem)] w-full">
         <Sidebar />
         <FiltersProvider>
-          <main className="w-full max-w-[calc(100vw_-_16rem)]">{children}</main>
+          <div className="w-full max-w-[calc(100vw_-_16rem)]">{children}</div>
         </FiltersProvider>
-      </div>
-    </Tooltip.Provider>
+      </main>
+    </QueryClientProvider>
   );
 };
 
