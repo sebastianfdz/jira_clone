@@ -49,6 +49,7 @@ import { type UserResource } from "@clerk/types";
 import { type GetIssueCommentResponse } from "@/app/api/issues/[issue_key]/comments/route";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { useIsInViewport } from "@/hooks/useIsInViewport";
 dayjs.extend(relativeTime);
 
 const IssueDetails: React.FC<{
@@ -259,21 +260,19 @@ const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
 const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const scrollRef = useRef(null);
   const [isWritingComment, setIsWritingComment] = useState(false);
+  const [isInViewport, ref] = useIsInViewport();
   const { comments, addComment } = useIssueDetails();
   const { user } = useUser();
 
   useKeydownListener(scrollRef, ["m", "M"], handleEdit);
   function handleEdit(ref: React.RefObject<HTMLElement>) {
     setIsWritingComment(true);
-    setTimeout(() => {
-      if (ref.current) {
-        ref.current.scrollIntoView({ behavior: "smooth" });
-      }
-    }, 100);
+    if (ref.current) {
+      ref.current.scrollIntoView({ behavior: "smooth" });
+    }
   }
 
   function handleSave(state: SerializedEditorState | undefined) {
-    console.log("comment state: ", state);
     if (!state || !user?.id) {
       setIsWritingComment(false);
       return;
@@ -291,7 +290,7 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   return (
     <Fragment>
       <h2>Comments</h2>
-      <div className="mb-5 mt-2 w-full">
+      <div className="sticky bottom-0 mb-5 w-full bg-white">
         <div ref={scrollRef} id="dummy-scroll-div" />
         {isWritingComment ? (
           <Editor
@@ -301,10 +300,14 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
             onCancel={handleCancel}
           />
         ) : (
-          <AddComment user={user} onAddComment={() => handleEdit(scrollRef)} />
+          <AddComment
+            user={user}
+            onAddComment={() => handleEdit(scrollRef)}
+            commentsInViewport={isInViewport}
+          />
         )}
       </div>
-      <div className="">
+      <div ref={ref}>
         {comments?.map((comment) => (
           <CommentPreview key={comment.id} comment={comment} user={user} />
         ))}
@@ -398,13 +401,17 @@ const CommentPreview: React.FC<{
 const AddComment: React.FC<{
   onAddComment: () => void;
   user: UserResource | undefined | null;
-}> = ({ onAddComment, user }) => {
+  commentsInViewport: boolean;
+}> = ({ onAddComment, user, commentsInViewport }) => {
   function handleAddComment(event: React.MouseEvent<HTMLInputElement>) {
     event.preventDefault();
     onAddComment();
   }
   return (
-    <div className="flex w-full gap-x-2">
+    <div
+      data-state={commentsInViewport ? "inViewport" : "notInViewport"}
+      className="flex w-full gap-x-2 py-3 [&[data-state=notInViewport]]:border-t"
+    >
       <Avatar
         src={user?.profileImageUrl}
         alt={
