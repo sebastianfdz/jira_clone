@@ -10,9 +10,7 @@ import React, {
 import { useIssues } from "@/hooks/useIssues";
 import { CgAttachment } from "react-icons/cg";
 import { ChildrenTreeIcon } from "../icons";
-
 import { BiLink } from "react-icons/bi";
-import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
@@ -39,10 +37,19 @@ import { useQuery } from "@tanstack/react-query";
 import { api } from "@/utils/api";
 import { Avatar } from "../avatar";
 import { useKeydownListener } from "@/hooks/useKeydownListener";
-import { Editor } from "@/components/text-editor/editor";
+import {
+  Editor,
+  type EditorContentType,
+} from "@/components/text-editor/editor";
 import { type SerializedEditorState } from "lexical";
 import { useSelectedIssueContext } from "@/context/useSelectedIssue";
 import { EditorPreview } from "../text-editor/preview";
+import { useIssueDetails } from "@/hooks/useIssueDetails";
+import { type UserResource } from "@clerk/types";
+import { type GetIssueCommentResponse } from "@/app/api/issues/[issue_key]/comments/route";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 const IssueDetails: React.FC<{
   issueId: string | null;
@@ -192,7 +199,7 @@ const IssueDetailsInfo: React.FC<{ issue: IssueType | undefined }> = ({
       <Description issue={issue} key={String(issueId) + issue.key} />
       <IssueDetailsInfoAccordion issue={issue} />
       <IssueMetaInfo issue={issue} />
-      <Comments />
+      <Comments issue={issue} />
     </Fragment>
   );
 };
@@ -237,7 +244,11 @@ const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
           />
         ) : (
           <div onMouseDown={handleEdit}>
-            <EditorPreview action="description" content={content} />
+            <EditorPreview
+              action="description"
+              content={content}
+              className="transition-all duration-200 hover:bg-gray-100"
+            />
           </div>
         )}
       </div>
@@ -245,9 +256,11 @@ const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
   );
 };
 
-const Comments: React.FC = () => {
+const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const scrollRef = useRef(null);
   const [isWritingComment, setIsWritingComment] = useState(false);
+  const { comments, addComment } = useIssueDetails();
+  const { user } = useUser();
 
   useKeydownListener(scrollRef, ["m", "M"], handleEdit);
   function handleEdit(ref: React.RefObject<HTMLElement>) {
@@ -261,6 +274,15 @@ const Comments: React.FC = () => {
 
   function handleSave(state: SerializedEditorState | undefined) {
     console.log("comment state: ", state);
+    if (!state || !user?.id) {
+      setIsWritingComment(false);
+      return;
+    }
+    addComment({
+      issue_key: issue.key,
+      content: JSON.stringify(state),
+      authorId: user?.id,
+    });
     setIsWritingComment(false);
   }
   function handleCancel() {
@@ -269,7 +291,8 @@ const Comments: React.FC = () => {
   return (
     <Fragment>
       <h2>Comments</h2>
-      <div className="mb-10 mt-2 w-full">
+      <div className="mb-5 mt-2 w-full">
+        <div ref={scrollRef} id="dummy-scroll-div" />
         {isWritingComment ? (
           <Editor
             action="comment"
@@ -278,30 +301,119 @@ const Comments: React.FC = () => {
             onCancel={handleCancel}
           />
         ) : (
-          <AddComment onAddComment={() => handleEdit(scrollRef)} />
+          <AddComment user={user} onAddComment={() => handleEdit(scrollRef)} />
         )}
-        <div ref={scrollRef} id="dummy-scroll-div" />
+      </div>
+      <div className="">
+        {comments?.map((comment) => (
+          <CommentPreview key={comment.id} comment={comment} user={user} />
+        ))}
       </div>
     </Fragment>
   );
 };
 
+const CommentPreview: React.FC<{
+  comment: GetIssueCommentResponse["comment"];
+  user: UserResource | undefined | null;
+}> = ({ comment, user }) => {
+  const [isEditing, setIsEditing] = useState(false);
+  const { updateComment } = useIssueDetails();
+
+  function handleSave(state: SerializedEditorState | undefined) {
+    updateComment({
+      issue_key: comment.issueKey,
+      commentId: comment.id,
+      content: JSON.stringify(state),
+    });
+    setIsEditing(false);
+  }
+
+  return (
+    <div className="flex gap-x-2">
+      <Avatar
+        src={comment.author?.avatar ?? ""}
+        alt={`${comment.author?.name ?? "Guest"}`}
+      />
+      <div>
+        <div className="flex items-center gap-x-3 text-xs">
+          <span className="font-semibold text-gray-600 ">
+            {comment.author?.name}
+          </span>
+          <span className="text-gray-500">
+            {dayjs(comment.createdAt).fromNow()}
+          </span>
+
+          <span
+            data-state={comment.isEdited ? "edited" : "not-edited"}
+            className="hidden text-gray-400 [&[data-state=edited]]:block"
+          >
+            (Edited)
+          </span>
+        </div>
+        {isEditing ? (
+          <Editor
+            action="comment"
+            content={
+              comment.content
+                ? (JSON.parse(comment.content) as EditorContentType)
+                : undefined
+            }
+            onSave={handleSave}
+            onCancel={() => setIsEditing(false)}
+            className="mt-2"
+          />
+        ) : (
+          <EditorPreview
+            action="comment"
+            content={
+              comment.content
+                ? (JSON.parse(comment.content) as EditorContentType)
+                : undefined
+            }
+          />
+        )}
+        {comment.authorId == user?.id ? (
+          <div className="mb-1">
+            <Button
+              onClick={() => setIsEditing(true)}
+              customColors
+              className="bg-transparent text-xs font-medium text-gray-500 underline-offset-2 hover:underline"
+            >
+              Edit
+            </Button>
+            <Button
+              customColors
+              className="bg-transparent text-xs font-medium text-gray-500 underline-offset-2 hover:underline"
+            >
+              Delete
+            </Button>
+          </div>
+        ) : null}
+      </div>
+    </div>
+  );
+};
+
 const AddComment: React.FC<{
   onAddComment: () => void;
-}> = ({ onAddComment }) => {
-  const { user } = useUser();
+  user: UserResource | undefined | null;
+}> = ({ onAddComment, user }) => {
+  function handleAddComment(event: React.MouseEvent<HTMLInputElement>) {
+    event.preventDefault();
+    onAddComment();
+  }
   return (
     <div className="flex w-full gap-x-2">
       <Avatar
-        className="mt-2"
-        src={user?.profileImageUrl ?? "https://www.gravatar.com/avatar?d=mp"}
+        src={user?.profileImageUrl}
         alt={
           user ? `${user?.firstName ?? ""} ${user?.lastName ?? ""}` : "Guest"
         }
       />
       <div className="w-full">
         <input
-          onMouseDown={onAddComment}
+          onMouseDown={handleAddComment}
           placeholder="Add a comment..."
           className="w-full rounded-[3px] border border-gray-300 px-4 py-2 placeholder:text-sm"
         />
@@ -340,7 +452,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   const [openAccordion, setOpenAccordion] = useState("details");
 
   function handleAutoAssign() {
-    if (!user) {
+    if (!user?.id) {
       console.error("No user found");
       return;
     }
@@ -380,15 +492,10 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
             </span>
             <div className="flex flex-col">
               <div className="flex items-center gap-x-3">
-                <Image
-                  width={20}
-                  height={20}
-                  src={
-                    issue.assignee?.avatar ??
-                    "https://www.gravatar.com/avatar?d=mp"
-                  }
-                  alt={`${issue.assignee?.name ?? "Unassigned"} avatar`}
-                  className="rounded-full"
+                <Avatar
+                  size={20}
+                  src={issue.assignee?.avatar}
+                  alt={`${issue.assignee?.name ?? "Unassigned"}`}
                 />
                 <div className="flex flex-col">
                   <span className="whitespace-nowrap text-sm">
@@ -421,15 +528,10 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
               Reporter
             </span>
             <div className="flex items-center gap-x-3 ">
-              <Image
-                width={20}
-                height={20}
-                src={
-                  issue.reporter?.avatar ??
-                  "https://www.gravatar.com/avatar?d=mp"
-                }
-                alt={`${issue.reporter?.name ?? "Unassigned"} avatar`}
-                className="rounded-full"
+              <Avatar
+                size={20}
+                src={issue.reporter?.avatar}
+                alt={`${issue.reporter?.name ?? "Unassigned"}`}
               />
               <span className="whitespace-nowrap text-sm">
                 {issue.reporter?.name}
