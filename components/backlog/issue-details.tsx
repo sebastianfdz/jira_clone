@@ -410,7 +410,7 @@ const AddComment: React.FC<{
   return (
     <div
       data-state={commentsInViewport ? "inViewport" : "notInViewport"}
-      className="flex w-full gap-x-2 py-3 [&[data-state=notInViewport]]:border-t"
+      className="flex w-full gap-x-2 border-t-2 border-transparent py-3 [&[data-state=notInViewport]]:border-gray-200"
     >
       <Avatar
         src={user?.profileImageUrl}
