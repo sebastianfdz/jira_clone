@@ -71,18 +71,20 @@ const TooltipWrapper: React.FC<
   } & TooltipContentProps
 > = ({ children, text, side = "bottom" }) => {
   return (
-    <Tooltip delayDuration={100}>
-      <TooltipTrigger asChild>{children}</TooltipTrigger>
-      <TooltipPortal>
-        <TooltipContent
-          side={side}
-          sideOffset={4}
-          className="max-w-2xl rounded-sm bg-gray-700 px-1.5 py-0.5 text-xs text-white"
-        >
-          {text}
-        </TooltipContent>
-      </TooltipPortal>
-    </Tooltip>
+    <TooltipPrimitive.Provider>
+      <Tooltip delayDuration={100}>
+        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipPortal>
+          <TooltipContent
+            side={side}
+            sideOffset={4}
+            className="z-[999] max-w-2xl rounded-sm bg-gray-700 px-1.5 py-0.5 text-xs text-white"
+          >
+            {text}
+          </TooltipContent>
+        </TooltipPortal>
+      </Tooltip>
+    </TooltipPrimitive.Provider>
   );
 };
 
