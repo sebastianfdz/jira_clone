@@ -82,10 +82,10 @@ const Issue: React.FC<{
           <IssueContextMenu isEditing={isEditing} className="flex-auto">
             <ContextTrigger className="h-8 w-full" />
           </IssueContextMenu>
-          <div className="2 relative flex items-center justify-end">
+          <div className="relative flex items-center justify-end gap-x-2">
             <NotImplemented feature="child issues">
               <button>
-                <ChildrenTreeIcon className="mx-2 text-gray-600" />
+                <ChildrenTreeIcon className="text-gray-600" />
               </button>
             </NotImplemented>
             <IssueSelectStatus
@@ -100,12 +100,11 @@ const Issue: React.FC<{
                   ? `Assignee: ${issue.assignee?.name}`
                   : "Unassigned"
               }
-              className="mx-1"
             />
             <IssueDropdownMenu issue={issue}>
               <DropdownTrigger
                 asChild
-                className="rounded-m ml-1 flex items-center gap-x-2 bg-opacity-30 px-1.5 text-xs font-semibold focus:ring-2 "
+                className="rounded-m flex items-center gap-x-2 bg-opacity-30 px-1.5 text-xs font-semibold focus:ring-2 "
               >
                 <div className="invisible rounded-sm px-1.5 py-1.5 text-gray-700 group-hover:visible group-hover:bg-gray-200 group-hover:hover:bg-gray-300 [&[data-state=open]]:visible [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white">
                   <BsThreeDots className="sm:text-xl" />
