@@ -219,27 +219,27 @@ function BlockFormatDropDown({
     >
       <DropDownItem onClick={formatParagraph}>
         <BsTextParagraph className="text-sm" />
-        <span className="text">Normal</span>
+        <span>Normal</span>
       </DropDownItem>
       <DropDownItem onClick={() => formatHeading("h1")}>
         <BsTypeH1 className="text-sm" />
-        <span className="text">Heading 1</span>
+        <span>Heading 1</span>
       </DropDownItem>
       <DropDownItem onClick={() => formatHeading("h2")}>
         <BsTypeH2 className="text-sm" />
-        <span className="text">Heading 2</span>
+        <span>Heading 2</span>
       </DropDownItem>
       <DropDownItem onClick={() => formatHeading("h3")}>
         <BsTypeH3 className="text-sm" />
-        <span className="text">Heading 3</span>
+        <span>Heading 3</span>
       </DropDownItem>
       <DropDownItem onClick={formatQuote}>
         <BsQuote className="text-sm" />
-        <span className="text">Quote</span>
+        <span>Quote</span>
       </DropDownItem>
       <DropDownItem onClick={formatCode}>
         <BsCodeSlash className="text-sm" />
-        <span className="text">Code Block</span>
+        <span>Code Block</span>
       </DropDownItem>
     </DropDown>
   );
@@ -291,7 +291,7 @@ function FontDropDown({
           : FONT_SIZE_OPTIONS
         ).map(([option, text]) => (
           <DropDownItem onClick={() => handleClick(option)} key={option}>
-            <span className="text">{text}</span>
+            <span className="">{text}</span>
           </DropDownItem>
         ))}
       </div>
@@ -307,7 +307,7 @@ export default function ToolbarPlugin(): JSX.Element {
   const [selectedElementKey, setSelectedElementKey] = useState<NodeKey | null>(
     null
   );
-  const [fontSize, setFontSize] = useState<string>("15px");
+  const [fontSize, setFontSize] = useState<string>("14px");
   const [isBold, setIsBold] = useState(false);
   const [isItalic, setIsItalic] = useState(false);
   const [isUnderline, setIsUnderline] = useState(false);
@@ -371,7 +371,7 @@ export default function ToolbarPlugin(): JSX.Element {
       }
 
       setFontSize(
-        $getSelectionStyleValueForProperty(selection, "font-size", "15px")
+        $getSelectionStyleValueForProperty(selection, "font-size", "14px")
       );
     }
   }, [activeEditor]);
@@ -481,7 +481,7 @@ export default function ToolbarPlugin(): JSX.Element {
                   onClick={() => onCodeLanguageSelect(value)}
                   key={value}
                 >
-                  <span className="text">{name}</span>
+                  <span>{name}</span>
                 </DropDownItem>
               );
             })}
@@ -563,7 +563,7 @@ export default function ToolbarPlugin(): JSX.Element {
           }}
         >
           <FiAlignLeft className="text-sm" />
-          <span className="text">Left Align</span>
+          <span>Left Align</span>
         </DropDownItem>
         <DropDownItem
           onClick={() => {
@@ -571,7 +571,7 @@ export default function ToolbarPlugin(): JSX.Element {
           }}
         >
           <FiAlignCenter className="text-sm" />
-          <span className="text">Center Align</span>
+          <span>Center Align</span>
         </DropDownItem>
         <DropDownItem
           onClick={() => {
@@ -579,7 +579,7 @@ export default function ToolbarPlugin(): JSX.Element {
           }}
         >
           <FiAlignRight className="text-sm" />
-          <span className="text">Right Align</span>
+          <span>Right Align</span>
         </DropDownItem>
         <DropDownItem
           onClick={() => {
@@ -587,7 +587,7 @@ export default function ToolbarPlugin(): JSX.Element {
           }}
         >
           <FiAlignJustify className="text-sm" />
-          <span className="text">Justify Align</span>
+          <span>Justify Align</span>
         </DropDownItem>
         <Divider />
         <DropDownItem
@@ -596,7 +596,7 @@ export default function ToolbarPlugin(): JSX.Element {
           }}
         >
           <BiRightIndent className="text-sm" />
-          <span className="text">Outdent</span>
+          <span>Outdent</span>
         </DropDownItem>
         <DropDownItem
           onClick={() => {
@@ -604,7 +604,7 @@ export default function ToolbarPlugin(): JSX.Element {
           }}
         >
           <BiLeftIndent className="text-sm" />
-          <span className="text">Indent</span>
+          <span>Indent</span>
         </DropDownItem>
       </DropDown>
     </div>
