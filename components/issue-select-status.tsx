@@ -74,8 +74,7 @@ const IssueSelectStatus: React.FC<{
               variant == "sm" ? selected.smTextColor : selected.lgTextColor,
           }}
           className={clsx(
-            variant == "sm" &&
-              "mx-2 bg-opacity-20 px-1.5 py-0.5 text-xs font-bold",
+            variant == "sm" && "bg-opacity-20 px-1.5 py-0.5 text-xs font-bold",
             variant == "lg" && "my-2 px-3 py-1.5 text-[16px] font-semibold",
             isUpdating && "cursor-not-allowed",
             "flex items-center gap-x-1 whitespace-nowrap rounded-[3px] focus:ring-2"
