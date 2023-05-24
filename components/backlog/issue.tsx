@@ -82,7 +82,7 @@ const Issue: React.FC<{
           <IssueContextMenu isEditing={isEditing} className="flex-auto">
             <ContextTrigger className="h-8 w-full" />
           </IssueContextMenu>
-          <div className="relative flex items-center justify-end gap-x-2">
+          <div className="relative ml-2 flex min-w-fit items-center justify-end gap-x-2">
             <NotImplemented feature="child issues">
               <button>
                 <ChildrenTreeIcon className="text-gray-600" />
