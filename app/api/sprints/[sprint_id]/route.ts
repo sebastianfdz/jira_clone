@@ -6,6 +6,7 @@ import { z } from "zod";
 const patchSchema = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
+  duration: z.string().optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
   status: z.nativeEnum(SprintStatus).optional(),
@@ -33,7 +34,8 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
     return new Response(message, { status: 400 });
   }
 
-  const { name, description, startDate, endDate, status } = validated.data;
+  const { name, description, startDate, endDate, status, duration } =
+    validated.data;
 
   const current = await prisma.sprint.findUnique({
     where: {
@@ -55,6 +57,7 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
       startDate: startDate ?? current.startDate,
       endDate: endDate ?? current.endDate,
       status: status ?? current.status,
+      duration: duration ?? current.duration,
     },
   });
 
