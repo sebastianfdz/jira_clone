@@ -1,5 +1,5 @@
 "use client";
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import {
   Modal,
   ModalContent,
@@ -17,8 +17,9 @@ const StartSprintModal: React.FC<{
   issueCount: number;
   sprint: Sprint;
 }> = ({ children, issueCount, sprint }) => {
+  const [isOpen, setIsOpen] = useState(false);
   return (
-    <Modal>
+    <Modal open={isOpen} onOpenChange={setIsOpen}>
       <ModalTrigger asChild>{children}</ModalTrigger>
       <ModalPortal>
         <ModalOverlay />
@@ -29,7 +30,7 @@ const StartSprintModal: React.FC<{
             {issueCount > 1 ? " issues" : " issue"} will be included in this
             sprint.
           </ModalDescription>
-          <StartSprintForm sprint={sprint} />
+          <StartSprintForm sprint={sprint} setModalIsOpen={setIsOpen} />
         </ModalContent>
       </ModalPortal>
     </Modal>
