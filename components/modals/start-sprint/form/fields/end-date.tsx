@@ -1,11 +1,11 @@
+import { useCallback, useEffect, useState } from "react";
+import { Error, type FormValues, Label, DEFAULT_DURATION } from "..";
+import clsx from "clsx";
 import {
   type UseFormSetValue,
   type FieldErrors,
   type UseFormRegister,
 } from "react-hook-form";
-import { Error, type FormValues, Label, DEFAULT_DURATION } from "..";
-import clsx from "clsx";
-import { useCallback, useEffect, useState } from "react";
 
 const EndDateField: React.FC<{
   errors: FieldErrors<FormValues>;
@@ -16,19 +16,22 @@ const EndDateField: React.FC<{
 }> = ({ errors, register, duration, startDate, setValue }) => {
   const [endDate, setEndDate] = useState(() => new Date());
 
-  const calculateEndDate = useCallback(() => {
-    if (duration === "custom") return;
-    const milliseconds = calculateMillisecondsFromDuration(
-      duration ?? DEFAULT_DURATION
-    );
-    const _startDate = new Date(startDate ?? new Date());
-    const _endDate = new Date(_startDate.getTime() + milliseconds);
-    setEndDate(_endDate);
-    setValue("endDate", _endDate);
-  }, [duration, startDate, setValue]);
+  const calculateEndDate = useCallback(
+    (duration: FormValues["duration"], startDate: FormValues["startDate"]) => {
+      if (duration === "custom") return;
+      const milliseconds = calculateMillisecondsFromDuration(
+        duration ?? DEFAULT_DURATION
+      );
+      const _startDate = new Date(startDate ?? new Date());
+      const _endDate = new Date(_startDate.getTime() + milliseconds);
+      setEndDate(_endDate);
+      setValue("endDate", _endDate);
+    },
+    [setValue]
+  );
 
   useEffect(() => {
-    calculateEndDate();
+    calculateEndDate(duration, startDate);
   }, [duration, startDate, calculateEndDate]);
 
   function calculateMillisecondsFromDuration(

@@ -1,8 +1,8 @@
-import { type Control, Controller, type FieldErrors } from "react-hook-form";
-import { Error, type FormValues, Label, DEFAULT_DURATION } from "..";
-import clsx from "clsx";
 import { Fragment } from "react";
-
+import { type Control, Controller, type FieldErrors } from "react-hook-form";
+import { Error, type FormValues, Label } from "..";
+import clsx from "clsx";
+import { FaChevronDown } from "react-icons/fa";
 import {
   Select,
   SelectContent,
@@ -14,13 +14,18 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
-import { FaChevronDown } from "react-icons/fa";
 
 const DurationField: React.FC<{
   control: Control<FormValues, "duration">;
   errors: FieldErrors<FormValues>;
 }> = ({ control, errors }) => {
-  const durationOptions = ["1 week", "2 weeks", "3 weeks", "4 weeks", "custom"];
+  const durationOptions: FormValues["duration"][] = [
+    "1 week",
+    "2 weeks",
+    "3 weeks",
+    "4 weeks",
+    "custom",
+  ];
 
   return (
     <Fragment>
@@ -28,13 +33,9 @@ const DurationField: React.FC<{
       <Controller
         control={control}
         name="duration"
-        defaultValue={DEFAULT_DURATION}
         render={({ field }) => {
           return (
-            <Select
-              onValueChange={field.onChange}
-              defaultValue={DEFAULT_DURATION}
-            >
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
               <SelectTrigger className="flex h-10 w-64 items-center justify-between rounded-[3px] bg-gray-100 px-2 text-xs font-semibold transition-all duration-200 hover:bg-gray-200 focus:ring-2">
                 <SelectValue />
                 <SelectIcon>
