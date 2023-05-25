@@ -52,6 +52,23 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
   //     return "Start Sprint";
   //   }
   // }
+
+  function getFormattedDateRange(
+    startDate: Date | undefined | null,
+    endDate: Date | undefined | null
+  ) {
+    if (!startDate || !endDate) {
+      return "";
+    }
+    return `${new Date(startDate).toLocaleDateString("en", {
+      day: "numeric",
+      month: "short",
+    })} - ${new Date(endDate).toLocaleDateString("en", {
+      day: "numeric",
+      month: "short",
+    })}`;
+  }
+
   return (
     <div className="flex w-full min-w-max items-center justify-between pl-2 text-sm">
       <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
@@ -62,8 +79,11 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
           />
           <div className="flex items-center gap-x-2">
             <div className="text-semibold whitespace-nowrap">{sprint.name}</div>
-            <div className="whitespace-nowrap font-normal text-gray-500">
-              10 Mar - 17 Mar ({issues.length} issues)
+            <div className="flex items-center gap-x-3 whitespace-nowrap font-normal text-gray-500">
+              <span>
+                {getFormattedDateRange(sprint.startDate, sprint.endDate)}
+              </span>
+              <span>({issues.length} issues)</span>
             </div>
           </div>
         </Fragment>
