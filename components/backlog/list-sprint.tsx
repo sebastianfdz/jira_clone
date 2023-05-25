@@ -14,6 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { StartSprintModal } from "../modals/start-sprint-modal";
 
 const SprintList: React.FC<{
   sprint: Sprint;
@@ -44,13 +45,13 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
   issues,
   sprint,
 }) => {
-  function getSprintAction(sprint: Sprint) {
-    if (sprint.status === "ACTIVE") {
-      return "Complete Sprint";
-    } else {
-      return "Start Sprint";
-    }
-  }
+  // function getSprintAction(sprint: Sprint) {
+  //   if (sprint.status === "ACTIVE") {
+  //     return "Complete Sprint";
+  //   } else {
+  //     return "Start Sprint";
+  //   }
+  // }
   return (
     <div className="flex w-full min-w-max items-center justify-between pl-2 text-sm">
       <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
@@ -69,9 +70,11 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
       </AccordionTrigger>
       <div className="flex items-center gap-x-2">
         <IssueStatusCount issues={issues} />
-        <Button>
-          <span className="whitespace-nowrap">{getSprintAction(sprint)}</span>
-        </Button>
+        <StartSprintModal issueCount={issues.length}>
+          <Button>
+            <span className="whitespace-nowrap">Start Sprint</span>
+          </Button>
+        </StartSprintModal>
 
         <SprintDropdownMenu sprint={sprint}>
           <DropdownTrigger
