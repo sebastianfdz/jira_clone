@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { api } from "@/utils/api";
 import { type Sprint } from "@prisma/client";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type FieldError, useForm } from "react-hook-form";
 import { NameField } from "./fields/name";
 import { DurationField } from "./fields/duration";
 import { StartDateField } from "./fields/start-date";
 import { EndDateField } from "./fields/end-date";
 import { DescriptionField } from "./fields/description";
+import { Spinner } from "@/components/ui/spinner";
 
 export type FormValues = {
   name: string;
@@ -19,25 +20,55 @@ export type FormValues = {
 
 export const DEFAULT_DURATION = "1 week";
 
-const StartSprintForm: React.FC<{ sprint: Sprint }> = ({ sprint }) => {
+const StartSprintForm: React.FC<{
+  sprint: Sprint;
+  setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ sprint, setModalIsOpen }) => {
   const {
     handleSubmit,
     register,
     formState: { errors },
     control,
     setValue,
+    reset,
     watch,
-  } = useForm<FormValues>();
-  const { mutate: updateSprint } = useMutation(api.sprints.patchSprint);
+  } = useForm<FormValues>({
+    defaultValues: {
+      name: sprint.name,
+      duration: (sprint.duration as FormValues["duration"]) ?? DEFAULT_DURATION,
+      startDate: sprint.startDate ? new Date(sprint.startDate) : new Date(),
+      endDate: sprint.endDate ? new Date(sprint.endDate) : new Date(),
+      description: sprint.description ?? "",
+    },
+  });
+  const { mutate: updateSprint, isLoading: isUpdating } = useMutation(
+    api.sprints.patchSprint
+  );
+  const queryClient = useQueryClient();
   function handleStartSprint(data: FormValues) {
-    updateSprint({
-      sprintId: sprint.id,
-      status: "ACTIVE",
-      name: data.name,
-      description: data.description,
-      startDate: data.startDate.toISOString(),
-      endDate: data.endDate.toISOString(),
-    });
+    updateSprint(
+      {
+        sprintId: sprint.id,
+        status: "ACTIVE",
+        name: data.name,
+        duration: data.duration ?? DEFAULT_DURATION,
+        description: data.description,
+        startDate: data.startDate.toISOString(),
+        endDate: data.endDate.toISOString(),
+      },
+      {
+        onSuccess: () => {
+          // eslint-disable-next-line
+          queryClient.invalidateQueries(["sprints"]);
+          handleClose();
+        },
+      }
+    );
+  }
+
+  function handleClose() {
+    reset();
+    setModalIsOpen(false);
   }
 
   return (
@@ -48,7 +79,7 @@ const StartSprintForm: React.FC<{ sprint: Sprint }> = ({ sprint }) => {
     >
       <NameField register={register} errors={errors} />
       <DurationField control={control} errors={errors} />
-      <StartDateField register={register} errors={errors} />
+      <StartDateField register={register} errors={errors} control={control} />
       <EndDateField
         register={register}
         errors={errors}
@@ -62,20 +93,23 @@ const StartSprintForm: React.FC<{ sprint: Sprint }> = ({ sprint }) => {
         <Button
           customColors
           customPadding
-          className="bg-inprogress px-3 py-1.5 font-medium text-white"
+          className="flex items-center gap-x-2 bg-inprogress px-3 py-1.5 font-medium text-white"
           type="submit"
           name="create"
+          disabled={isUpdating}
           aria-label={"create"}
         >
-          Start
+          <span>Start</span>
+          {isUpdating ? <Spinner white size="sm" /> : null}
         </Button>
+
         <Button
           customColors
           customPadding
+          onClick={handleClose}
           className="px-3 py-1.5 font-medium text-inprogress underline-offset-2 hover:underline hover:brightness-110"
-          type="submit"
-          name="create"
-          aria-label={"create"}
+          name="cancel"
+          aria-label={"cancel"}
         >
           Cancel
         </Button>
