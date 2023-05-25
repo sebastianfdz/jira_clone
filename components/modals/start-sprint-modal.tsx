@@ -45,8 +45,9 @@ const StartSprintModal: React.FC<{
         <ModalContent>
           <ModalTitle>Start Sprint</ModalTitle>
           <ModalDescription>
-            {issueCount} {issueCount > 1 ? "issues" : "issue"} will be included
-            in this sprint.
+            <span className="font-bold text-gray-600">{issueCount}</span>
+            {issueCount > 1 ? " issues" : " issue"} will be included in this
+            sprint.
           </ModalDescription>
           <StartSprintForm />
         </ModalContent>
