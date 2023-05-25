@@ -94,7 +94,7 @@ type DescriptionRef = React.ElementRef<typeof ModalPrimitive.Description>;
 const ModalDescription = React.forwardRef<DescriptionRef, DescriptionProps>(
   ({ children, className, ...props }, forwardedRef) => (
     <ModalPrimitive.Description
-      className={clsx("text-base", className)}
+      className={clsx("text-sm text-gray-500", className)}
       {...props}
       ref={forwardedRef}
     >
