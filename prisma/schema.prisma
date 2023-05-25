@@ -75,10 +75,19 @@ enum SprintStatus {
     CLOSED
 }
 
+enum Duration {
+    ONE_WEEK
+    TWO_WEEKS
+    THREE_WEEKS
+    FOUR_WEEKS
+    CUSTOM
+}
+
 model Sprint {
     id          String       @id @default(uuid())
     name        String
     description String?      @default("")
+    duration    String?
     startDate   DateTime?
     endDate     DateTime?
     createdAt   DateTime     @default(now())
