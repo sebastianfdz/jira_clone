@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState, type ReactNode, useEffect } from "react";
+import { Fragment, type ReactNode } from "react";
 import {
   Modal,
   ModalContent,
@@ -69,7 +69,6 @@ const StartSprintForm: React.FC = () => {
     register,
     formState: { errors },
     control,
-    getValues,
   } = useForm<FormValues>();
   function handleStartSprint(data: FieldValues) {
     console.log(data);
@@ -84,13 +83,7 @@ const StartSprintForm: React.FC = () => {
       <NameField register={register} errors={errors} />
       <DurationField control={control} errors={errors} />
       <StartDateField register={register} errors={errors} />
-      <EndDateField
-        key={getValues().duration}
-        startDate={getValues().startDate}
-        duration={getValues().duration}
-        register={register}
-        errors={errors}
-      />
+      <EndDateField register={register} errors={errors} />
       <SprintGoalField register={register} />
 
       <div className="flex w-full justify-end">
@@ -220,31 +213,19 @@ const StartDateField: React.FC<{
 const EndDateField: React.FC<{
   errors: FieldErrors<FormValues>;
   register: UseFormRegister<FormValues>;
-  startDate: FormValues["startDate"];
-  duration: FormValues["duration"];
-}> = ({ errors, register, startDate, duration }) => {
+}> = ({ errors, register }) => {
   //   const currentDate = new Date(startDate);
-  const [endDate, setEndDate] = useState(new Date());
+  // const [endDate, setEndDate] = useState(new Date());
 
-  function calculateMillisecondsFromDuration(
-    duration: FormValues["duration"] | undefined
-  ) {
-    if (duration === "custom" || !duration) return 0;
-    console.log(duration);
-    const durationInWeeks = parseInt(duration.split(" ")[0] as string);
+  // function calculateMillisecondsFromDuration(
+  //   duration: FormValues["duration"] | undefined
+  // ) {
+  //   if (duration === "custom" || !duration) return 0;
+  //   console.log(duration);
+  //   const durationInWeeks = parseInt(duration.split(" ")[0] as string);
 
-    return durationInWeeks * 7 * 24 * 60 * 60 * 1000;
-  }
-
-  useEffect(() => {
-    if (!startDate || !duration) return;
-    const currentDate = new Date(startDate);
-    setEndDate(
-      new Date(
-        currentDate.getTime() + calculateMillisecondsFromDuration(duration)
-      )
-    );
-  }, [duration, startDate]);
+  //   return durationInWeeks * 7 * 24 * 60 * 60 * 1000;
+  // }
 
   return (
     <div className="my-2">
@@ -255,14 +236,14 @@ const EndDateField: React.FC<{
           validate: {
             endDateAfterStartDate: (value) => {
               const endDate = new Date(value);
-              const _startDate = new Date(startDate);
+              const _startDate = new Date();
               return endDate > _startDate;
             },
           },
         })}
         aria-invalid={errors.endDate ? "true" : "false"}
         type="date"
-        defaultValue={endDate.toISOString().slice(0, 10)}
+        defaultValue={new Date().toISOString().slice(0, 10)}
         id="endDate"
         className={clsx(
           errors.endDate ? "focus:outline-red-500" : "focus:outline-blue-400",
