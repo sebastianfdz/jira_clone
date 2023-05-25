@@ -14,7 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { StartSprintModal } from "../modals/start-sprint-modal";
+import { StartSprintModal } from "@/components/modals/start-sprint";
 
 const SprintList: React.FC<{
   sprint: Sprint;
@@ -70,7 +70,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
       </AccordionTrigger>
       <div className="flex items-center gap-x-2">
         <IssueStatusCount issues={issues} />
-        <StartSprintModal issueCount={issues.length}>
+        <StartSprintModal issueCount={issues.length} sprint={sprint}>
           <Button>
             <span className="whitespace-nowrap">Start Sprint</span>
           </Button>
