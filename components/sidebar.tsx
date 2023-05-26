@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Link from "next/link";
-import { BacklogIcon, BoardIcon, DevelopmentIcon, RoadmapIcon } from "./icons";
+import { BacklogIcon, BoardIcon, DevelopmentIcon, RoadmapIcon } from "./svgs";
 import {
   NavigationMenu,
   NavigationMenuItem,

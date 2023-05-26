@@ -9,7 +9,7 @@ import React, {
 } from "react";
 import { useIssues } from "@/hooks/useIssues";
 import { CgAttachment } from "react-icons/cg";
-import { ChildrenTreeIcon } from "../icons";
+import { ChildrenTreeIcon } from "../svgs";
 import { BiLink } from "react-icons/bi";
 import { useUser } from "@clerk/nextjs";
 import { MdClose, MdOutlineShare, MdRemoveRedEye } from "react-icons/md";
@@ -21,7 +21,7 @@ import { IssueDropdownMenu } from "../issue-menu";
 import { DropdownTrigger } from "../ui/dropdown-menu";
 import { NotImplemented } from "../not-implemented";
 import { IssuePath } from "./issue-path";
-import { LightningIcon } from "../icons";
+import { LightningIcon } from "../svgs";
 import { IssueTitle } from "../issue-title";
 import { IssueSelectStatus } from "../issue-select-status";
 import { type IssueType } from "@/utils/types";

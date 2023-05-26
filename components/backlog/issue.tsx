@@ -6,7 +6,7 @@ import { Button } from "../ui/button";
 import clsx from "clsx";
 import { BsThreeDots } from "react-icons/bs";
 import { Avatar } from "../avatar";
-import { ChildrenTreeIcon } from "../icons";
+import { ChildrenTreeIcon } from "../svgs";
 import { NotImplemented } from "../not-implemented";
 import { DropdownTrigger } from "../ui/dropdown-menu";
 import { ContextTrigger } from "../ui/context-menu";
