@@ -45,7 +45,7 @@ const CompleteSprintForm: React.FC<{
     );
     updateIssuesBatch({
       keys:
-        issues?.filter((issue) => isDone(issue)).map((issue) => issue.key) ??
+        issues?.filter((issue) => !isDone(issue)).map((issue) => issue.key) ??
         [],
       sprintId: data.moveToSprintId === "backlog" ? null : data.moveToSprintId,
     });
