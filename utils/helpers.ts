@@ -121,3 +121,7 @@ export function dateToLongString(date: Date) {
 
   return dateString + " at " + timeStirng;
 }
+
+export function isDone(issue: IssueType) {
+  return issue.status == "DONE";
+}
