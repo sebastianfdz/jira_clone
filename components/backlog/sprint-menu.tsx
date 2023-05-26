@@ -1,4 +1,4 @@
-import { type ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import clsx from "clsx";
 import {
   Dropdown,
@@ -14,10 +14,15 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "../toast";
 import { useSprints } from "@/hooks/useSprints";
 
-const SprintDropdownMenu: React.FC<{
+type SprintDropdownMenuProps = {
   children: ReactNode;
   sprint: SprintType;
-}> = ({ children, sprint }) => {
+};
+
+const SprintDropdownMenu = React.forwardRef<
+  HTMLButtonElement,
+  SprintDropdownMenuProps
+>(({ children, sprint }, modalRef) => {
   const menuOptions: MenuOptionType[] = [
     { id: "edit", label: "Edit Sprint" },
     { id: "delete", label: "Delete Sprint" },
@@ -45,6 +50,10 @@ const SprintDropdownMenu: React.FC<{
           },
         }
       );
+    } else if (id == "edit") {
+      if (modalRef) {
+        (modalRef as React.RefObject<HTMLInputElement>).current?.click();
+      }
     }
   };
 
@@ -77,6 +86,8 @@ const SprintDropdownMenu: React.FC<{
       </DropdownPortal>
     </Dropdown>
   );
-};
+});
+
+SprintDropdownMenu.displayName = "SprintDropdownMenu";
 
 export { SprintDropdownMenu };
