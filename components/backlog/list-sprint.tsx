@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/accordion";
 import { StartSprintModal } from "@/components/modals/start-sprint";
 import { CompleteSprintModal } from "../modals/complete-sprint";
+import { UpdateSprintModal } from "../modals/update-sprint";
 
 const SprintList: React.FC<{
   sprint: Sprint;
@@ -70,9 +71,14 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
     })}`;
   }
 
+  const modalRef = useRef(null);
+
   return (
     <div className="flex w-full min-w-max items-center justify-between pl-2 text-sm">
       <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
+        <UpdateSprintModal sprint={sprint}>
+          <button ref={modalRef} />
+        </UpdateSprintModal>
         <Fragment>
           <FaChevronRight
             className="mr-2 text-xs text-black transition-transform"
@@ -92,7 +98,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
       <div className="flex items-center gap-x-2">
         <IssueStatusCount issues={issues} />
         <SprintActionButton sprint={sprint} issues={issues} />
-        <SprintDropdownMenu sprint={sprint}>
+        <SprintDropdownMenu sprint={sprint} ref={modalRef}>
           <DropdownTrigger
             asChild
             className="rounded-m flex items-center gap-x-1 px-1.5 py-0.5 text-xs font-semibold focus:ring-2"
