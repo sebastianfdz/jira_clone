@@ -59,7 +59,7 @@ const StartSprintForm: React.FC<{
       {
         onSuccess: () => {
           // eslint-disable-next-line
-          queryClient.invalidateQueries(["sprints"]);
+          queryClient.invalidateQueries(["issues"]);
           handleClose();
         },
       }
@@ -95,9 +95,9 @@ const StartSprintForm: React.FC<{
           customPadding
           className="flex items-center gap-x-2 bg-inprogress px-3 py-1.5 font-medium text-white"
           type="submit"
-          name="create"
+          name="start"
           disabled={isUpdating}
-          aria-label={"create"}
+          aria-label={"start"}
         >
           <span>Start</span>
           {isUpdating ? <Spinner white size="sm" /> : null}
