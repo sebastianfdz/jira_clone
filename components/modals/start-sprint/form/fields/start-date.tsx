@@ -4,7 +4,9 @@ import {
   type FieldErrors,
   type UseFormRegister,
 } from "react-hook-form";
-import { Error, type FormValues, Label } from "..";
+import { type FormValues } from "..";
+import { Label } from "@/components/form/label";
+import { Error } from "@/components/form/error";
 import clsx from "clsx";
 
 const StartDateField: React.FC<{

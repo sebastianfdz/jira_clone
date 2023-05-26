@@ -1,14 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { api } from "@/utils/api";
 import { type Sprint } from "@prisma/client";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { type FieldError, useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
+import { useForm } from "react-hook-form";
 import { NameField } from "./fields/name";
 import { DurationField } from "./fields/duration";
 import { StartDateField } from "./fields/start-date";
 import { EndDateField } from "./fields/end-date";
 import { DescriptionField } from "./fields/description";
 import { Spinner } from "@/components/ui/spinner";
+import { useSprints } from "@/hooks/useSprints";
 
 export type FormValues = {
   name: string;
@@ -41,9 +41,8 @@ const StartSprintForm: React.FC<{
       description: sprint.description ?? "",
     },
   });
-  const { mutate: updateSprint, isLoading: isUpdating } = useMutation(
-    api.sprints.patchSprint
-  );
+  const { updateSprint, isUpdating } = useSprints();
+
   const queryClient = useQueryClient();
   function handleStartSprint(data: FormValues) {
     updateSprint(
@@ -118,29 +117,4 @@ const StartSprintForm: React.FC<{
   );
 };
 
-const Label: React.FC<
-  { text: string; required?: boolean } & React.HTMLProps<HTMLLabelElement>
-> = ({ text, required = true, ...props }) => {
-  return (
-    <label
-      {...props}
-      className="my-1 flex gap-x-1 text-xs font-medium text-gray-500"
-    >
-      {text}
-      {required ? <span className="text-red-600">*</span> : null}
-    </label>
-  );
-};
-
-const Error: React.FC<{ trigger: FieldError | undefined; message: string }> = ({
-  message,
-  trigger,
-}) => {
-  if (!trigger) return null;
-  return (
-    <span role="alert" className="text-xs text-red-600">
-      {message} *
-    </span>
-  );
-};
-export { StartSprintForm, Error, Label };
+export { StartSprintForm };
