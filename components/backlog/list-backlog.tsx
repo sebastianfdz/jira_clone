@@ -4,14 +4,13 @@ import { FaChevronRight } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { IssueList } from "./issue-list";
 import { IssueStatusCount } from "./issue-status-count";
-import { api } from "@/utils/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { type IssueType } from "@/utils/types";
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { useSprints } from "@/hooks/useSprints";
 
 const BacklogList: React.FC<{
   id: string;
@@ -40,16 +39,10 @@ const BacklogList: React.FC<{
 };
 
 const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
-  const queryClient = useQueryClient();
-  const { mutate: createSprint } = useMutation(api.sprints.postSprint);
+  const { createSprint } = useSprints();
 
   function handleCreateSprint() {
-    createSprint(undefined, {
-      onSuccess: () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        queryClient.invalidateQueries(["sprints"]);
-      },
-    });
+    createSprint();
   }
 
   return (

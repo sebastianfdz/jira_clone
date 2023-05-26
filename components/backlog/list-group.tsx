@@ -1,8 +1,6 @@
 "use client";
 import { useIssues } from "@/hooks/useIssues";
-import { useQuery } from "@tanstack/react-query";
 import clsx from "clsx";
-import { api } from "@/utils/api";
 import { BacklogList } from "./list-backlog";
 import { SprintList } from "./list-sprint";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
@@ -15,11 +13,12 @@ import {
   isNullish,
   sprintId,
 } from "@/utils/helpers";
+import { useSprints } from "@/hooks/useSprints";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();
   const { search, assignees } = useFiltersContext();
-  const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
+  const { sprints } = useSprints();
 
   const filterIssues = useCallback(
     (issues: IssueType[] | undefined, sprintId: string | null) => {

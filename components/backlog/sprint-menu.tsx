@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import clsx from "clsx";
 import {
   Dropdown,
@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { type Sprint as SprintType } from "@prisma/client";
 import { type MenuOptionType } from "@/utils/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api } from "@/utils/api";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "../toast";
+import { useSprints } from "@/hooks/useSprints";
 
 const SprintDropdownMenu: React.FC<{
   children: ReactNode;
@@ -24,32 +24,7 @@ const SprintDropdownMenu: React.FC<{
   ];
 
   const queryClient = useQueryClient();
-
-  const { mutate: deleteSprint, error } = useMutation(
-    api.sprints.deleteSprint,
-    {
-      onSuccess: () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        queryClient.invalidateQueries(["sprints"]);
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        queryClient.invalidateQueries(["issues"]);
-        toast.success({
-          message: `Deleted sprint ${sprint.name}`,
-          description: "Sprint deleted",
-        });
-      },
-    }
-  );
-
-  useEffect(() => {
-    console.log(error);
-    if (error) {
-      toast.error({
-        message: "Error",
-        description: "Something went wrong. Please try again.",
-      });
-    }
-  }, [error]);
+  const { deleteSprint } = useSprints();
 
   const handleSprintAction = (
     id: MenuOptionType["id"],
@@ -57,7 +32,19 @@ const SprintDropdownMenu: React.FC<{
   ) => {
     e.stopPropagation();
     if (id == "delete") {
-      deleteSprint({ sprintId: sprint.id });
+      deleteSprint(
+        { sprintId: sprint.id },
+        {
+          onSuccess: () => {
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            queryClient.invalidateQueries(["issues"]);
+            toast.success({
+              message: `Deleted sprint ${sprint.name}`,
+              description: "Sprint deleted",
+            });
+          },
+        }
+      );
     }
   };
 

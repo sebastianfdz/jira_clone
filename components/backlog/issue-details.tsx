@@ -33,8 +33,6 @@ import {
   AccordionTrigger,
 } from "../ui/accordion";
 import { dateToLongString } from "@/utils/helpers";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/utils/api";
 import { Avatar } from "../avatar";
 import { useKeydownListener } from "@/hooks/useKeydownListener";
 import {
@@ -50,6 +48,7 @@ import { type GetIssueCommentResponse } from "@/app/api/issues/[issue_key]/comme
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useIsInViewport } from "@/hooks/useIsInViewport";
+import { useSprints } from "@/hooks/useSprints";
 dayjs.extend(relativeTime);
 
 const IssueDetails: React.FC<{
@@ -467,7 +466,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
   const { updateIssue } = useIssues();
-  const { data: sprints } = useQuery(["sprints"], api.sprints.getSprints);
+  const { sprints } = useSprints();
   const { user } = useUser();
   const [openAccordion, setOpenAccordion] = useState("details");
 

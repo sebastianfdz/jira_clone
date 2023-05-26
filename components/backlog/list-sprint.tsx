@@ -15,6 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { StartSprintModal } from "@/components/modals/start-sprint";
+import { CompleteSprintModal } from "../modals/complete-sprint";
 
 const SprintList: React.FC<{
   sprint: Sprint;
@@ -90,12 +91,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
       </AccordionTrigger>
       <div className="flex items-center gap-x-2">
         <IssueStatusCount issues={issues} />
-        <StartSprintModal issueCount={issues.length} sprint={sprint}>
-          <Button>
-            <span className="whitespace-nowrap">Start Sprint</span>
-          </Button>
-        </StartSprintModal>
-
+        <SprintActionButton sprint={sprint} issues={issues} />
         <SprintDropdownMenu sprint={sprint}>
           <DropdownTrigger
             asChild
@@ -109,6 +105,33 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
       </div>
     </div>
   );
+};
+
+const SprintActionButton: React.FC<{ sprint: Sprint; issues: IssueType[] }> = ({
+  sprint,
+  issues,
+}) => {
+  if (sprint.status === "ACTIVE") {
+    return (
+      <CompleteSprintModal issues={issues} sprint={sprint}>
+        <Button>
+          <span className="whitespace-nowrap">Complete sprint</span>
+        </Button>
+      </CompleteSprintModal>
+    );
+  }
+
+  if (sprint.status === "PENDING") {
+    return (
+      <StartSprintModal issueCount={issues.length} sprint={sprint}>
+        <Button>
+          <span className="whitespace-nowrap">Start sprint</span>
+        </Button>
+      </StartSprintModal>
+    );
+  }
+
+  return null;
 };
 
 export { SprintList };
