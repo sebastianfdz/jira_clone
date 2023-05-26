@@ -1,6 +1,7 @@
 import axios from "axios";
 import { getBaseUrl, getHeaders } from "../helpers";
 import {
+  type PatchIssuesBody,
   type GetIssuesResponse,
   type PostIssueBody,
   type PostIssueResponse,
@@ -21,6 +22,15 @@ export const issuesRoutes = {
   getIssues: async () => {
     const { data } = await axios.get<GetIssuesResponse>(
       `${baseUrl}/api/issues`
+    );
+    return data?.issues;
+  },
+  updateBatchIssues: async (body: PatchIssuesBody) => {
+    console.log("body batch patch", body);
+    const { data } = await axios.patch<GetIssuesResponse>(
+      `${baseUrl}/api/issues`,
+      body,
+      { headers: getHeaders() }
     );
     return data?.issues;
   },
