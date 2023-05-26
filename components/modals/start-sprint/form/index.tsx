@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { type Sprint } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -7,8 +6,8 @@ import { DurationField } from "./fields/duration";
 import { StartDateField } from "./fields/start-date";
 import { EndDateField } from "./fields/end-date";
 import { DescriptionField } from "./fields/description";
-import { Spinner } from "@/components/ui/spinner";
 import { useSprints } from "@/hooks/useSprints";
+import { FormSubmit } from "@/components/form/submit";
 
 export type FormValues = {
   name: string;
@@ -87,32 +86,12 @@ const StartSprintForm: React.FC<{
         setValue={setValue}
       />
       <DescriptionField register={register} />
-
-      <div className="flex w-full justify-end">
-        <Button
-          customColors
-          customPadding
-          className="flex items-center gap-x-2 bg-inprogress px-3 py-1.5 font-medium text-white"
-          type="submit"
-          name="start"
-          disabled={isUpdating}
-          aria-label={"start"}
-        >
-          <span>Start</span>
-          {isUpdating ? <Spinner white size="sm" /> : null}
-        </Button>
-
-        <Button
-          customColors
-          customPadding
-          onClick={handleClose}
-          className="px-3 py-1.5 font-medium text-inprogress underline-offset-2 hover:underline hover:brightness-110"
-          name="cancel"
-          aria-label={"cancel"}
-        >
-          Cancel
-        </Button>
-      </div>
+      <FormSubmit
+        submitText="Start"
+        ariaLabel="Start sprint"
+        onCancel={handleClose}
+        isLoading={isUpdating}
+      />
     </form>
   );
 };

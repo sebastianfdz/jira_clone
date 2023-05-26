@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button";
 import { type Sprint } from "@prisma/client";
 import { useForm } from "react-hook-form";
-import { Spinner } from "@/components/ui/spinner";
 import { SprintDropdownField } from "./fields/sprint-dropdown";
 import { useIssues } from "@/hooks/useIssues";
 import { type IssueType } from "@/utils/types";
 import { isDone } from "@/utils/helpers";
 import { useSprints } from "@/hooks/useSprints";
+import { FormSubmit } from "@/components/form/submit";
 
 export type FormValues = {
   moveToSprintId: string;
@@ -64,30 +63,12 @@ const CompleteSprintForm: React.FC<{
       className="relative h-full"
     >
       <SprintDropdownField control={control} errors={errors} />
-      <div className="mt-5 flex w-full justify-end">
-        <Button
-          customColors
-          customPadding
-          className="flex items-center gap-x-2 bg-inprogress px-3 py-1.5 font-medium text-white"
-          type="submit"
-          name="complete"
-          disabled={isUpdating || batchUpdating}
-          aria-label={"complete"}
-        >
-          <span>Complete</span>
-          {isUpdating || batchUpdating ? <Spinner white size="sm" /> : null}
-        </Button>
-        <Button
-          customColors
-          customPadding
-          onClick={handleClose}
-          className="px-3 py-1.5 font-medium text-inprogress underline-offset-2 hover:underline hover:brightness-110"
-          name="cancel"
-          aria-label={"cancel"}
-        >
-          Cancel
-        </Button>
-      </div>
+      <FormSubmit
+        submitText="Complete"
+        ariaLabel="Complete sprint"
+        onCancel={handleClose}
+        isLoading={isUpdating || batchUpdating}
+      />
     </form>
   );
 };
