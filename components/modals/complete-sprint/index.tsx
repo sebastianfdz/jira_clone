@@ -12,6 +12,7 @@ import {
 import { type Sprint } from "@prisma/client";
 import { CompleteSprintForm } from "./form";
 import { type IssueType } from "@/utils/types";
+import { SprintTrophy } from "@/components/icons";
 
 const CompleteSprintModal: React.FC<{
   children: ReactNode;
@@ -25,6 +26,7 @@ const CompleteSprintModal: React.FC<{
       <ModalPortal>
         <ModalOverlay />
         <ModalContent>
+          <SprintTrophy className="-m-8 mb-8" />
           <ModalTitle>Complete {sprint.name}</ModalTitle>
           <ModalDescription>
             <span>This sprint contains:</span>

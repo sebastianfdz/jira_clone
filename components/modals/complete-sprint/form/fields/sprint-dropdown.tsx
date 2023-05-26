@@ -1,6 +1,7 @@
-import { Fragment } from "react";
 import { type Control, Controller, type FieldErrors } from "react-hook-form";
-import { Error, type FormValues, Label } from "..";
+import { type FormValues } from "..";
+import { Label } from "@/components/form/label";
+import { Error } from "@/components/form/error";
 import clsx from "clsx";
 import { FaChevronDown } from "react-icons/fa";
 import {
@@ -24,15 +25,15 @@ const SprintDropdownField: React.FC<{
   const backlog = { id: "backlog", name: "Backlog", status: "PENDING" };
 
   return (
-    <Fragment>
-      <Label htmlFor="duration" text="Move open issues to" />
+    <div className="my-5">
+      <Label htmlFor="duration" text="Move open issues to" required={false} />
       <Controller
         control={control}
         name="moveToSprintId"
         render={({ field }) => {
           return (
             <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger className="flex h-10 w-64 items-center justify-between rounded-[3px] bg-gray-100 px-2 text-xs font-semibold transition-all duration-200 hover:bg-gray-200 focus:ring-2">
+              <SelectTrigger className="flex h-10 w-full items-center justify-between rounded-[3px] bg-gray-100 px-2 text-xs font-semibold transition-all duration-200 hover:bg-gray-200 focus:ring-2">
                 <SelectValue />
                 <SelectIcon>
                   <FaChevronDown className="text-gray-500" />
@@ -40,7 +41,7 @@ const SprintDropdownField: React.FC<{
               </SelectTrigger>
               <SelectPortal className="z-[999]">
                 <SelectContent position="popper">
-                  <SelectViewport className="w-64 rounded-md border border-gray-300 bg-white py-2 shadow-md">
+                  <SelectViewport className="w-full rounded-md border border-gray-300 bg-white py-2 shadow-md">
                     <SelectGroup>
                       {sprints &&
                         [...sprints, backlog]
@@ -67,7 +68,7 @@ const SprintDropdownField: React.FC<{
         }}
       />
       <Error trigger={errors.moveToSprintId} message="New sprint is required" />
-    </Fragment>
+    </div>
   );
 };
 

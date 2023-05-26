@@ -12,7 +12,7 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
-import { Label } from "../../../start-sprint/form";
+import { Label } from "@/components/form/label";
 import { useSprints } from "@/hooks/useSprints";
 
 const SprintDropdown: React.FC = () => {
