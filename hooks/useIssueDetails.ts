@@ -1,6 +1,6 @@
 import { api } from "@/utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSelectedIssueContext } from "@/context/useSelectedIssue";
+import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type GetIssueCommentsResponse } from "@/app/api/issues/[issue_key]/comments/route";
 import { toast } from "@/components/toast";
 

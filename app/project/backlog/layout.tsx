@@ -1,6 +1,6 @@
 "use client";
 import { Container } from "@/components/ui/container";
-import { SelectedIssueProvider } from "@/context/useSelectedIssue";
+import { SelectedIssueProvider } from "@/context/useSelectedIssueContext";
 
 const BacklogLayout = ({ children }: { children: React.ReactNode }) => {
   return (

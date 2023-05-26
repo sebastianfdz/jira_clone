@@ -7,7 +7,7 @@ import debounce from "lodash.debounce";
 import { useProject } from "@/hooks/useProject";
 import { Avatar } from "../avatar";
 import { Button } from "../ui/button";
-import { useFiltersContext } from "@/context/useFilters";
+import { useFiltersContext } from "@/context/useFiltersContext";
 import { type Project } from "@prisma/client";
 
 const BacklogHeader: React.FC<{ project: Project }> = ({ project }) => {

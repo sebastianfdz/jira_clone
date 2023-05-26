@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/sidebar";
 import { TopNavbar } from "@/components/top-navbar";
-import { FiltersProvider } from "@/context/useFilters";
+import { FiltersProvider } from "@/context/useFiltersContext";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 

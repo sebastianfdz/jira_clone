@@ -40,7 +40,7 @@ import {
   type EditorContentType,
 } from "@/components/text-editor/editor";
 import { type SerializedEditorState } from "lexical";
-import { useSelectedIssueContext } from "@/context/useSelectedIssue";
+import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { EditorPreview } from "../text-editor/preview";
 import { useIssueDetails } from "@/hooks/useIssueDetails";
 import { type UserResource } from "@clerk/types";

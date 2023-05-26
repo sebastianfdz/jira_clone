@@ -14,7 +14,7 @@ import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
 import { IssueSelectStatus } from "../issue-select-status";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue-title";
-import { useSelectedIssueContext } from "@/context/useSelectedIssue";
+import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type IssueType } from "@/utils/types";
 import { isEpic } from "@/utils/helpers";
 

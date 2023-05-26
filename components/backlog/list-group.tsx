@@ -6,7 +6,7 @@ import { SprintList } from "./list-sprint";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
 import { type IssueType } from "@/utils/types";
 import { useCallback } from "react";
-import { useFiltersContext } from "@/context/useFilters";
+import { useFiltersContext } from "@/context/useFiltersContext";
 import {
   filterIssuesSearch,
   isEpic,
