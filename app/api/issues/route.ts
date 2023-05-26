@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { type User, prisma } from "@/server/db";
-import { type Issue } from "@prisma/client";
+import { IssueType, type Issue, IssueStatus } from "@prisma/client";
 import { z } from "zod";
 import { clerkClient } from "@clerk/nextjs/server";
 import { filterUserForClient } from "@/utils/helpers";
@@ -85,7 +85,72 @@ export async function POST(req: NextRequest) {
       listPosition: positionToInsert,
     },
   });
-
   // return NextResponse.json<PostIssueResponse>({ issue });
   return NextResponse.json({ issue });
+}
+
+const patchSchema = z.object({
+  keys: z.array(z.string()),
+  type: z.nativeEnum(IssueType).optional(),
+  status: z.nativeEnum(IssueStatus).optional(),
+  assigneeId: z.string().nullable().optional(),
+  reporterId: z.string().optional(),
+  parentKey: z.string().nullable().optional(),
+  sprintId: z.string().nullable().optional(),
+  isDeleted: z.boolean().optional(),
+});
+
+export type PatchIssuesBody = z.infer<typeof patchSchema>;
+
+export async function PATCH(req: NextRequest) {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const body = await req.json();
+  const validated = patchSchema.safeParse(body);
+
+  if (!validated.success) {
+    // eslint-disable-next-line
+    const message = "Invalid body. " + validated.error.errors[0]?.message ?? "";
+    return new Response(message, { status: 400 });
+  }
+
+  const {
+    keys,
+    type,
+    status,
+    assigneeId,
+    reporterId,
+    isDeleted,
+    sprintId,
+    parentKey,
+  } = validated.data;
+
+  const issuesToUpdate = await prisma.issue.findMany({
+    where: {
+      key: {
+        in: keys,
+      },
+    },
+  });
+
+  const updatedIssues = await Promise.all(
+    issuesToUpdate.map(async (issue) => {
+      return await prisma.issue.update({
+        where: {
+          id: issue.id,
+        },
+        data: {
+          type: type ?? issue.type,
+          status: status ?? issue.status,
+          assigneeId: assigneeId ?? issue.assigneeId,
+          reporterId: reporterId ?? issue.reporterId,
+          isDeleted: isDeleted ?? issue.isDeleted,
+          sprintId: sprintId === undefined ? issue.sprintId : sprintId,
+          parentKey: parentKey ?? issue.parentKey,
+        },
+      });
+    })
+  );
+
+  // return NextResponse.json<PostIssueResponse>({ issue });
+  return NextResponse.json({ issues: updatedIssues });
 }

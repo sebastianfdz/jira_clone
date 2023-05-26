@@ -112,10 +112,10 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
       status: status ?? current.status,
       type: type ?? current.type,
       listPosition: listPosition ?? current.listPosition,
-      assigneeId: assigneeId ?? current.assigneeId,
+      assigneeId: assigneeId === undefined ? current.assigneeId : assigneeId,
       reporterId: reporterId ?? current.reporterId,
       isDeleted: isDeleted ?? current.isDeleted,
-      sprintId: sprintId ?? current.sprintId,
+      sprintId: sprintId === undefined ? current.sprintId : sprintId,
       parentKey: parentKey === undefined ? current.parentKey : parentKey,
     },
   });
