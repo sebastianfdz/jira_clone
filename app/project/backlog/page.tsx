@@ -2,9 +2,9 @@
 import { Backlog } from "@/components/backlog";
 import { notFound } from "next/navigation";
 import BacklogSkeleton from "./loading";
-import { useProject } from "@/hooks/useProject";
-import { useIssues } from "@/hooks/useIssues";
-import { useSprints } from "@/hooks/useSprints";
+import { useProject } from "@/hooks/query-hooks/useProject";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
+import { useSprints } from "@/hooks/query-hooks/useSprints";
 
 const BacklogPage = () => {
   const { project, projectIsLoading } = useProject();

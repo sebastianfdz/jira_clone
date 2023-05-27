@@ -1,6 +1,6 @@
 "use client";
 import { Fragment, useState } from "react";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import { Droppable } from "react-beautiful-dnd";
 import { AccordionContent } from "../ui/accordion";
 import { Issue } from "./issue";

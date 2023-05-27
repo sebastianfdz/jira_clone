@@ -5,7 +5,7 @@ import React, {
   useLayoutEffect,
   useState,
 } from "react";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import { useIsInViewport } from "@/hooks/useIsInViewport";
 import { IssueDetailsHeader } from "./issue-details-header";
 import { IssueDetailsInfo } from "./issue-details-info";

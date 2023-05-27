@@ -1,4 +1,4 @@
-import { useIssueDetails } from "@/hooks/useIssueDetails";
+import { useIssueDetails } from "@/hooks/query-hooks/useIssueDetails";
 import { type UserResource } from "@clerk/types";
 import { type GetIssueCommentResponse } from "@/app/api/issues/[issue_key]/comments/route";
 import {

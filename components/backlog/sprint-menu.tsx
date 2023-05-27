@@ -12,7 +12,7 @@ import { type Sprint as SprintType } from "@prisma/client";
 import { type MenuOptionType } from "@/utils/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "../toast";
-import { useSprints } from "@/hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/useSprints";
 
 type SprintDropdownMenuProps = {
   children: ReactNode;

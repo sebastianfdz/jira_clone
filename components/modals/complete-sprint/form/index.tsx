@@ -1,10 +1,10 @@
 import { type Sprint } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { SprintDropdownField } from "./fields/sprint-dropdown";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import { type IssueType } from "@/utils/types";
 import { isDone } from "@/utils/helpers";
-import { useSprints } from "@/hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/useSprints";
 import { FormSubmit } from "@/components/form/submit";
 
 export type FormValues = {

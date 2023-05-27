@@ -1,5 +1,5 @@
 "use client";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import clsx from "clsx";
 import { BacklogList } from "./list-backlog";
 import { SprintList } from "./list-sprint";
@@ -13,7 +13,7 @@ import {
   isNullish,
   sprintId,
 } from "@/utils/helpers";
-import { useSprints } from "@/hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/useSprints";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();

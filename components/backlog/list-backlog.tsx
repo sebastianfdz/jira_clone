@@ -10,7 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { useSprints } from "@/hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/useSprints";
 
 const BacklogList: React.FC<{
   id: string;

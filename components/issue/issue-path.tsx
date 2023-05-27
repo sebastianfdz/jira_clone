@@ -8,7 +8,7 @@ import { IssueIcon } from "./issue-icon";
 import { AiOutlinePlus } from "react-icons/ai";
 import { isEpic } from "@/utils/helpers";
 import { type ReactNode } from "react";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import { TooltipWrapper } from "../ui/tooltip";
 
 const IssuePath: React.FC<{

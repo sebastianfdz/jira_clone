@@ -1,5 +1,5 @@
 import { Fragment, useState } from "react";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import { FaChevronDown } from "react-icons/fa";
 import clsx from "clsx";
 import { type IssueStatus } from "@prisma/client";

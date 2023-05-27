@@ -13,7 +13,7 @@ import {
   SelectViewport,
 } from "@/components/ui/select";
 import { Label } from "@/components/form/label";
-import { useSprints } from "@/hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/useSprints";
 
 const SprintDropdown: React.FC = () => {
   const { sprints } = useSprints();

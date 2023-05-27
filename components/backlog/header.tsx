@@ -4,7 +4,7 @@ import { useFocus } from "@/hooks/useFocus";
 import { BsX } from "react-icons/bs";
 import { MdSearch } from "react-icons/md";
 import debounce from "lodash.debounce";
-import { useProject } from "@/hooks/useProject";
+import { useProject } from "@/hooks/query-hooks/useProject";
 import { Avatar } from "../avatar";
 import { Button } from "../ui/button";
 import { useFiltersContext } from "@/context/useFiltersContext";

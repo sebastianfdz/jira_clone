@@ -9,11 +9,11 @@ import {
   SelectViewport,
 } from "@/components/ui/select";
 import clsx from "clsx";
-import { useProject } from "@/hooks/useProject";
+import { useProject } from "@/hooks/query-hooks/useProject";
 import { type User } from "@/server/db";
 import { type IssueType } from "@/utils/types";
 import { Fragment, useState } from "react";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import { Avatar } from "../avatar";
 import { toast } from "../toast";
 

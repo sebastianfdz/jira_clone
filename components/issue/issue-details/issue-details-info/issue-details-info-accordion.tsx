@@ -10,9 +10,9 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar } from "@/components/avatar";
 
-import { useSprints } from "@/hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/useSprints";
 import { IssueAssigneeSelect } from "../../issue-select-assignee";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import { useState } from "react";
 const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,

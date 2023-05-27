@@ -1,5 +1,5 @@
 import { type ReactNode, useState } from "react";
-import { useIssues } from "@/hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 import clsx from "clsx";
 import { IssueIcon } from "./issue-icon";
 import { type IssueType } from "@/utils/types";
