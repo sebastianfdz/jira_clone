@@ -3,7 +3,7 @@ import { prisma } from "@/server/db";
 import { SprintStatus, type Sprint } from "@prisma/client";
 import { z } from "zod";
 
-const patchSchema = z.object({
+const patchSprintBodyValidator = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
   duration: z.string().optional(),
@@ -12,21 +12,21 @@ const patchSchema = z.object({
   status: z.nativeEnum(SprintStatus).optional(),
 });
 
-export type PatchSprintBody = z.infer<typeof patchSchema>;
+export type PatchSprintBody = z.infer<typeof patchSprintBodyValidator>;
 export type PatchSprintResponse = { sprint: Sprint };
 
-type PatchParams = {
+type ParamsType = {
   params: {
     sprint_id: string;
   };
 };
 
-export async function PATCH(req: NextRequest, { params }: PatchParams) {
+export async function PATCH(req: NextRequest, { params }: ParamsType) {
   const { sprint_id } = params;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
-  const validated = patchSchema.safeParse(body);
+  const validated = patchSprintBodyValidator.safeParse(body);
 
   if (!validated.success) {
     const message =
@@ -65,7 +65,7 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
   return NextResponse.json({ sprint });
 }
 
-export async function DELETE(req: NextRequest, { params }: PatchParams) {
+export async function DELETE(req: NextRequest, { params }: ParamsType) {
   const { sprint_id } = params;
 
   await prisma.issue.updateMany({
