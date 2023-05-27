@@ -17,13 +17,13 @@ import { BsThreeDots } from "react-icons/bs";
 import { AiOutlineLike } from "react-icons/ai";
 import { FaChevronUp } from "react-icons/fa";
 import { Button } from "../ui/button";
-import { IssueDropdownMenu } from "../issue-menu";
+import { IssueDropdownMenu } from "./issue-menu";
 import { DropdownTrigger } from "../ui/dropdown-menu";
 import { NotImplemented } from "../not-implemented";
 import { IssuePath } from "./issue-path";
 import { LightningIcon } from "../svgs";
-import { IssueTitle } from "../issue-title";
-import { IssueSelectStatus } from "../issue-select-status";
+import { IssueTitle } from "./issue-title";
+import { IssueSelectStatus } from "./issue-select-status";
 import { type IssueType } from "@/utils/types";
 
 import {
@@ -50,7 +50,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { useIsInViewport } from "@/hooks/useIsInViewport";
 import { useSprints } from "@/hooks/useSprints";
 
-import { IssueAssigneeSelect } from "../issue-select-assignee";
+import { IssueAssigneeSelect } from "./issue-select-assignee";
 dayjs.extend(relativeTime);
 
 const IssueDetails: React.FC<{

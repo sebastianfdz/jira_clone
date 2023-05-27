@@ -1,4 +1,4 @@
-import { type StatusObject } from "@/components/issue-select-status";
+import { type StatusObject } from "@/components/issue/issue-select-status";
 
 export const statuses: StatusObject[] = [
   {

@@ -14,7 +14,7 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
-import { TooltipWrapper } from "./ui/tooltip";
+import { TooltipWrapper } from "../ui/tooltip";
 import { capitalize } from "@/utils/helpers";
 
 const IssueSelectType: React.FC<{

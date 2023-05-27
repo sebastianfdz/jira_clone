@@ -3,7 +3,7 @@ import React, { Fragment, useLayoutEffect } from "react";
 import { type Project } from "@prisma/client";
 import Split from "react-split";
 import { ListGroup } from "./list-group";
-import { IssueDetails } from "./issue-details";
+import { IssueDetails } from "../issue/issue-details";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
 import clsx from "clsx";

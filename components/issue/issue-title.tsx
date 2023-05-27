@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useIssues } from "@/hooks/useIssues";
 import clsx from "clsx";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { MdCheck, MdClose } from "react-icons/md";
 import { type IssueType } from "@/utils/types";
-import { TooltipWrapper } from "./ui/tooltip";
+import { TooltipWrapper } from "../ui/tooltip";
 
 type IssueTitleProps = {
   isEditing: boolean;

@@ -15,7 +15,7 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
-import { TooltipWrapper } from "./ui/tooltip";
+import { TooltipWrapper } from "../ui/tooltip";
 
 const IssueSelectEpic: React.FC<{
   issue: IssueType;

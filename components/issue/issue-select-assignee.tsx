@@ -14,8 +14,8 @@ import { type User } from "@/server/db";
 import { type IssueType } from "@/utils/types";
 import { Fragment, useState } from "react";
 import { useIssues } from "@/hooks/useIssues";
-import { Avatar } from "./avatar";
-import { toast } from "./toast";
+import { Avatar } from "../avatar";
+import { toast } from "../toast";
 
 const IssueAssigneeSelect: React.FC<{
   issue: IssueType;

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useRef } from "react";
 import { Draggable } from "react-beautiful-dnd";
-import { IssueIcon } from "../issue-icon";
+import { IssueIcon } from "../issue/issue-icon";
 import { Button } from "../ui/button";
 import clsx from "clsx";
 import { BsThreeDots } from "react-icons/bs";
@@ -9,14 +9,14 @@ import { ChildrenTreeIcon } from "../svgs";
 import { NotImplemented } from "../not-implemented";
 import { DropdownTrigger } from "../ui/dropdown-menu";
 import { ContextTrigger } from "../ui/context-menu";
-import { IssueContextMenu, IssueDropdownMenu } from "../issue-menu";
-import { IssueSelectStatus } from "../issue-select-status";
+import { IssueContextMenu, IssueDropdownMenu } from "../issue/issue-menu";
+import { IssueSelectStatus } from "../issue/issue-select-status";
 import { MdEdit } from "react-icons/md";
-import { IssueTitle } from "../issue-title";
+import { IssueTitle } from "../issue/issue-title";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type IssueType } from "@/utils/types";
 import { isEpic } from "@/utils/helpers";
-import { IssueAssigneeSelect } from "../issue-select-assignee";
+import { IssueAssigneeSelect } from "../issue/issue-select-assignee";
 
 const Issue: React.FC<{
   issue: IssueType;

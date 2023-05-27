@@ -1,10 +1,10 @@
 "use client";
 import { Button } from "../ui/button";
-import { IssueSelectType } from "../issue-select-type";
+import { IssueSelectType } from "./issue-select-type";
 import { type IssueType } from "@/utils/types";
-import { IssueSelectEpic } from "../issue-select-epic";
+import { IssueSelectEpic } from "./issue-select-epic";
 import { toast } from "../toast";
-import { IssueIcon } from "../issue-icon";
+import { IssueIcon } from "./issue-icon";
 import { AiOutlinePlus } from "react-icons/ai";
 import { isEpic } from "@/utils/helpers";
 import { type ReactNode } from "react";
