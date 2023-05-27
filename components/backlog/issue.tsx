@@ -5,7 +5,6 @@ import { IssueIcon } from "../issue-icon";
 import { Button } from "../ui/button";
 import clsx from "clsx";
 import { BsThreeDots } from "react-icons/bs";
-import { Avatar } from "../avatar";
 import { ChildrenTreeIcon } from "../svgs";
 import { NotImplemented } from "../not-implemented";
 import { DropdownTrigger } from "../ui/dropdown-menu";
@@ -17,6 +16,7 @@ import { IssueTitle } from "../issue-title";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type IssueType } from "@/utils/types";
 import { isEpic } from "@/utils/helpers";
+import { IssueAssigneeSelect } from "../issue-select-assignee";
 
 const Issue: React.FC<{
   issue: IssueType;
@@ -93,14 +93,7 @@ const Issue: React.FC<{
               currentStatus={issue.status}
               issueId={issue.key}
             />
-            <Avatar
-              src={issue.assignee?.avatar ?? null}
-              alt={
-                issue.assignee
-                  ? `Assignee: ${issue.assignee?.name}`
-                  : "Unassigned"
-              }
-            />
+            <IssueAssigneeSelect issue={issue} avatarOnly />
             <IssueDropdownMenu issue={issue}>
               <DropdownTrigger
                 asChild
