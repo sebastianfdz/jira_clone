@@ -1,19 +1,16 @@
+import React, { Fragment, useRef, useState } from "react";
 import { NotImplemented } from "@/components/not-implemented";
 import { LightningIcon } from "@/components/svgs";
 import { IssueTitle } from "../../issue-title";
 import { IssueSelectStatus } from "../../issue-select-status";
-import { CgAttachment } from "react-icons/cg";
-import { ChildrenTreeIcon } from "@/components/svgs";
-import { BiLink } from "react-icons/bi";
-import { BsThreeDots } from "react-icons/bs";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
-import React, { Fragment, useRef, useState } from "react";
 import { type IssueType } from "@/utils/types";
 import { Button } from "@/components/ui/button";
 import { Comments } from "./issue-details-info-comments";
 import { IssueMetaInfo } from "./issue-details-info-meta";
 import { Description } from "./issue-details-info-description";
 import { IssueDetailsInfoAccordion } from "./issue-details-info-accordion";
+import { IssueDetailsInfoActions } from "./issue-details-info-actions";
 
 const IssueDetailsInfo = React.forwardRef<
   HTMLDivElement,
@@ -41,26 +38,7 @@ const IssueDetailsInfo = React.forwardRef<
           ref={nameRef}
         />
       </h1>
-      <div className="flex gap-x-2 text-gray-700">
-        <NotImplemented feature="attachment">
-          <Button customColors className="bg-gray-100 hover:bg-gray-200">
-            <CgAttachment className="rotate-45 text-xl" />
-          </Button>
-        </NotImplemented>
-        <Button customColors className="bg-gray-100 hover:bg-gray-200">
-          <ChildrenTreeIcon />
-        </Button>
-        <NotImplemented feature="link">
-          <Button customColors className="bg-gray-100 hover:bg-gray-200">
-            <BiLink className="text-xl" />
-          </Button>
-        </NotImplemented>
-        <NotImplemented feature="add apps">
-          <Button customColors className="bg-gray-100 hover:bg-gray-200">
-            <BsThreeDots className="text-xl" />
-          </Button>
-        </NotImplemented>
-      </div>
+      <IssueDetailsInfoActions />
       <div className="relative flex items-center gap-x-3">
         <IssueSelectStatus
           key={issue.key + issue.status}
