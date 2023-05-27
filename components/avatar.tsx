@@ -13,7 +13,7 @@ const Avatar = ({ src, alt, size = 32, ...props }: AvatarProps) => {
         alt={alt}
         height={size}
         width={size}
-        className="h-fit rounded-full"
+        className="h-fit w-fit rounded-full"
         {...props}
       />
     </TooltipWrapper>
