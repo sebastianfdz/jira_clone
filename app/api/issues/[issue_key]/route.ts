@@ -1,9 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/server/db";
+import { type User, prisma } from "@/server/db";
 import { IssueStatus, type Issue, IssueType } from "@prisma/client";
 import { z } from "zod";
-import { insertIssueIntoList, moveIssueWithinList } from "@/utils/helpers";
+import {
+  filterUserForClient,
+  insertIssueIntoList,
+  moveIssueWithinList,
+} from "@/utils/helpers";
 import { type GetIssuesResponse } from "../route";
+import { clerkClient } from "@clerk/nextjs";
 
 export type GetIssueDetailsResponse = {
   issue: GetIssuesResponse["issues"][number] | null;
@@ -44,6 +49,7 @@ const patchSchema = z.object({
 });
 
 export type PatchIssueBody = z.infer<typeof patchSchema>;
+export type PatchIssueResponse = { issue: Issue & { assignee: User | null } };
 
 type PatchParams = {
   params: {
@@ -63,7 +69,6 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
     const message = "Invalid body. " + validated.error.errors[0]?.message ?? "";
     return new Response(message, { status: 400 });
   }
-
   const {
     name,
     description,
@@ -119,9 +124,18 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
       parentKey: parentKey === undefined ? current.parentKey : parentKey,
     },
   });
+  if (issue.assigneeId) {
+    const assignee = await clerkClient.users.getUser(issue.assigneeId);
+    const assigneeForClient = filterUserForClient(assignee);
+    return NextResponse.json({
+      issue: { ...issue, assignee: assigneeForClient },
+    });
+  }
 
   // return NextResponse.json<PostIssueResponse>({ issue });
-  return NextResponse.json({ issue });
+  return NextResponse.json({
+    issue: { ...issue, assignee: null },
+  });
 }
 
 export async function DELETE(req: NextRequest, { params }: PatchParams) {
