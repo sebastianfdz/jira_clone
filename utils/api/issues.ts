@@ -4,12 +4,12 @@ import {
   type PatchIssuesBody,
   type GetIssuesResponse,
   type PostIssueBody,
-  type PostIssueResponse,
 } from "@/app/api/issues/route";
 import {
   type PatchIssueBody,
   type GetIssueDetailsResponse,
   type PatchIssueResponse,
+  type PostIssueResponse,
 } from "@/app/api/issues/[issue_key]/route";
 import {
   type GetIssueCommentResponse,
