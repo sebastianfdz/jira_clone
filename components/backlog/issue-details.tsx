@@ -49,6 +49,8 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { useIsInViewport } from "@/hooks/useIsInViewport";
 import { useSprints } from "@/hooks/useSprints";
+
+import { IssueAssigneeSelect } from "../issue-select-assignee";
 dayjs.extend(relativeTime);
 
 const IssueDetails: React.FC<{
@@ -510,18 +512,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
               Assignee
             </span>
             <div className="flex flex-col">
-              <div className="flex items-center gap-x-3">
-                <Avatar
-                  size={20}
-                  src={issue.assignee?.avatar}
-                  alt={`${issue.assignee?.name ?? "Unassigned"}`}
-                />
-                <div className="flex flex-col">
-                  <span className="whitespace-nowrap text-sm">
-                    {issue.assignee?.name ?? "Unassigned"}
-                  </span>
-                </div>
-              </div>
+              <IssueAssigneeSelect issue={issue} />
               <Button
                 onClick={handleAutoAssign}
                 data-state={issue.assignee ? "assigned" : "unassigned"}
@@ -548,7 +539,6 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
             </span>
             <div className="flex items-center gap-x-3 ">
               <Avatar
-                size={20}
                 src={issue.reporter?.avatar}
                 alt={`${issue.reporter?.name ?? "Unassigned"}`}
               />
