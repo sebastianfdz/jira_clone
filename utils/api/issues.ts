@@ -9,6 +9,7 @@ import {
 import {
   type PatchIssueBody,
   type GetIssueDetailsResponse,
+  type PatchIssueResponse,
 } from "@/app/api/issues/[issue_key]/route";
 import {
   type GetIssueCommentResponse,
@@ -53,7 +54,7 @@ export const issuesRoutes = {
     issue_key,
     ...body
   }: { issue_key: string } & PatchIssueBody) => {
-    const { data } = await axios.patch<PostIssueResponse>(
+    const { data } = await axios.patch<PatchIssueResponse>(
       `${baseUrl}/api/issues/${issue_key}`,
       body,
       { headers: getHeaders() }
