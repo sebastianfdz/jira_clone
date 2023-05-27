@@ -2,17 +2,19 @@ import { type NextRequest, NextResponse } from "next/server";
 import { type User, prisma } from "@/server/db";
 import { IssueStatus, type Issue, IssueType } from "@prisma/client";
 import { z } from "zod";
+import { type GetIssuesResponse } from "../route";
+import { clerkClient } from "@clerk/nextjs";
 import {
   filterUserForClient,
   insertIssueIntoList,
   moveIssueWithinList,
 } from "@/utils/helpers";
-import { type GetIssuesResponse } from "../route";
-import { clerkClient } from "@clerk/nextjs";
 
 export type GetIssueDetailsResponse = {
   issue: GetIssuesResponse["issues"][number] | null;
 };
+
+export type PostIssueResponse = { issue: Issue };
 
 export async function GET(
   req: NextRequest,
@@ -35,7 +37,8 @@ export async function GET(
   // return NextResponse.json<GetIssueDetailsResponse>({ issue });
   return NextResponse.json({ issue: { ...issue, parent } });
 }
-const patchSchema = z.object({
+
+const patchIssueBodyValidator = z.object({
   name: z.string().optional(),
   description: z.string().optional(),
   type: z.nativeEnum(IssueType).optional(),
@@ -48,21 +51,21 @@ const patchSchema = z.object({
   isDeleted: z.boolean().optional(),
 });
 
-export type PatchIssueBody = z.infer<typeof patchSchema>;
+export type PatchIssueBody = z.infer<typeof patchIssueBodyValidator>;
 export type PatchIssueResponse = { issue: Issue & { assignee: User | null } };
 
-type PatchParams = {
+type ParamsType = {
   params: {
     issue_key: string;
   };
 };
 
-export async function PATCH(req: NextRequest, { params }: PatchParams) {
+export async function PATCH(req: NextRequest, { params }: ParamsType) {
   const { issue_key } = params;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
-  const validated = patchSchema.safeParse(body);
+  const validated = patchIssueBodyValidator.safeParse(body);
 
   if (!validated.success) {
     // eslint-disable-next-line
@@ -124,6 +127,7 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
       parentKey: parentKey === undefined ? current.parentKey : parentKey,
     },
   });
+
   if (issue.assigneeId) {
     const assignee = await clerkClient.users.getUser(issue.assigneeId);
     const assigneeForClient = filterUserForClient(assignee);
@@ -138,7 +142,7 @@ export async function PATCH(req: NextRequest, { params }: PatchParams) {
   });
 }
 
-export async function DELETE(req: NextRequest, { params }: PatchParams) {
+export async function DELETE(req: NextRequest, { params }: ParamsType) {
   const { issue_key } = params;
 
   const issue = await prisma.issue.update({

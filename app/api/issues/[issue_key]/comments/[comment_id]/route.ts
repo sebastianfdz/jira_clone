@@ -4,7 +4,7 @@ import { prisma } from "@/server/db";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient } from "@/utils/helpers";
 
-const patchSchema = z.object({
+const patchCommentBodyValidator = z.object({
   content: z.string(),
 });
 
@@ -16,17 +16,13 @@ export async function PATCH(
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
 
-  console.log("body", body);
-
-  const validated = patchSchema.safeParse(body);
+  const validated = patchCommentBodyValidator.safeParse(body);
 
   if (!validated.success) {
     const message =
       "Invalid body. " + (validated.error.errors[0]?.message ?? "");
     return new Response(message, { status: 400 });
   }
-
-  console.log("validated", validated);
 
   const { content } = validated.data;
 
