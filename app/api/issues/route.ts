@@ -5,14 +5,28 @@ import { z } from "zod";
 import { clerkClient } from "@clerk/nextjs/server";
 import { filterUserForClient } from "@/utils/helpers";
 
-const postSchema = z.object({
+const postIssuesBodyValidator = z.object({
   name: z.string(),
   type: z.enum(["BUG", "STORY", "TASK", "EPIC"]),
   sprintId: z.string().nullable(),
   reporterId: z.string().nullable(),
 });
 
-export type PostIssueBody = z.infer<typeof postSchema>;
+export type PostIssueBody = z.infer<typeof postIssuesBodyValidator>;
+
+const patchIssuesBodyValidator = z.object({
+  keys: z.array(z.string()),
+  type: z.nativeEnum(IssueType).optional(),
+  status: z.nativeEnum(IssueStatus).optional(),
+  assigneeId: z.string().nullable().optional(),
+  reporterId: z.string().optional(),
+  parentKey: z.string().nullable().optional(),
+  sprintId: z.string().nullable().optional(),
+  isDeleted: z.boolean().optional(),
+});
+
+export type PatchIssuesBody = z.infer<typeof patchIssuesBodyValidator>;
+
 export type GetIssuesResponse = {
   issues: (Issue & {
     parent: Issue;
@@ -20,7 +34,6 @@ export type GetIssuesResponse = {
     reporter: User | null;
   })[];
 };
-export type PostIssueResponse = { issue: Issue };
 
 export async function GET() {
   const issues = await prisma.issue.findMany();
@@ -55,7 +68,7 @@ export async function POST(req: NextRequest) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
 
-  const validated = postSchema.safeParse(body);
+  const validated = postIssuesBodyValidator.safeParse(body);
 
   if (!validated.success) {
     const message =
@@ -89,23 +102,10 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ issue });
 }
 
-const patchSchema = z.object({
-  keys: z.array(z.string()),
-  type: z.nativeEnum(IssueType).optional(),
-  status: z.nativeEnum(IssueStatus).optional(),
-  assigneeId: z.string().nullable().optional(),
-  reporterId: z.string().optional(),
-  parentKey: z.string().nullable().optional(),
-  sprintId: z.string().nullable().optional(),
-  isDeleted: z.boolean().optional(),
-});
-
-export type PatchIssuesBody = z.infer<typeof patchSchema>;
-
 export async function PATCH(req: NextRequest) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
-  const validated = patchSchema.safeParse(body);
+  const validated = patchIssuesBodyValidator.safeParse(body);
 
   if (!validated.success) {
     // eslint-disable-next-line
