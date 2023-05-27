@@ -61,7 +61,7 @@ const Members = () => {
               }
               className="-mx-1 flex border-spacing-2 rounded-full border-2 border-transparent bg-white p-0.5 transition-all duration-75 hover:-mt-1.5 [&[data-state=selected]]:border-inprogress"
             >
-              <Avatar size={35} src={member.avatar} alt={`${member.name}`} />
+              <Avatar src={member.avatar} alt={`${member.name}`} />
             </Button>
           </div>
         );
