@@ -28,9 +28,11 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   useKeydownListener(scrollRef, ["m", "M"], handleEdit);
   function handleEdit(ref: React.RefObject<HTMLElement>) {
     setIsWritingComment(true);
-    if (ref.current) {
-      ref.current.scrollIntoView({ behavior: "smooth" });
-    }
+    setTimeout(() => {
+      if (ref.current) {
+        ref.current.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 50);
   }
 
   function handleSave(state: SerializedEditorState | undefined) {
