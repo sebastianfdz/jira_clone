@@ -17,7 +17,7 @@ import { useSprints } from "@/hooks/query-hooks/useSprints";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();
-  const { search, assignees } = useFiltersContext();
+  const { search, assignees, isseTypes, epics } = useFiltersContext();
   const { sprints } = useSprints();
 
   const filterIssues = useCallback(
@@ -36,9 +36,19 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
           assignees.includes(issue.assignee?.id ?? "unassigned")
         );
       }
+      if (epics.length) {
+        sprintIssues = sprintIssues.filter(
+          (issue) => issue.parentKey && epics.includes(issue.parentKey)
+        );
+      }
+      if (isseTypes.length) {
+        sprintIssues = sprintIssues.filter((issue) =>
+          isseTypes.includes(issue.type)
+        );
+      }
       return sprintIssues;
     },
-    [search, assignees]
+    [search, assignees, epics, isseTypes]
   );
 
   const onDragEnd = (result: DropResult) => {
