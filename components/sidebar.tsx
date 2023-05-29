@@ -9,7 +9,8 @@ import {
   NavigationMenuList,
 } from "./ui/navigation-menu";
 import { usePathname } from "next/navigation";
-import { FaChevronRight } from "react-icons/fa";
+import { FaChessPawn, FaChevronRight } from "react-icons/fa";
+import { useProject } from "@/hooks/query-hooks/useProject";
 
 type NavItem = {
   id: string;
@@ -66,6 +67,7 @@ const NavList: React.FC<{ items: NavItem[]; label: string }> = ({
 };
 
 const Sidebar = () => {
+  const { project } = useProject();
   const planningItems = [
     {
       id: "roadmap",
@@ -98,10 +100,14 @@ const Sidebar = () => {
   return (
     <div className="flex h-full w-64 flex-col gap-y-5 bg-gray-50 p-3 shadow-inner">
       <div className="my-5 flex items-center gap-x-2 px-3">
-        <div className="flex aspect-square items-center justify-center rounded-sm bg-orange-500 p-3 text-xs font-bold text-white"></div>
+        <div className="mt-1 flex items-center justify-center rounded-sm bg-[#FF5630] p-1 text-xs font-bold text-white">
+          <FaChessPawn className="aspect-square text-2xl" />
+        </div>
         <div>
-          <h2 className="text-sm font-semibold text-gray-600">Project Name</h2>
-          <p className="text-xs text-gray-500">Project Type</p>
+          <h2 className="-mb-[0.5px] text-sm font-semibold text-gray-600">
+            {project?.name ?? "Project Name"}
+          </h2>
+          <p className="text-xs text-gray-500">Software Project</p>
         </div>
       </div>
       <NavList label={"PLANNING"} items={planningItems} />
