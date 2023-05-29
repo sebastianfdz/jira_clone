@@ -8,6 +8,8 @@ import { type Project } from "@prisma/client";
 import { EpicFilter } from "./filter-epic";
 import { IssueTypeFilter } from "./filter-issue-type";
 import { SearchBar } from "./filter-search-bar";
+import { AddPeopleIcon } from "../svgs";
+import { NotImplemented } from "../not-implemented";
 
 const BacklogHeader: React.FC<{ project: Project }> = ({ project }) => {
   const { search, setSearch } = useFiltersContext();
@@ -18,7 +20,6 @@ const BacklogHeader: React.FC<{ project: Project }> = ({ project }) => {
       <div className="my-3 flex items-center gap-x-5">
         <SearchBar search={search} setSearch={setSearch} />
         <Members />
-        [add_member]
         <EpicFilter />
         <IssueTypeFilter />
       </div>
@@ -45,7 +46,7 @@ const Members = () => {
   if (!members) return <div />;
 
   return (
-    <div className="flex">
+    <div className="flex items-center">
       {[...members, unassigned].map((member, index) => {
         return (
           <div
@@ -67,6 +68,15 @@ const Members = () => {
           </div>
         );
       })}
+
+      <NotImplemented feature="add people">
+        <button>
+          <AddPeopleIcon
+            className="ml-3 rounded-full bg-gray-200 p-1 text-gray-500"
+            size={35}
+          />
+        </button>
+      </NotImplemented>
     </div>
   );
 };
