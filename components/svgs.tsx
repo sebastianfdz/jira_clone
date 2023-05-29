@@ -372,6 +372,28 @@ const SprintTrophy: React.FC<{ className?: string; size?: number }> = ({
   );
 };
 
+const AddPeopleIcon: React.FC<{ className?: string; size?: number }> = ({
+  className,
+  size,
+}) => {
+  return (
+    <svg
+      className={className}
+      width={size ?? 24}
+      height={size ?? 24}
+      viewBox="0 0 24 24"
+      role="presentation"
+    >
+      <g fill="currentColor" fillRule="evenodd">
+        <rect x="18" y="5" width="2" height="6" rx="1"></rect>
+        <rect x="16" y="7" width="6" height="2" rx="1"></rect>
+        <path d="M5 14c0-1.105.902-2 2.009-2h7.982c1.11 0 2.009.894 2.009 2.006v4.44c0 3.405-12 3.405-12 0V14z"></path>
+        <circle cx="11" cy="7" r="4"></circle>
+      </g>
+    </svg>
+  );
+};
+
 export {
   ChildrenTreeIcon,
   BacklogIcon,
@@ -380,4 +402,5 @@ export {
   LightningIcon,
   DevelopmentIcon,
   SprintTrophy,
+  AddPeopleIcon,
 };
