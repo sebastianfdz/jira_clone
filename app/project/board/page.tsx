@@ -1,8 +1,18 @@
+"use client";
+import { Board } from "@/components/board";
+import { useProject } from "@/hooks/query-hooks/useProject";
 import { type NextPage } from "next";
-import { Fragment } from "react";
+import BoardSkeleton from "./loading";
+import { notFound } from "next/navigation";
 
-const Board: NextPage = () => {
-  return <Fragment>Board</Fragment>;
+const BoardPage: NextPage = () => {
+  const { project, projectIsLoading } = useProject();
+
+  if (projectIsLoading) return <BoardSkeleton />;
+
+  if (!project) return notFound();
+
+  return <Board project={project} />;
 };
 
-export default Board;
+export default BoardPage;
