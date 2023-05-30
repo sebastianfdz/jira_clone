@@ -69,10 +69,15 @@ const SprintSearchSkeleton = () => {
   );
 };
 
+const BoardColumnSkeleton = () => {
+  return <div className="h-[550px] w-64 rounded-md bg-gray-100"></div>;
+};
+
 export {
   IssueSkeleton,
   BreadCrumbSkeleton,
   TitleSkeleton,
   SprintHeaderSkeleton,
   SprintSearchSkeleton,
+  BoardColumnSkeleton,
 };
