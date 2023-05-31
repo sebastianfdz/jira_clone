@@ -10,6 +10,7 @@ import { EmtpyIssue } from "./issue-empty";
 import { type IssueType } from "@/utils/types";
 import clsx from "clsx";
 import { useUser } from "@clerk/clerk-react";
+import { useStrictModeDroppable } from "@/hooks/useStrictModeDroppable";
 
 const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   sprintId,
@@ -18,6 +19,11 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   const { createIssue, isCreating } = useIssues();
   const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
+  const [droppableEnabled] = useStrictModeDroppable();
+
+  if (!droppableEnabled) {
+    return null;
+  }
 
   function handleCreateIssue({
     name,
@@ -42,7 +48,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   }
   return (
     <AccordionContent className="pt-2">
-      <Droppable key={sprintId} droppableId={sprintId ?? "backlog"}>
+      <Droppable droppableId={sprintId ?? "backlog"}>
         {({ droppableProps, innerRef, placeholder }) => (
           <div
             {...droppableProps}
