@@ -192,7 +192,7 @@ export const useIssues = () => {
     if (
       isNullish(listPosition) ||
       isNullish(oldIssue) ||
-      sprintId === undefined
+      (sprintId === undefined && newIssue.status === undefined)
     ) {
       return;
     }
@@ -201,7 +201,22 @@ export const useIssues = () => {
       ["issues"],
       (old?: (IssueType | IssueType["parent"])[]) => {
         if (isNullish(old)) return;
-        if (sprintId === oldIssue.sprintId) {
+        if (sprintId === undefined) {
+          // The issue is being moved inside the board
+          const affectedIssues = old.filter(
+            (issue) => issue.status === oldIssue.status
+          );
+          const unaffectedIssues = old.filter(
+            (issue) => issue.status !== oldIssue.status
+          );
+
+          const newAffectedIssues = moveIssueWithinList({
+            issueList: affectedIssues,
+            oldIndex: oldIssue.listPosition,
+            newIndex: listPosition,
+          });
+          return [...unaffectedIssues, ...newAffectedIssues];
+        } else if (sprintId === oldIssue.sprintId) {
           // The issue is being moved within the same sprint
           const affectedIssues = old.filter(
             (issue) => issue.sprintId === sprintId
