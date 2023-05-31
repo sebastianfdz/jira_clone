@@ -4,12 +4,18 @@ import { type Sprint, type IssueStatus, type Project } from "@prisma/client";
 // import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
 import { BoardHeader } from "./header";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  type DropResult,
+  Droppable,
+} from "react-beautiful-dnd";
 import clsx from "clsx";
 import { useIssues } from "@/hooks/query-hooks/useIssues";
 import { useSprints } from "@/hooks/query-hooks/useSprints";
 import { type IssueType } from "@/utils/types";
 import { useStrictModeDroppable } from "@/hooks/useStrictModeDroppable";
+import { isNullish } from "@/utils/helpers";
 
 const STATUSES: IssueStatus[] = ["TODO", "IN_PROGRESS", "DONE"];
 
@@ -35,6 +41,7 @@ const Board: React.FC<{
     return issue.status == status && sprint.status == "ACTIVE";
   }
 
+  const { updateIssue } = useIssues();
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
     const calculatedHeight = renderContainerRef.current.offsetTop;
@@ -43,17 +50,19 @@ const Board: React.FC<{
 
   const [droppableEnabled] = useStrictModeDroppable();
 
-  if (!droppableEnabled) {
+  if (!issues || !sprints || !droppableEnabled) {
     return null;
   }
 
-  if (!issues || !sprints) {
-    return <div />;
-  }
-
-  function onDragEnd() {
-    console.log("drag end");
-  }
+  const onDragEnd = (result: DropResult) => {
+    const { destination, source } = result;
+    if (isNullish(destination) || isNullish(source)) return;
+    updateIssue({
+      issue_key: result.draggableId,
+      status: destination.droppableId as IssueStatus,
+      listPosition: destination.index,
+    });
+  };
 
   return (
     <div>
