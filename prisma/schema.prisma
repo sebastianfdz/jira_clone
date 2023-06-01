@@ -47,24 +47,25 @@ enum IssueStatus {
 }
 
 model Issue {
-    id           String      @id @default(uuid())
-    key          String      @unique
-    name         String
-    description  String?     @db.Text()
-    status       IssueStatus @default(TODO)
-    type         IssueType   @default(TASK)
-    listPosition Int
-    reporterId   String      @default("1")
-    assigneeId   String?
-    parentKey    String?
-    sprintId     String?
-    isDeleted    Boolean     @default(false)
-    createdAt    DateTime    @default(now())
-    updatedAt    DateTime    @updatedAt
-    deletedAt    DateTime?
-    comments     Comment[]
-    logs         Log[]
-    Sprint       Sprint?     @relation(fields: [sprintId], references: [id])
+    id             String      @id @default(uuid())
+    key            String      @unique
+    name           String
+    description    String?     @db.Text()
+    status         IssueStatus @default(TODO)
+    type           IssueType   @default(TASK)
+    sprintPosition Int
+    boardPosition  Int?
+    reporterId     String      @default("1")
+    assigneeId     String?
+    parentKey      String?
+    sprintId       String?
+    isDeleted      Boolean     @default(false)
+    createdAt      DateTime    @default(now())
+    updatedAt      DateTime    @updatedAt
+    deletedAt      DateTime?
+    comments       Comment[]
+    logs           Log[]
+    Sprint         Sprint?     @relation(fields: [sprintId], references: [id])
 
     @@index([sprintId])
 }
