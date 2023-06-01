@@ -47,7 +47,10 @@ const NavList: React.FC<{ items: NavItem[]; label: string }> = ({
               key={item.id}
               className="w-full rounded-lg text-gray-600"
             >
-              <Link href={item.href} passHref legacyBehavior>
+              <Link
+                href={item.href}
+                // passHref legacyBehavior
+              >
                 <NavigationMenuLink
                   active={currentPath === item.href}
                   className="flex w-full rounded-sm border-transparent py-2 [&[data-active]]:border-l-blue-700 [&[data-active]]:bg-blue-100 [&[data-active]]:text-blue-700"

@@ -95,7 +95,7 @@ export async function POST(req: NextRequest) {
       type,
       reporterId: reporterId ?? "user_2PwZmH2xP5aE0svR6hDH4AwDlcu", // Rogan as default reporter
       sprintId,
-      listPosition: positionToInsert,
+      sprintPosition: positionToInsert,
     },
   });
   // return NextResponse.json<PostIssueResponse>({ issue });

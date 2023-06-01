@@ -57,7 +57,7 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
     updateIssue({
       issue_key: result.draggableId,
       sprintId: sprintId(destination.droppableId),
-      listPosition: destination.index,
+      sprintPosition: destination.index,
     });
   };
 

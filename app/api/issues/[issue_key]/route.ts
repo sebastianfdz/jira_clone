@@ -43,7 +43,7 @@ const patchIssueBodyValidator = z.object({
   description: z.string().optional(),
   type: z.nativeEnum(IssueType).optional(),
   status: z.nativeEnum(IssueStatus).optional(),
-  listPosition: z.number().optional(),
+  sprintPosition: z.number().optional(),
   assigneeId: z.string().nullable().optional(),
   reporterId: z.string().optional(),
   parentKey: z.string().nullable().optional(),
@@ -77,7 +77,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
     description,
     type,
     status,
-    listPosition,
+    sprintPosition,
     assigneeId,
     reporterId,
     isDeleted,
@@ -95,13 +95,13 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
     return new Response("Issue not found", { status: 404 });
   }
 
-  if (listPosition !== undefined && sprintId !== undefined) {
+  if (sprintPosition !== undefined && sprintId !== undefined) {
     // HANDLE DND ACTION
-    const updatedIssues = await handleListPositionChange({
+    const updatedIssues = await handlesprintPositionChange({
       sourceSprint: current.sprintId,
       destinationSprint: sprintId,
-      sourcePosition: current.listPosition,
-      destinationPosition: listPosition,
+      sourcePosition: current.sprintPosition,
+      destinationPosition: sprintPosition,
       current,
     });
 
@@ -119,7 +119,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
       description: description ?? current.description,
       status: status ?? current.status,
       type: type ?? current.type,
-      listPosition: listPosition ?? current.listPosition,
+      sprintPosition: sprintPosition ?? current.sprintPosition,
       assigneeId: assigneeId === undefined ? current.assigneeId : assigneeId,
       reporterId: reporterId ?? current.reporterId,
       isDeleted: isDeleted ?? current.isDeleted,
@@ -158,7 +158,7 @@ export async function DELETE(req: NextRequest, { params }: ParamsType) {
   return NextResponse.json({ issue });
 }
 
-async function handleListPositionChange(payload: {
+async function handlesprintPositionChange(payload: {
   sourceSprint: string | null;
   destinationSprint: string | null;
   sourcePosition: number;
@@ -178,7 +178,7 @@ async function handleListPositionChange(payload: {
     // MOVE WITHIN LIST
     const issueList = await prisma.issue.findMany({
       where: { sprintId: sourceSprint },
-      orderBy: { listPosition: "asc" },
+      orderBy: { sprintPosition: "asc" },
     });
     newIssues = moveIssueWithinList({
       issueList,
@@ -189,7 +189,7 @@ async function handleListPositionChange(payload: {
     // MOVE BETWEEN LISTS
     const issueList = await prisma.issue.findMany({
       where: { sprintId: destinationSprint },
-      orderBy: { listPosition: "asc" },
+      orderBy: { sprintPosition: "asc" },
     });
     const updatedCurrent = await prisma.issue.update({
       where: { key: current.key },
@@ -210,7 +210,7 @@ async function handleListPositionChange(payload: {
           key: issue.key,
         },
         data: {
-          listPosition: index,
+          sprintPosition: index,
         },
       });
     })

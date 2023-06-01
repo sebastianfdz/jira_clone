@@ -60,7 +60,7 @@ const Board: React.FC<{
     updateIssue({
       issue_key: result.draggableId,
       status: destination.droppableId as IssueStatus,
-      listPosition: destination.index,
+      sprintPosition: destination.index,
     });
   };
 
@@ -115,7 +115,7 @@ const Column: React.FC<{ status: string; issues: IssueType[] }> = ({
         >
           <Fragment>
             {issues
-              .sort((a, b) => a.listPosition - b.listPosition)
+              .sort((a, b) => a.sprintPosition - b.sprintPosition)
               .map((issue, index) => (
                 <Issue key={issue.key} index={index} issue={issue} />
               ))}

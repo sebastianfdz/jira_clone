@@ -83,8 +83,8 @@ export const useIssues = () => {
           (IssueType | IssueType["parent"])[]
         >(["issues"]);
         // Optimistically update the issue
-        if (!isNullish(newIssue.listPosition) && !isNullish(previousIssues)) {
-          // If listPosition is defined, we are dragging and dropping
+        if (!isNullish(newIssue.sprintPosition) && !isNullish(previousIssues)) {
+          // If sprintPosition is defined, we are dragging and dropping
           handleOptimisticDrangAndDrop({ previousIssues, newIssue });
         } else {
           // Otherwise, we are generically updating the issue
@@ -187,10 +187,10 @@ export const useIssues = () => {
     previousIssues: (IssueType | IssueType["parent"])[];
     newIssue: { issue_key: string } & PatchIssueBody;
   }) {
-    const { issue_key, listPosition, sprintId } = newIssue;
+    const { issue_key, sprintPosition, sprintId } = newIssue;
     const oldIssue = previousIssues.find((issue) => issue.key === issue_key);
     if (
-      isNullish(listPosition) ||
+      isNullish(sprintPosition) ||
       isNullish(oldIssue) ||
       (sprintId === undefined && newIssue.status === undefined)
     ) {
@@ -212,8 +212,8 @@ export const useIssues = () => {
 
           const newAffectedIssues = moveIssueWithinList({
             issueList: affectedIssues,
-            oldIndex: oldIssue.listPosition,
-            newIndex: listPosition,
+            oldIndex: oldIssue.sprintPosition,
+            newIndex: sprintPosition,
           });
           return [...unaffectedIssues, ...newAffectedIssues];
         } else if (sprintId === oldIssue.sprintId) {
@@ -227,8 +227,8 @@ export const useIssues = () => {
 
           const newAffectedIssues = moveIssueWithinList({
             issueList: affectedIssues,
-            oldIndex: oldIssue.listPosition,
-            newIndex: listPosition,
+            oldIndex: oldIssue.sprintPosition,
+            newIndex: sprintPosition,
           });
           return [...unaffectedIssues, ...newAffectedIssues];
         } else {
@@ -245,8 +245,8 @@ export const useIssues = () => {
 
           const newSprintIssues = insertIssueIntoList({
             issueList: destinationList,
-            issue: Object.assign(oldIssue, { listPosition, sprintId }),
-            index: listPosition,
+            issue: Object.assign(oldIssue, { sprintPosition, sprintId }),
+            index: sprintPosition,
           });
 
           const unaffectedIssues = old.filter(

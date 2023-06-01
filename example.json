@@ -6,7 +6,7 @@
     "description": "",
     "status": "DONE",
     "type": "TASK",
-    "listPosition": 1,
+    "sprintPosition": 1,
     "reporter": {
       "id": "user_2PAopw0wVcwcJjzZQ4TMCekOnjX",
       "name": "Sebastian Fernandez",
@@ -28,7 +28,7 @@
     "description": "",
     "status": "TODO",
     "type": "BUG",
-    "listPosition": 0,
+    "sprintPosition": 0,
     "reporter": {
       "id": "user_2PAopw0wVcwcJjzZQ4TMCekOnjX",
       "name": "Sebastian Fernandez",
@@ -54,7 +54,7 @@
       "description": "",
       "status": "TODO",
       "type": "EPIC",
-      "listPosition": 4,
+      "sprintPosition": 4,
       "reporter": {
         "id": "1",
         "name": "John Doe",
@@ -77,7 +77,7 @@
     "description": "",
     "status": "TODO",
     "type": "TASK",
-    "listPosition": 1,
+    "sprintPosition": 1,
     "reporter": {
       "id": "1",
       "name": "John Doe",
@@ -99,7 +99,7 @@
     "description": "",
     "status": "TODO",
     "type": "TASK",
-    "listPosition": 3,
+    "sprintPosition": 3,
     "reporter": {
       "id": "1",
       "name": "John Doe",
