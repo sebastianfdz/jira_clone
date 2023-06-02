@@ -5,10 +5,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type PatchIssueBody } from "@/app/api/issues/[issue_key]/route";
 import {
-  insertIssueIntoList,
+  insertIssueIntoBacklogList,
+  insertIssueIntoBoardList,
   isNullish,
-  moveIssueWithinList,
+  moveIssueWithinBacklogList,
+  moveIssueWithinBoardList,
 } from "@/utils/helpers";
+import { type Sprint } from "@prisma/client";
 
 export const useIssues = () => {
   const { issueId, setIssueId } = useSelectedIssueContext();
@@ -16,7 +19,7 @@ export const useIssues = () => {
   // GET
   const { data: issues, isLoading: issuesLoading } = useQuery(
     ["issues"],
-    api.issues.getIssues,
+    ({ signal }) => api.issues.getIssues({ signal }),
     {
       refetchOnMount: false,
     }
@@ -70,7 +73,7 @@ export const useIssues = () => {
     }
   );
 
-  // UPDATE
+  // UPDATE ONE
   const { mutate: updateIssue, isLoading: isUpdating } = useMutation(
     api.issues.patchIssue,
     {
@@ -84,8 +87,13 @@ export const useIssues = () => {
         >(["issues"]);
         // Optimistically update the issue
         if (!isNullish(newIssue.sprintPosition) && !isNullish(previousIssues)) {
-          // If sprintPosition is defined, we are dragging and dropping
-          handleOptimisticDrangAndDrop({ previousIssues, newIssue });
+          // If sprintPosition OR boardPosition is defined, we are dragging and dropping
+          handleOptimisticBacklogDragAndDrop({ previousIssues, newIssue });
+        } else if (
+          !isNullish(newIssue.boardPosition) &&
+          !isNullish(previousIssues)
+        ) {
+          handleOptimisticBoardDragAndDrop({ previousIssues, newIssue });
         } else {
           // Otherwise, we are generically updating the issue
           queryClient.setQueryData(
@@ -108,6 +116,7 @@ export const useIssues = () => {
       },
       onError: (err, newIssue, context) => {
         // If the mutation fails, use the context returned from onMutate to roll back
+        console.log(err);
         queryClient.setQueryData(["issues"], context?.previousIssues);
         toast.error({
           message: `Something went wrong while updating the issue ${newIssue.issue_key}`,
@@ -180,7 +189,7 @@ export const useIssues = () => {
     }
   );
 
-  function handleOptimisticDrangAndDrop({
+  function handleOptimisticBacklogDragAndDrop({
     previousIssues,
     newIssue,
   }: {
@@ -201,22 +210,7 @@ export const useIssues = () => {
       ["issues"],
       (old?: (IssueType | IssueType["parent"])[]) => {
         if (isNullish(old)) return;
-        if (sprintId === undefined) {
-          // The issue is being moved inside the board
-          const affectedIssues = old.filter(
-            (issue) => issue.status === oldIssue.status
-          );
-          const unaffectedIssues = old.filter(
-            (issue) => issue.status !== oldIssue.status
-          );
-
-          const newAffectedIssues = moveIssueWithinList({
-            issueList: affectedIssues,
-            oldIndex: oldIssue.sprintPosition,
-            newIndex: sprintPosition,
-          });
-          return [...unaffectedIssues, ...newAffectedIssues];
-        } else if (sprintId === oldIssue.sprintId) {
+        if (sprintId === oldIssue.sprintId) {
           // The issue is being moved within the same sprint
           const affectedIssues = old.filter(
             (issue) => issue.sprintId === sprintId
@@ -225,7 +219,7 @@ export const useIssues = () => {
             (issue) => issue.sprintId !== sprintId
           );
 
-          const newAffectedIssues = moveIssueWithinList({
+          const newAffectedIssues = moveIssueWithinBacklogList({
             issueList: affectedIssues,
             oldIndex: oldIssue.sprintPosition,
             newIndex: sprintPosition,
@@ -243,7 +237,7 @@ export const useIssues = () => {
             (issue) => issue.sprintId === sprintId
           );
 
-          const newSprintIssues = insertIssueIntoList({
+          const newSprintIssues = insertIssueIntoBacklogList({
             issueList: destinationList,
             issue: Object.assign(oldIssue, { sprintPosition, sprintId }),
             index: sprintPosition,
@@ -255,6 +249,88 @@ export const useIssues = () => {
           );
 
           return [...unaffectedIssues, ...oldSprintIssues, ...newSprintIssues];
+        }
+      }
+    );
+  }
+
+  function handleOptimisticBoardDragAndDrop({
+    previousIssues,
+    newIssue,
+  }: {
+    previousIssues: (IssueType | IssueType["parent"])[];
+    newIssue: { issue_key: string } & PatchIssueBody;
+  }) {
+    const { issue_key, boardPosition, status } = newIssue;
+    const oldIssue = previousIssues.find((issue) => issue.key === issue_key);
+    if (
+      isNullish(boardPosition) ||
+      isNullish(oldIssue) ||
+      (status === undefined && newIssue.status === undefined)
+    ) {
+      return;
+    }
+
+    const sprints = queryClient.getQueryData<Sprint[]>(["sprints"]);
+
+    queryClient.setQueryData(
+      ["issues"],
+      (old?: (IssueType | IssueType["parent"])[]) => {
+        if (isNullish(old) || isNullish(oldIssue.boardPosition)) return;
+        if (status === oldIssue.status) {
+          // MOVE WITHIN COLUMN
+
+          const affectedIssues = old.filter(
+            (issue) =>
+              issue.status === oldIssue.status &&
+              issueSprintIsActive(issue, sprints)
+          );
+          const unaffectedIssues = old.filter(
+            (issue) => issue.status !== oldIssue.status
+          );
+
+          const newAffectedIssues = moveIssueWithinBoardList({
+            issueList: affectedIssues,
+            oldIndex: oldIssue.boardPosition,
+            newIndex: boardPosition,
+          });
+          return [...unaffectedIssues, ...newAffectedIssues];
+        } else {
+          // MOVE BETWEEN COLUMNS
+
+          const { status: oldStatus } = oldIssue;
+          const sourceColumnIssues = old.filter(
+            (issue) =>
+              issue.status === oldIssue.status &&
+              issueSprintIsActive(issue, sprints)
+          );
+
+          const newSourceColumnIssues = sourceColumnIssues.filter(
+            (issue) => issue.key !== oldIssue.key
+          );
+
+          const destinationColumnIssues = old.filter(
+            (issue) =>
+              issue.status === status && issueSprintIsActive(issue, sprints)
+          );
+
+          const newDestinationColumnIssues = insertIssueIntoBoardList({
+            issueList: destinationColumnIssues,
+            issue: Object.assign(oldIssue, { boardPosition, status }),
+            index: boardPosition,
+          });
+
+          const unaffectedIssues = old.filter(
+            (issue) =>
+              (issue.status !== status && issue.status !== oldStatus) ||
+              !issueSprintIsActive(issue, sprints)
+          );
+
+          return [
+            ...unaffectedIssues,
+            ...newSourceColumnIssues,
+            ...newDestinationColumnIssues,
+          ];
         }
       }
     );
@@ -273,3 +349,12 @@ export const useIssues = () => {
     isDeleting,
   };
 };
+
+function issueSprintIsActive(
+  issue: IssueType | IssueType["parent"],
+  sprints: Sprint[] | undefined
+) {
+  if (!sprints) return false;
+  const sprint = sprints.find((sprint) => sprint.id === issue.sprintId);
+  return sprint?.status === "ACTIVE";
+}
