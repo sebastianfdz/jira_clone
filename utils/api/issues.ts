@@ -20,9 +20,10 @@ import {
 const baseUrl = getBaseUrl();
 
 export const issuesRoutes = {
-  getIssues: async () => {
+  getIssues: async ({ signal }: { signal?: AbortSignal }) => {
     const { data } = await axios.get<GetIssuesResponse>(
-      `${baseUrl}/api/issues`
+      `${baseUrl}/api/issues`,
+      { signal }
     );
     return data?.issues;
   },
@@ -57,6 +58,7 @@ export const issuesRoutes = {
     const { data } = await axios.patch<PatchIssueResponse>(
       `${baseUrl}/api/issues/${issue_key}`,
       body,
+
       { headers: getHeaders() }
     );
 
