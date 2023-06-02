@@ -17,15 +17,42 @@ export function getHeaders() {
   };
 }
 
-export function moveIssueWithinList(payload: {
+export function moveIssueWithinBoardList(payload: {
   issueList: IssueT[];
   oldIndex: number;
   newIndex: number;
 }) {
   const { issueList, oldIndex, newIndex } = payload;
+  const issueListClone = [...issueList].sort((a, b) => {
+    if (a.boardPosition == null) return 1;
+    if (b.boardPosition == null) return -1;
+    return a.boardPosition - b.boardPosition;
+  });
+  const [removedItem] = issueListClone.splice(oldIndex, 1);
+
+  if (!removedItem) return issueListClone;
+
+  issueListClone.splice(newIndex, 0, removedItem);
+
+  return issueListClone.map((issue, index) => {
+    return <IssueT>{
+      ...issue,
+      boardPosition: index,
+    };
+  });
+}
+
+export function moveIssueWithinBacklogList(payload: {
+  issueList: IssueT[];
+  oldIndex: number;
+  newIndex: number;
+}) {
+  const { issueList, oldIndex, newIndex } = payload;
+
   const issueListClone = [...issueList].sort(
     (a, b) => a.sprintPosition - b.sprintPosition
   );
+
   const [removedItem] = issueListClone.splice(oldIndex, 1);
 
   if (!removedItem) return issueListClone;
@@ -40,7 +67,7 @@ export function moveIssueWithinList(payload: {
   });
 }
 
-export function insertIssueIntoList(payload: {
+export function insertIssueIntoBacklogList(payload: {
   issueList: IssueT[];
   issue: IssueT;
   index: number;
@@ -54,6 +81,26 @@ export function insertIssueIntoList(payload: {
     return <IssueT>{
       ...issue,
       sprintPosition: index,
+    };
+  });
+}
+
+export function insertIssueIntoBoardList(payload: {
+  issueList: IssueT[];
+  issue: IssueT;
+  index: number;
+}) {
+  const { issueList, issue, index } = payload;
+  const issueListClone = [...issueList].sort((a, b) => {
+    if (a.boardPosition == null) return 1;
+    if (b.boardPosition == null) return -1;
+    return a.boardPosition - b.boardPosition;
+  });
+  issueListClone.splice(index, 0, issue);
+  return issueListClone.map((issue, index) => {
+    return <IssueT>{
+      ...issue,
+      boardPosition: index,
     };
   });
 }
