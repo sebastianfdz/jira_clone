@@ -9,7 +9,7 @@ export type GetProjectResponse = {
 export async function GET() {
   const project = await prisma.project.findUnique({
     where: {
-      key: "CLONE",
+      key: "JIRA-CLONE",
     },
   });
   // return NextResponse.json<GetProjectResponse>({ project });
