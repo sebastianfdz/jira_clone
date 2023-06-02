@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, useEffect, useLayoutEffect, useState } from "react";
+import React, { Fragment, useLayoutEffect } from "react";
 import { type Sprint, type IssueStatus, type Project } from "@prisma/client";
 // import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
@@ -48,19 +48,22 @@ const Board: React.FC<{
     renderContainerRef.current.style.height = `calc(100vh - ${calculatedHeight}px)`;
   }, []);
 
-  const [droppableEnabled] = useStrictModeDroppable();
-
-  if (!issues || !sprints || !droppableEnabled) {
+  if (!issues || !sprints) {
     return null;
   }
 
   const onDragEnd = (result: DropResult) => {
     const { destination, source } = result;
     if (isNullish(destination) || isNullish(source)) return;
+    console.log({
+      issue_key: result.draggableId,
+      status: destination.droppableId as IssueStatus,
+      boardPosition: destination.index,
+    });
     updateIssue({
       issue_key: result.draggableId,
       status: destination.droppableId as IssueStatus,
-      sprintPosition: destination.index,
+      boardPosition: destination.index,
     });
   };
 
@@ -93,17 +96,11 @@ const Column: React.FC<{ status: string; issues: IssueType[] }> = ({
   status,
   issues,
 }) => {
-  const [enabled, setEnabled] = useState(false);
+  const [droppableEnabled] = useStrictModeDroppable();
 
-  useEffect(() => {
-    const animation = requestAnimationFrame(() => setEnabled(true));
-    return () => {
-      cancelAnimationFrame(animation);
-      setEnabled(false);
-    };
-  }, []);
-
-  if (!enabled) return null;
+  if (!droppableEnabled) {
+    return null;
+  }
 
   return (
     <Droppable droppableId={status}>
@@ -115,7 +112,16 @@ const Column: React.FC<{ status: string; issues: IssueType[] }> = ({
         >
           <Fragment>
             {issues
-              .sort((a, b) => a.sprintPosition - b.sprintPosition)
+              .sort((a, b) => {
+                if (
+                  !isNullish(a.boardPosition) &&
+                  !isNullish(b.boardPosition)
+                ) {
+                  return a.boardPosition - b.boardPosition;
+                } else {
+                  return a.sprintPosition - b.sprintPosition;
+                }
+              })
               .map((issue, index) => (
                 <Issue key={issue.key} index={index} issue={issue} />
               ))}
