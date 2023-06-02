@@ -37,6 +37,9 @@ export type GetIssuesResponse = {
 
 export async function GET() {
   const issues = await prisma.issue.findMany();
+  if (!issues) {
+    return NextResponse.json({ issues: [] });
+  }
   const activeIssues = issues.filter((issue) => !issue.isDeleted);
   const userIds = issues
     .map((issue) => [issue.assigneeId, issue.reporterId] as string[])
@@ -49,8 +52,6 @@ export async function GET() {
       limit: 110,
     })
   ).map(filterUserForClient);
-
-  console.log("users => ", users);
 
   const issuesForClient = activeIssues.map((issue) => {
     const parent = activeIssues.find((i) => i.key === issue.parentKey) ?? null;
