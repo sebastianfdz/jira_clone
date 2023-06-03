@@ -31,6 +31,12 @@ type StatusMap = {
   [key in IssueStatus]: string;
 };
 
+export const statusMap: StatusMap = {
+  DONE: "DONE",
+  IN_PROGRESS: "IN PROGRESS",
+  TODO: "TO DO",
+};
+
 const IssueSelectStatus: React.FC<{
   currentStatus: IssueType["status"];
   issueId: string;
@@ -41,12 +47,6 @@ const IssueSelectStatus: React.FC<{
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       statuses.find((status) => status.value == currentStatus) ?? statuses[0]!
   );
-
-  const statusMap: StatusMap = {
-    DONE: "DONE",
-    IN_PROGRESS: "IN PROGRESS",
-    TODO: "TO DO",
-  };
 
   const { updateIssue, isUpdating } = useIssues();
 
