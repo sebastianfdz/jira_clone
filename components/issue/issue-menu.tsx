@@ -78,7 +78,7 @@ const IssueDropdownMenu: React.FC<{
               </DropdownItem>
             ))}
           </DropdownGroup>
-          <DropdownLabel className="p-2 text-xs font-normal text-gray-400">
+          {/* <DropdownLabel className="p-2 text-xs font-normal text-gray-400">
             MOVE TO
           </DropdownLabel>
           <DropdownGroup>
@@ -96,7 +96,7 @@ const IssueDropdownMenu: React.FC<{
                 </span>
               </DropdownItem>
             ))}
-          </DropdownGroup>
+          </DropdownGroup> */}
         </DropdownContent>
       </DropdownPortal>
     </Dropdown>
