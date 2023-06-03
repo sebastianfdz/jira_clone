@@ -4,8 +4,10 @@ import { type IssueType } from "@/utils/types";
 import { Droppable } from "react-beautiful-dnd";
 import { Issue } from "./issue";
 import clsx from "clsx";
+import { statusMap } from "../issue/issue-select-status";
+import { type IssueStatus } from "@prisma/client";
 
-const IssueList: React.FC<{ status: string; issues: IssueType[] }> = ({
+const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
   status,
   issues,
 }) => {
@@ -21,9 +23,14 @@ const IssueList: React.FC<{ status: string; issues: IssueType[] }> = ({
         <div
           className={clsx("min-h-full w-[300px] rounded-md bg-gray-100 p-1")}
         >
-          <h2 className="mb-4 mt-3 px-2 text-xs text-gray-600">
-            {status} {issues.filter((issue) => issue.status == status).length}
+          <h2 className="mb-4 mt-3 px-2 text-xs text-gray-500">
+            {statusMap[status]}{" "}
+            {issues.filter((issue) => issue.status == status).length}
+            {issues.filter((issue) => issue.status == status).length > 1
+              ? " ISSUES"
+              : " ISSUE"}
           </h2>
+
           <div
             {...droppableProps}
             ref={innerRef}
