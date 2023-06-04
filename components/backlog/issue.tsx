@@ -111,9 +111,17 @@ const Issue: React.FC<{
   );
 };
 
-const EpicName: React.FC<{ issue: IssueType["parent"] }> = ({ issue }) => {
+export const EpicName: React.FC<{
+  issue: IssueType["parent"];
+  className?: string;
+}> = ({ issue, className }) => {
   return (
-    <div className="whitespace-nowrap rounded-[3px] bg-[#ece4fc] px-2 text-xs font-bold text-indigo-900">
+    <div
+      className={clsx(
+        "whitespace-nowrap rounded-[3px] bg-[#ece4fc] px-2 text-xs font-bold text-indigo-900",
+        className
+      )}
+    >
       {issue.name.toUpperCase()}
     </div>
   );
