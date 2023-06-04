@@ -36,6 +36,7 @@ model Member {
 enum IssueType {
     BUG
     TASK
+    SUB_TASK
     STORY
     EPIC
 }
