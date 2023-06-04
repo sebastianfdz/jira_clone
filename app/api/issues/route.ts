@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { type User, prisma } from "@/server/db";
 import { IssueType, type Issue, IssueStatus } from "@prisma/client";
+import { type IssueType as IssueT } from "@/utils/types";
 import { z } from "zod";
 import { clerkClient } from "@clerk/nextjs/server";
 import { filterUserForClient } from "@/utils/helpers";
@@ -29,6 +30,7 @@ export type PatchIssuesBody = z.infer<typeof patchIssuesBodyValidator>;
 
 export type GetIssuesResponse = {
   issues: (Issue & {
+    children: IssueT[];
     parent: Issue;
     assignee: User | null;
     reporter: User | null;
@@ -57,7 +59,8 @@ export async function GET() {
     const parent = activeIssues.find((i) => i.key === issue.parentKey) ?? null;
     const assignee = users.find((u) => u.id === issue.assigneeId) ?? null;
     const reporter = users.find((u) => u.id === issue.reporterId) ?? null;
-    return { ...issue, parent, assignee, reporter };
+    const children = activeIssues.filter((i) => i.parentKey === issue.key);
+    return { ...issue, parent, assignee, reporter, children };
   });
 
   // return NextResponse.json<GetIssuesResponse>({ issues: activeIssues });
