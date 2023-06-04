@@ -34,10 +34,7 @@ const TopNavbar: React.FC = () => {
         </div>
       ) : (
         <div className="flex items-center gap-x-3">
-          <span className="text-xs text-gray-400">
-            Currently using guest account
-          </span>
-          <div className="rounded-sm bg-blue-500 px-3 py-1.5 text-sm text-white hover:bg-blue-600">
+          <div className="rounded-sm bg-inprogress px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-600">
             <SignInButton />
           </div>
         </div>
