@@ -12,7 +12,7 @@ const DescriptionField: React.FC<{
         {...register("description")}
         type="text"
         id="description"
-        className="form-input block h-32 w-[500px] rounded-[3px] border border-gray-300 px-2 text-sm shadow-sm outline-2 transition-all duration-200 focus:outline-blue-400"
+        className="block h-32 w-[500px] rounded-[3px] border border-gray-300 px-2 text-sm shadow-sm outline-2 transition-all duration-75 focus:outline-blue-400"
       />
     </div>
   );
