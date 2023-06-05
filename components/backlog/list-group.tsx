@@ -11,6 +11,7 @@ import {
   filterIssuesSearch,
   isEpic,
   isNullish,
+  isSubtask,
   sprintId,
 } from "@/utils/helpers";
 import { useSprints } from "@/hooks/query-hooks/useSprints";
@@ -24,7 +25,8 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
     (issues: IssueType[] | undefined, sprintId: string | null) => {
       if (!issues) return [];
       let sprintIssues = issues.filter(
-        (issue) => issue.sprintId === sprintId && !isEpic(issue)
+        (issue) =>
+          issue.sprintId === sprintId && !isEpic(issue) && !isSubtask(issue)
       );
       if (search.length) {
         sprintIssues = sprintIssues.filter((issue) =>
