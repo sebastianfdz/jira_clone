@@ -11,6 +11,8 @@ import { IssueMetaInfo } from "./issue-details-info-meta";
 import { Description } from "./issue-details-info-description";
 import { IssueDetailsInfoAccordion } from "./issue-details-info-accordion";
 import { IssueDetailsInfoActions } from "./issue-details-info-actions";
+import { ChildIssueList } from "./issue-details-info-child-issues";
+import { hasChildren, isEpic } from "@/utils/helpers";
 
 const IssueDetailsInfo = React.forwardRef<
   HTMLDivElement,
@@ -19,6 +21,7 @@ const IssueDetailsInfo = React.forwardRef<
   const { issueId } = useSelectedIssueContext();
   const nameRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isAddingChildIssue, setIsAddingChildIssue] = useState(false);
   if (!issue) return <div />;
   return (
     <Fragment>
@@ -38,7 +41,9 @@ const IssueDetailsInfo = React.forwardRef<
           ref={nameRef}
         />
       </h1>
-      <IssueDetailsInfoActions />
+      <IssueDetailsInfoActions
+        onAddChildIssue={() => setIsAddingChildIssue(true)}
+      />
       <div className="relative flex items-center gap-x-3">
         <IssueSelectStatus
           key={issue.key + issue.status}
@@ -56,6 +61,15 @@ const IssueDetailsInfo = React.forwardRef<
         </NotImplemented>
       </div>
       <Description issue={issue} key={String(issueId) + issue.key} />
+      {hasChildren(issue) || isAddingChildIssue ? (
+        <ChildIssueList
+          issues={issue.children}
+          parentIsEpic={isEpic(issue)}
+          parentKey={issue.key}
+          isAddingChildIssue={isAddingChildIssue}
+          setIsAddingChildIssue={setIsAddingChildIssue}
+        />
+      ) : null}
       <IssueDetailsInfoAccordion issue={issue} />
       <IssueMetaInfo issue={issue} />
       <Comments issue={issue} />
