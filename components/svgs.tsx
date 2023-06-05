@@ -394,6 +394,67 @@ const AddPeopleIcon: React.FC<{ className?: string; size?: number }> = ({
   );
 };
 
+const SubTaskIcon: React.FC<{ className?: string; size?: number }> = ({
+  className,
+  size,
+}) => {
+  return (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      width={size ?? 14}
+      height={size ?? 14}
+      viewBox="0 0 14 14"
+      version="1.1"
+    >
+      {/* <!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch --> */}
+      <title>subtask</title>
+      <desc>Created with Sketch.</desc>
+      <defs />
+      <g
+        id="Page-1"
+        stroke="none"
+        stroke-width="1"
+        fill="none"
+        fillRule="evenodd"
+      >
+        <g id="subtask">
+          <g id="Subtask" transform="translate(1.000000, 1.000000)">
+            <rect
+              id="Rectangle-36"
+              fill="#4BAEE8"
+              x="0"
+              y="0"
+              width="14"
+              height="14"
+              // rx="2"
+            />
+            <rect
+              id="Rectangle-80"
+              stroke="#FFFFFF"
+              x="2"
+              y="2"
+              width="5"
+              height="5"
+              // rx="0.800000012"
+            />
+            <rect
+              id="Rectangle-80-Copy"
+              stroke="#FFFFFF"
+              fill="#FFFFFF"
+              x="5"
+              y="5"
+              width="5"
+              height="5"
+              // rx="0.800000012"
+            />
+          </g>
+        </g>
+      </g>
+    </svg>
+  );
+};
+
 export {
   ChildrenTreeIcon,
   BacklogIcon,
@@ -403,4 +464,5 @@ export {
   DevelopmentIcon,
   SprintTrophy,
   AddPeopleIcon,
+  SubTaskIcon,
 };
