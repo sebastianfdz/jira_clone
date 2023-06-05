@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
@@ -17,6 +17,10 @@ import {
 import { StartSprintModal } from "@/components/modals/start-sprint";
 import { CompleteSprintModal } from "../modals/complete-sprint";
 import { UpdateSprintModal } from "../modals/update-sprint";
+import { AlertModal } from "../modals/alert";
+import { useQueryClient } from "@tanstack/react-query";
+import { useSprints } from "@/hooks/query-hooks/useSprints";
+import { toast } from "../toast";
 
 const SprintList: React.FC<{
   sprint: Sprint;
@@ -47,13 +51,32 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
   issues,
   sprint,
 }) => {
-  // function getSprintAction(sprint: Sprint) {
-  //   if (sprint.status === "ACTIVE") {
-  //     return "Complete Sprint";
-  //   } else {
-  //     return "Start Sprint";
-  //   }
-  // }
+  const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const { deleteSprint } = useSprints();
+  function handleDeleteSprint() {
+    deleteSprint(
+      { sprintId: sprint.id },
+      {
+        onSuccess: () => {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          queryClient.invalidateQueries(["issues"]);
+          toast.success({
+            message: `Deleted sprint ${sprint.name}`,
+            description: "Sprint deleted",
+          });
+          setDeleteModalIsOpen(false);
+        },
+        onError: () => {
+          toast.error({
+            message: `Failed to delete sprint ${sprint.name}`,
+            description: "Something went wrong",
+          });
+        },
+      }
+    );
+  }
 
   function getFormattedDateRange(
     startDate: Date | undefined | null,
@@ -71,45 +94,60 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
     })}`;
   }
 
-  const modalRef = useRef(null);
-
   return (
-    <div className="flex w-full min-w-max items-center justify-between pl-2 text-sm">
-      <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
-        <UpdateSprintModal sprint={sprint}>
-          <button ref={modalRef} />
-        </UpdateSprintModal>
-        <Fragment>
-          <FaChevronRight
-            className="mr-2 text-xs text-black transition-transform"
-            aria-hidden
-          />
-          <div className="flex items-center gap-x-2">
-            <div className="text-semibold whitespace-nowrap">{sprint.name}</div>
-            <div className="flex items-center gap-x-3 whitespace-nowrap font-normal text-gray-500">
-              <span>
-                {getFormattedDateRange(sprint.startDate, sprint.endDate)}
-              </span>
-              <span>({issues.length} issues)</span>
+    <Fragment>
+      <UpdateSprintModal
+        isOpen={updateModalIsOpen}
+        setIsOpen={setUpdateModalIsOpen}
+        sprint={sprint}
+      />
+      <AlertModal
+        isOpen={deleteModalIsOpen}
+        setIsOpen={setDeleteModalIsOpen}
+        title="Delete sprint"
+        description={`Are you sure you want to delete sprint BOLD${sprint.name}BOLD?`}
+        actionText="Delete"
+        onAction={handleDeleteSprint}
+      />
+      <div className="flex w-full min-w-max items-center justify-between pl-2 text-sm">
+        <AccordionTrigger className="flex w-full items-center font-medium [&[data-state=open]>svg]:rotate-90">
+          <Fragment>
+            <FaChevronRight
+              className="mr-2 text-xs text-black transition-transform"
+              aria-hidden
+            />
+            <div className="flex items-center gap-x-2">
+              <div className="text-semibold whitespace-nowrap">
+                {sprint.name}
+              </div>
+              <div className="flex items-center gap-x-3 whitespace-nowrap font-normal text-gray-500">
+                <span>
+                  {getFormattedDateRange(sprint.startDate, sprint.endDate)}
+                </span>
+                <span>({issues.length} issues)</span>
+              </div>
             </div>
-          </div>
-        </Fragment>
-      </AccordionTrigger>
-      <div className="flex items-center gap-x-2">
-        <IssueStatusCount issues={issues} />
-        <SprintActionButton sprint={sprint} issues={issues} />
-        <SprintDropdownMenu sprint={sprint} ref={modalRef}>
-          <DropdownTrigger
-            asChild
-            className="rounded-m flex items-center gap-x-1 px-1.5 py-0.5 text-xs font-semibold focus:ring-2"
+          </Fragment>
+        </AccordionTrigger>
+        <div className="flex items-center gap-x-2">
+          <IssueStatusCount issues={issues} />
+          <SprintActionButton sprint={sprint} issues={issues} />
+          <SprintDropdownMenu
+            setUpdateModalIsOpen={setUpdateModalIsOpen}
+            setDeleteModalIsOpen={setDeleteModalIsOpen}
           >
-            <div className="rounded-sm bg-gray-200 px-1.5 py-1.5 text-gray-600 hover:cursor-pointer hover:bg-gray-300 [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white">
-              <BsThreeDots className="sm:text-xl" />
-            </div>
-          </DropdownTrigger>
-        </SprintDropdownMenu>
+            <DropdownTrigger
+              asChild
+              className="rounded-m flex items-center gap-x-1 px-1.5 py-0.5 text-xs font-semibold focus:ring-2"
+            >
+              <div className="rounded-sm bg-gray-200 px-1.5 py-1.5 text-gray-600 hover:cursor-pointer hover:bg-gray-300 [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white">
+                <BsThreeDots className="sm:text-xl" />
+              </div>
+            </DropdownTrigger>
+          </SprintDropdownMenu>
+        </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 
