@@ -28,12 +28,12 @@ const Issue: React.FC<{ issue: IssueType; index: number }> = ({
             "group my-0.5 max-w-full rounded-[3px] border-[0.3px] border-gray-300 bg-white p-2 text-sm shadow-sm shadow-gray-300 hover:bg-gray-200 "
           )}
         >
-          <div className="flex items-center justify-between">
-            <div>{issue.name}</div>
+          <div className="flex items-start justify-between">
+            <span className="mb-2">{issue.name}</span>
             <IssueDropdownMenu issue={issue}>
               <DropdownTrigger
                 asChild
-                className="rounded-m flex items-center gap-x-2 bg-opacity-30 px-1.5 text-xs font-semibold focus:ring-2"
+                className="rounded-m flex h-fit items-center gap-x-2 bg-opacity-30 px-1.5 text-xs font-semibold focus:ring-2"
               >
                 <div className="invisible rounded-sm px-1.5 py-1.5 text-gray-700 group-hover:visible group-hover:bg-gray-100 group-hover:hover:bg-gray-300 [&[data-state=open]]:visible [&[data-state=open]]:bg-gray-700 [&[data-state=open]]:text-white">
                   <BsThreeDots className="sm:text-xl" />
