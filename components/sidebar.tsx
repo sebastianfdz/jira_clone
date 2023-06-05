@@ -4,7 +4,6 @@ import Link from "next/link";
 import { BacklogIcon, BoardIcon, DevelopmentIcon, RoadmapIcon } from "./svgs";
 import {
   NavigationMenu,
-  NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
 } from "./ui/navigation-menu";
@@ -43,25 +42,23 @@ const NavList: React.FC<{ items: NavItem[]; label: string }> = ({
       >
         <NavigationMenuList>
           {items.map((item) => (
-            <NavigationMenuItem
+            <Link
               key={item.id}
+              href={item.href}
               className="w-full rounded-lg text-gray-600"
+              passHref
+              legacyBehavior
             >
-              <Link
-                href={item.href}
-                // passHref legacyBehavior
+              <NavigationMenuLink
+                active={currentPath === item.href}
+                className="flex w-full rounded-sm border-transparent py-2 [&[data-active]]:border-l-blue-700 [&[data-active]]:bg-blue-100 [&[data-active]]:text-blue-700"
               >
-                <NavigationMenuLink
-                  active={currentPath === item.href}
-                  className="flex w-full rounded-sm border-transparent py-2 [&[data-active]]:border-l-blue-700 [&[data-active]]:bg-blue-100 [&[data-active]]:text-blue-700"
-                >
-                  <div className="flex w-full items-center gap-x-3 border-l-4 border-inherit bg-inherit px-2">
-                    <item.icon />
-                    <span className="text-sm">{item.label}</span>
-                  </div>
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
+                <div className="flex w-full items-center gap-x-3 border-l-4 border-inherit bg-inherit px-2">
+                  <item.icon />
+                  <span className="text-sm">{item.label}</span>
+                </div>
+              </NavigationMenuLink>
+            </Link>
           ))}
         </NavigationMenuList>
       </NavigationMenu>
