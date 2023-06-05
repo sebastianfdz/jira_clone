@@ -135,6 +135,16 @@ export function isEpic(issue: IssueType | IssueType["parent"] | null) {
   return issue.type == "EPIC";
 }
 
+export function isSubtask(issue: IssueType | IssueType["parent"] | null) {
+  if (!issue) return false;
+  return issue.type == "SUBTASK";
+}
+
+export function hasChildren(issue: IssueType | null) {
+  if (!issue) return false;
+  return issue.children.length > 0;
+}
+
 export function sprintId(id: string | null | undefined) {
   return id == "backlog" ? null : id;
 }
