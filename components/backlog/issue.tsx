@@ -14,8 +14,9 @@ import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue/issue-title";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type IssueType } from "@/utils/types";
-import { hasChildren, isEpic } from "@/utils/helpers";
+import { hasChildren, isEpic, hexToRgba } from "@/utils/helpers";
 import { IssueAssigneeSelect } from "../issue/issue-select-assignee";
+import { DARK_COLORS, LIGHT_COLORS } from "../color-picker";
 
 const Issue: React.FC<{
   issue: IssueType;
@@ -112,10 +113,21 @@ export const EpicName: React.FC<{
   issue: IssueType["parent"];
   className?: string;
 }> = ({ issue, className }) => {
+  const lightColor = LIGHT_COLORS.find(
+    (color) => color.hex == issue.sprintColor
+  );
+  const darkColor = DARK_COLORS.find((color) => color.hex == issue.sprintColor);
+
+  const bgColor = hexToRgba(issue.sprintColor, !!lightColor ? 0.5 : 1);
+
   return (
     <div
+      style={{
+        backgroundColor: bgColor,
+        color: !!lightColor ? darkColor?.hex : "white",
+      }}
       className={clsx(
-        "whitespace-nowrap rounded-[3px] bg-[#ece4fc] px-2 text-xs font-bold text-indigo-900",
+        "whitespace-nowrap rounded-[3px] px-2 text-xs font-bold text-indigo-900",
         className
       )}
     >
