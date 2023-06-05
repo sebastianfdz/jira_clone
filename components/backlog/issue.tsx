@@ -127,7 +127,7 @@ export const EpicName: React.FC<{
         color: !!lightColor ? darkColor?.hex : "white",
       }}
       className={clsx(
-        "whitespace-nowrap rounded-[3px] px-2 text-xs font-bold text-indigo-900",
+        "whitespace-nowrap rounded-[3px] px-2 text-xs font-bold",
         className
       )}
     >
