@@ -36,6 +36,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
       {
         name,
         type,
+        parentKey: null,
         sprintId,
         reporterId: user?.id ?? null,
       },
