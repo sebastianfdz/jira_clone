@@ -34,6 +34,9 @@ const IssueDetails: React.FC<{
 
   useEffect(() => {
     setIssueInfo(() => getIssue(issueId));
+    if (renderContainerRef.current) {
+      renderContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }, [issueId, getIssue]);
 
   if (!issueInfo || !issues) return <div />;
