@@ -9,12 +9,28 @@ import { type IssueType } from "@/utils/types";
 
 const EmtpyIssue: React.FC<{
   className?: string;
-  onCreate: (payload: { name: string; type: IssueType["type"] }) => void;
+  onCreate: (payload: {
+    name: string;
+    type: IssueType["type"];
+    parentKey: IssueType["key"] | null;
+  }) => void;
   onCancel: () => void;
   isCreating: boolean;
-}> = ({ onCreate, onCancel, isCreating, className, ...props }) => {
+  isSubtask?: boolean;
+  parentKey?: IssueType["key"];
+}> = ({
+  onCreate,
+  onCancel,
+  isCreating,
+  className,
+  isSubtask,
+  parentKey,
+  ...props
+}) => {
   const [name, setName] = useState("");
-  const [type, setType] = useState<IssueType["type"]>("TASK");
+  const [type, setType] = useState<IssueType["type"]>(
+    isSubtask ? "SUBTASK" : "TASK"
+  );
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -34,7 +50,9 @@ const EmtpyIssue: React.FC<{
   function handleCreateIssue(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
-      onCreate({ name, type });
+      console.log("create issue", type);
+
+      onCreate({ name, type, parentKey: parentKey ?? null });
       setName("");
     }
   }
@@ -47,11 +65,15 @@ const EmtpyIssue: React.FC<{
         className
       )}
     >
-      <IssueSelectType
-        currentType={type}
-        dropdownIcon
-        onSelect={handleSelect}
-      />
+      {isSubtask ? (
+        <div className="py-4" />
+      ) : (
+        <IssueSelectType
+          currentType={type}
+          dropdownIcon
+          onSelect={handleSelect}
+        />
+      )}
       <input
         ref={inputRef}
         autoFocus
@@ -76,7 +98,13 @@ const EmtpyIssue: React.FC<{
           </Button>
           <Button
             className="aspect-square shadow-md"
-            onClick={() => onCreate({ name, type })}
+            onClick={() =>
+              onCreate({
+                name,
+                type,
+                parentKey: parentKey ?? null,
+              })
+            }
           >
             <MdCheck className="text-sm" />
           </Button>
