@@ -169,25 +169,27 @@ SelectGroup.displayName = "SelectGroup";
 type SelectItemProps = React.ComponentProps<typeof SelectPrimitive.Item>;
 type SelectItemRef = React.ElementRef<typeof SelectPrimitive.Item>;
 
-const SelectItem = React.forwardRef<SelectItemRef, SelectItemProps>(
-  ({ children, className, ...props }, forwardedRef) => {
-    return (
-      <SelectPrimitive.Item
-        className={clsx(
-          "border-l-[3px] border-transparent  [&[data-state=checked]]:bg-gray-100",
-          className
-        )}
-        {...props}
-        ref={forwardedRef}
-      >
-        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
-        {/* <SelectPrimitive.ItemIndicator className="bg-blue-500">
+const SelectItem = React.forwardRef<
+  SelectItemRef,
+  SelectItemProps & { noBorder?: boolean }
+>(({ children, className, noBorder, ...props }, forwardedRef) => {
+  return (
+    <SelectPrimitive.Item
+      className={clsx(
+        noBorder ? "" : "border-l-[3px] border-transparent",
+        "[&[data-state=checked]]:bg-gray-100",
+        className
+      )}
+      {...props}
+      ref={forwardedRef}
+    >
+      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+      {/* <SelectPrimitive.ItemIndicator className="bg-blue-500">
           {children}
         </SelectPrimitive.ItemIndicator> */}
-      </SelectPrimitive.Item>
-    );
-  }
-);
+    </SelectPrimitive.Item>
+  );
+});
 
 SelectItem.displayName = "SelectItem";
 
