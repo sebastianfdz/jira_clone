@@ -64,6 +64,7 @@ model Issue {
     createdAt      DateTime    @default(now())
     updatedAt      DateTime    @updatedAt
     deletedAt      DateTime?
+    sprintColor    String?
     comments       Comment[]
     logs           Log[]
     Sprint         Sprint?     @relation(fields: [sprintId], references: [id])
