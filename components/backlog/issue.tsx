@@ -116,15 +116,21 @@ export const EpicName: React.FC<{
   const lightColor = LIGHT_COLORS.find(
     (color) => color.hex == issue.sprintColor
   );
-  const darkColor = DARK_COLORS.find((color) => color.hex == issue.sprintColor);
-
   const bgColor = hexToRgba(issue.sprintColor, !!lightColor ? 0.5 : 1);
+
+  function calcTextColor() {
+    if (lightColor) {
+      return DARK_COLORS.find((color) => color.label == lightColor.label)?.hex;
+    } else {
+      return "white";
+    }
+  }
 
   return (
     <div
       style={{
         backgroundColor: bgColor,
-        color: !!lightColor ? darkColor?.hex : "white",
+        color: calcTextColor(),
       }}
       className={clsx(
         "whitespace-nowrap rounded-[3px] px-2 text-xs font-bold",
