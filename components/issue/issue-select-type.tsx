@@ -18,6 +18,7 @@ import { TooltipWrapper } from "../ui/tooltip";
 import { capitalize } from "@/utils/helpers";
 
 export const ISSUE_TYPES: IssueType["type"][] = ["STORY", "TASK", "BUG"];
+const SUBTASK_OPTIONS: IssueType["type"][] = ["SUBTASK"];
 const IssueSelectType: React.FC<{
   currentType: IssueType["type"];
   dropdownIcon?: boolean;
@@ -56,20 +57,22 @@ const IssueSelectType: React.FC<{
               CHANGE ISSUE TYPE
             </span>
             <SelectGroup>
-              {ISSUE_TYPES.map((type) => (
-                <SelectItem
-                  key={type}
-                  value={type}
-                  className={clsx(
-                    "border-transparent py-2 pl-3 text-sm hover:cursor-default hover:bg-gray-50"
-                  )}
-                >
-                  <div className="flex">
-                    <IssueIcon issueType={type} />
-                    <span className={clsx("px-2 text-xs")}>{type}</span>
-                  </div>
-                </SelectItem>
-              ))}
+              {(currentType === "SUBTASK" ? SUBTASK_OPTIONS : ISSUE_TYPES).map(
+                (type) => (
+                  <SelectItem
+                    key={type}
+                    value={type}
+                    className={clsx(
+                      "border-transparent py-2 pl-3 text-sm hover:cursor-default hover:bg-gray-50"
+                    )}
+                  >
+                    <div className="flex">
+                      <IssueIcon issueType={type} />
+                      <span className={clsx("px-2 text-xs")}>{type}</span>
+                    </div>
+                  </SelectItem>
+                )
+              )}
             </SelectGroup>
           </SelectViewport>
         </SelectContent>
