@@ -8,9 +8,10 @@ import { filterUserForClient } from "@/utils/helpers";
 
 const postIssuesBodyValidator = z.object({
   name: z.string(),
-  type: z.enum(["BUG", "STORY", "TASK", "EPIC"]),
+  type: z.enum(["BUG", "STORY", "TASK", "EPIC", "SUBTASK"]),
   sprintId: z.string().nullable(),
   reporterId: z.string().nullable(),
+  parentKey: z.string().nullable(),
 });
 
 export type PostIssueBody = z.infer<typeof postIssuesBodyValidator>;
@@ -80,7 +81,7 @@ export async function POST(req: NextRequest) {
     return new Response(message, { status: 400 });
   }
 
-  const { name, type, reporterId, sprintId } = validated.data;
+  const { name, type, reporterId, sprintId, parentKey } = validated.data;
 
   const issues = await prisma.issue.findMany();
   const currentSprintIssues = await prisma.issue.findMany({
@@ -100,6 +101,7 @@ export async function POST(req: NextRequest) {
       reporterId: reporterId ?? "user_2PwZmH2xP5aE0svR6hDH4AwDlcu", // Rogan as default reporter
       sprintId,
       sprintPosition: positionToInsert,
+      parentKey,
     },
   });
   // return NextResponse.json<PostIssueResponse>({ issue });
