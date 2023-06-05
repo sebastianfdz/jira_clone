@@ -36,7 +36,7 @@ const StartDateField: React.FC<{
                 errors.startDate
                   ? "focus:outline-red-500"
                   : "focus:outline-blue-400",
-                "form-input block h-10 w-64 rounded-[3px] border border-gray-300 px-2 text-sm shadow-sm outline-2 transition-all duration-200"
+                "block h-10 w-64 rounded-[3px] border border-gray-300 px-2 text-sm shadow-sm outline-2 transition-all duration-75"
               )}
             />
           );
