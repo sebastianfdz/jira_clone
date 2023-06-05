@@ -11,8 +11,9 @@ import {
 } from "./ui/select";
 import { useState } from "react";
 import { type IssueType } from "@/utils/types";
+import { useIssues } from "@/hooks/query-hooks/useIssues";
 
-const LIGHT_COLORS = [
+export const LIGHT_COLORS = [
   { hex: "#9f8fef", label: "purple" },
   { hex: "#579dff", label: "blue" },
   { hex: "#4cce97", label: "green" },
@@ -22,7 +23,7 @@ const LIGHT_COLORS = [
   { hex: "#8590a2", label: "gray" },
 ];
 
-const DARK_COLORS = [
+export const DARK_COLORS = [
   { hex: "#6e5dc6", label: "purple" },
   { hex: "#0b66e4", label: "blue" },
   { hex: "#20845a", label: "green" },
@@ -36,8 +37,11 @@ const ColorPicker: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const [selected, setSelected] = useState<string | null>(
     issue.sprintColor ?? null
   );
+
+  const { updateIssue } = useIssues();
   function handleSelectChange(value: string) {
     setSelected(value);
+    updateIssue({ issue_key: issue.key, sprintColor: value });
   }
 
   return (
