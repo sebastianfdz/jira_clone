@@ -51,6 +51,7 @@ const patchIssueBodyValidator = z.object({
   parentKey: z.string().nullable().optional(),
   sprintId: z.string().nullable().optional(),
   isDeleted: z.boolean().optional(),
+  sprintColor: z.string().optional(),
 });
 
 export type PatchIssueBody = z.infer<typeof patchIssueBodyValidator>;
@@ -86,6 +87,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
     isDeleted,
     sprintId,
     parentKey,
+    sprintColor,
   } = validated.data;
 
   const currentIssue = await prisma.issue.findUnique({
@@ -186,6 +188,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
       isDeleted: isDeleted ?? currentIssue.isDeleted,
       sprintId: sprintId === undefined ? currentIssue.sprintId : sprintId,
       parentKey: parentKey === undefined ? currentIssue.parentKey : parentKey,
+      sprintColor: sprintColor ?? currentIssue.sprintColor,
     },
   });
 
