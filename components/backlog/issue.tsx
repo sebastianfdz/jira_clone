@@ -14,7 +14,7 @@ import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue/issue-title";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type IssueType } from "@/utils/types";
-import { isEpic } from "@/utils/helpers";
+import { hasChildren, isEpic } from "@/utils/helpers";
 import { IssueAssigneeSelect } from "../issue/issue-select-assignee";
 
 const Issue: React.FC<{
@@ -82,7 +82,7 @@ const Issue: React.FC<{
             <ContextTrigger className="h-8 w-full" />
           </IssueContextMenu>
           <div className="relative ml-2 flex min-w-fit items-center justify-end gap-x-2">
-            {issue.children.length ? (
+            {hasChildren(issue) ? (
               <ChildrenTreeIcon className="p-0.5 text-gray-600" />
             ) : null}
             <IssueSelectStatus
