@@ -6,7 +6,6 @@ import { Button } from "../ui/button";
 import clsx from "clsx";
 import { BsThreeDots } from "react-icons/bs";
 import { ChildrenTreeIcon } from "../svgs";
-import { NotImplemented } from "../not-implemented";
 import { DropdownTrigger } from "../ui/dropdown-menu";
 import { ContextTrigger } from "../ui/context-menu";
 import { IssueContextMenu, IssueDropdownMenu } from "../issue/issue-menu";
@@ -83,11 +82,9 @@ const Issue: React.FC<{
             <ContextTrigger className="h-8 w-full" />
           </IssueContextMenu>
           <div className="relative ml-2 flex min-w-fit items-center justify-end gap-x-2">
-            <NotImplemented feature="child issues">
-              <button>
-                <ChildrenTreeIcon className="text-gray-600" />
-              </button>
-            </NotImplemented>
+            {issue.children.length ? (
+              <ChildrenTreeIcon className="p-0.5 text-gray-600" />
+            ) : null}
             <IssueSelectStatus
               key={issue.key + issue.status}
               currentStatus={issue.status}
