@@ -13,6 +13,7 @@ import { IssueDetailsInfoAccordion } from "./issue-details-info-accordion";
 import { IssueDetailsInfoActions } from "./issue-details-info-actions";
 import { ChildIssueList } from "./issue-details-info-child-issues";
 import { hasChildren, isEpic } from "@/utils/helpers";
+import { ColorPicker } from "@/components/color-picker";
 
 const IssueDetailsInfo = React.forwardRef<
   HTMLDivElement,
@@ -25,22 +26,25 @@ const IssueDetailsInfo = React.forwardRef<
   if (!issue) return <div />;
   return (
     <Fragment>
-      <h1
-        ref={ref}
-        role="button"
-        onClick={() => setIsEditing(true)}
-        data-state={isEditing ? "editing" : "notEditing"}
-        className="transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
-      >
-        <IssueTitle
-          className="mr-1 py-1"
-          key={issue.key + issue.name}
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-          issue={issue}
-          ref={nameRef}
-        />
-      </h1>
+      <div className="flex items-center gap-x-2">
+        {isEpic(issue) ? <ColorPicker issue={issue} /> : null}
+        <h1
+          ref={ref}
+          role="button"
+          onClick={() => setIsEditing(true)}
+          data-state={isEditing ? "editing" : "notEditing"}
+          className="transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
+        >
+          <IssueTitle
+            className="mr-1 py-1"
+            key={issue.key + issue.name}
+            isEditing={isEditing}
+            setIsEditing={setIsEditing}
+            issue={issue}
+            ref={nameRef}
+          />
+        </h1>
+      </div>
       <IssueDetailsInfoActions
         onAddChildIssue={() => setIsAddingChildIssue(true)}
       />
