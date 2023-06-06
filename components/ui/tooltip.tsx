@@ -78,7 +78,7 @@ const TooltipWrapper: React.FC<
           <TooltipContent
             side={side}
             sideOffset={4}
-            className="z-[999] max-w-2xl rounded-sm bg-gray-700 px-1.5 py-0.5 text-xs text-white"
+            className="z-50 max-w-2xl rounded-sm bg-gray-700 px-1.5 py-0.5 text-xs text-white"
           >
             {text}
           </TooltipContent>
