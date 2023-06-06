@@ -56,7 +56,7 @@ const SmallIssueDetailsInfo = React.forwardRef<
           role="button"
           onClick={() => setIsEditing(true)}
           data-state={isEditing ? "editing" : "notEditing"}
-          className="transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
+          className="w-full transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
         >
           <IssueTitle
             className="mr-1 py-1"
@@ -131,7 +131,7 @@ const LargeIssueDetails = React.forwardRef<
             role="button"
             onClick={() => setIsEditing(true)}
             data-state={isEditing ? "editing" : "notEditing"}
-            className="transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
+            className="w-full transition-all [&[data-state=notEditing]]:hover:bg-gray-100"
           >
             <IssueTitle
               className="mr-1 py-1"
