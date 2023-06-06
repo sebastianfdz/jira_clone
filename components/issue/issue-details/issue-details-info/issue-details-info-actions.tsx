@@ -18,7 +18,10 @@ const IssueDetailsInfoActions: React.FC<{
           className="flex items-center whitespace-nowrap bg-gray-100 hover:bg-gray-200"
         >
           <CgAttachment className="rotate-45 text-xl" />
-          <span className="ml-2 whitespace-nowrap  text-sm font-medium">
+          <span
+            data-state={variant === "sm" ? "sm" : "lg"}
+            className="whitespace-nowrap text-sm  font-medium [&[data-state=lg]]:ml-2"
+          >
             {variant === "sm" ? null : "Attach"}
           </span>
         </Button>
@@ -30,7 +33,10 @@ const IssueDetailsInfoActions: React.FC<{
           className="flex items-center whitespace-nowrap bg-gray-100 hover:bg-gray-200"
         >
           <ChildrenTreeIcon />
-          <span className="ml-2 whitespace-nowrap  text-sm font-medium">
+          <span
+            data-state={variant === "sm" ? "sm" : "lg"}
+            className="whitespace-nowrap text-sm  font-medium [&[data-state=lg]]:ml-2"
+          >
             {variant === "sm" ? null : "Add a child issue"}
           </span>
         </Button>
@@ -41,7 +47,10 @@ const IssueDetailsInfoActions: React.FC<{
           className="flex items-center whitespace-nowrap bg-gray-100 hover:bg-gray-200"
         >
           <BiLink className="text-xl" />
-          <span className="ml-2 whitespace-nowrap  text-sm font-medium">
+          <span
+            data-state={variant === "sm" ? "sm" : "lg"}
+            className="whitespace-nowrap text-sm  font-medium [&[data-state=lg]]:ml-2"
+          >
             {variant === "sm" ? null : "Link issue"}
           </span>
         </Button>
