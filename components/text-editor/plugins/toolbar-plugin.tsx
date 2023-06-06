@@ -285,7 +285,7 @@ function FontDropDown({
       buttonLabel={value}
       buttonAriaLabel={buttonAriaLabel}
     >
-      <div className="flex h-[200px] flex-col overflow-y-auto">
+      <div className="z-[50] flex h-[200px] flex-col overflow-y-auto">
         {(style === "font-family"
           ? FONT_FAMILY_OPTIONS
           : FONT_SIZE_OPTIONS

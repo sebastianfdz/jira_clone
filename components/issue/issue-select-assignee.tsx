@@ -81,7 +81,7 @@ const IssueAssigneeSelect: React.FC<{
           </Fragment>
         </SelectValue>
       </SelectTrigger>
-      <SelectPortal className="z-[999] w-full">
+      <SelectPortal className="z-50 w-full">
         <SelectContent position="popper">
           <SelectViewport className="w-full rounded-md border border-gray-300 bg-white pt-2 shadow-md">
             <SelectGroup>

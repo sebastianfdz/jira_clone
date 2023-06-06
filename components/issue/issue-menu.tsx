@@ -22,24 +22,22 @@ import {
 
 type MenuOptionsType = {
   actions: MenuOptionType[];
-  moveTo: MenuOptionType[];
+};
+
+const menuOptions: MenuOptionsType = {
+  actions: [
+    { id: "add-flag", label: "Add Flag" },
+    { id: "change-parent", label: "Change Parent" },
+    { id: "copy-issue-link", label: "Copy Issue Link" },
+    { id: "split-issue", label: "Split Issue" },
+    { id: "delete", label: "Delete" },
+  ],
 };
 
 const IssueDropdownMenu: React.FC<{
   children: ReactNode;
   issue: IssueType;
 }> = ({ children, issue }) => {
-  const menuOptions: MenuOptionsType = {
-    actions: [
-      { id: "add-flag", label: "Add Flag" },
-      { id: "change-parent", label: "Change Parent" },
-      { id: "copy-issue-link", label: "Copy Issue Link" },
-      { id: "split-issue", label: "Split Issue" },
-      { id: "delete", label: "Delete" },
-    ],
-    moveTo: [],
-  };
-
   const { deleteIssue } = useIssues();
 
   const handleIssueAction = (
@@ -59,7 +57,7 @@ const IssueDropdownMenu: React.FC<{
           side="top"
           sideOffset={5}
           align="end"
-          className="z-10 w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md"
+          className="z-50 w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md"
         >
           <DropdownLabel className="p-2 text-xs font-normal text-gray-400">
             ACTIONS
@@ -78,25 +76,6 @@ const IssueDropdownMenu: React.FC<{
               </DropdownItem>
             ))}
           </DropdownGroup>
-          {/* <DropdownLabel className="p-2 text-xs font-normal text-gray-400">
-            MOVE TO
-          </DropdownLabel>
-          <DropdownGroup>
-            {menuOptions.moveTo.map((action) => (
-              <DropdownItem
-                onClick={(e) => handleIssueAction(action.id, e)}
-                key={action.id}
-                textValue={action.label}
-                className={clsx(
-                  "border-transparent p-2 text-sm hover:cursor-default hover:bg-gray-100"
-                )}
-              >
-                <span className={clsx("rounded-md bg-opacity-30 pr-2 text-sm")}>
-                  {action.label}
-                </span>
-              </DropdownItem>
-            ))}
-          </DropdownGroup> */}
         </DropdownContent>
       </DropdownPortal>
     </Dropdown>
@@ -107,16 +86,6 @@ const IssueContextMenu: React.FC<{
   isEditing: boolean;
   className?: string;
 }> = ({ children, isEditing, className }) => {
-  const menuOptions: MenuOptionsType = {
-    actions: [
-      { id: "add-flag", label: "Add Flag" },
-      { id: "change-parent", label: "Change Parent" },
-      { id: "copy-issue-link", label: "Copy Issue Link" },
-      { id: "split-issue", label: "Split Issue" },
-      { id: "delete", label: "Delete" },
-    ],
-    moveTo: [],
-  };
   return (
     <div
       data-state={isEditing ? "editing" : "not-editing"}
@@ -139,26 +108,6 @@ const IssueContextMenu: React.FC<{
                   )}
                 >
                   <span className={clsx("pr-2 text-sm")}>{action.label}</span>
-                </ContextItem>
-              ))}
-            </ContextGroup>
-            <ContextLabel className="p-2 text-xs font-normal text-gray-400">
-              MOVE TO
-            </ContextLabel>
-            <ContextGroup>
-              {menuOptions.moveTo.map((action) => (
-                <ContextItem
-                  key={action.id}
-                  textValue={action.label}
-                  className={clsx(
-                    "border-transparent p-2 text-sm hover:cursor-default hover:bg-gray-100"
-                  )}
-                >
-                  <span
-                    className={clsx("rounded-md bg-opacity-30 pr-2 text-sm")}
-                  >
-                    {action.label}
-                  </span>
                 </ContextItem>
               ))}
             </ContextGroup>

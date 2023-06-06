@@ -89,7 +89,7 @@ const IssueSelectStatus: React.FC<{
             <FaChevronDown className="text-xs" />
           </SelectIcon>
         </SelectTrigger>
-        <SelectPortal className="z-10">
+        <SelectPortal className="z-50">
           <SelectContent position="popper">
             <SelectViewport className="w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
               <SelectGroup>

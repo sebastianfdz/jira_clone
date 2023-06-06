@@ -49,7 +49,7 @@ const IssueSelectEpic: React.FC<{
           </SelectValue>
         </SelectTrigger>
       </TooltipWrapper>
-      <SelectPortal className="z-10">
+      <SelectPortal className="z-50">
         <SelectContent position="popper">
           <SelectViewport className="min-w-60 rounded-md border border-gray-300 bg-white pt-2 shadow-md">
             <span className="pl-3 text-xs text-gray-500">EPICS</span>
