@@ -32,7 +32,7 @@ const SprintDropdown: React.FC = () => {
             <FaChevronDown className="text-gray-500" />
           </SelectIcon>
         </SelectTrigger>
-        <SelectPortal className="z-[999]">
+        <SelectPortal className="z-50">
           <SelectContent position="popper" className="w-full">
             <SelectViewport className=" w-[400px] rounded-md border border-gray-300 bg-white py-2 shadow-md">
               <SelectGroup>
