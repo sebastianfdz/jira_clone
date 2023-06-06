@@ -1,6 +1,6 @@
 "use client";
 import React, { Fragment, useLayoutEffect } from "react";
-import { type Project } from "@prisma/client";
+import { type Sprint, type Project } from "@prisma/client";
 import Split from "react-split";
 import { ListGroup } from "./list-group";
 import { IssueDetails } from "../issue/issue-details";
@@ -8,10 +8,18 @@ import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
 import clsx from "clsx";
 import { BacklogHeader } from "./header";
+import { type IssueType } from "@/utils/types";
+import { useQuery } from "@tanstack/react-query";
 
 const Backlog: React.FC<{
   project: Project;
-}> = ({ project }) => {
+  issues: IssueType[];
+  sprints: Sprint[];
+}> = ({ project, issues, sprints }) => {
+  // Set initial data for queries
+  useQuery(["issues"], { initialData: issues });
+  useQuery(["sprints"], { initialData: sprints });
+  useQuery(["project"], { initialData: project });
   const { issueId, setIssueId } = useSelectedIssueContext();
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 

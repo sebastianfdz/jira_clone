@@ -6,22 +6,26 @@ import "@/styles/split.css";
 import { BoardHeader } from "./header";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
 import { useIssues } from "@/hooks/query-hooks/useIssues";
-import { useSprints } from "@/hooks/query-hooks/useSprints";
 import { type IssueType } from "@/utils/types";
 
 import { isNullish } from "@/utils/helpers";
 import { IssueList } from "./issue-list";
 import { IssueDetailsModal } from "../modals/board-issue-details";
+import { useQuery } from "@tanstack/react-query";
 
 const STATUSES: IssueStatus[] = ["TODO", "IN_PROGRESS", "DONE"];
 
 const Board: React.FC<{
   project: Project;
-}> = ({ project }) => {
+  issues: IssueType[];
+  sprints: Sprint[];
+}> = ({ project, issues, sprints }) => {
   // const { issueId, setIssueId } = useSelectedIssueContext();
   const renderContainerRef = useRef<HTMLDivElement>(null);
-  const { issues } = useIssues();
-  const { sprints } = useSprints();
+  // Set initial data for queries
+  useQuery(["issues"], { initialData: issues });
+  useQuery(["sprints"], { initialData: sprints });
+  useQuery(["project"], { initialData: project });
 
   function filterIssuesBySprintAndStatus({
     issue,
