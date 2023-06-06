@@ -23,8 +23,8 @@ const Board: React.FC<{
   // const { issueId, setIssueId } = useSelectedIssueContext();
   const renderContainerRef = useRef<HTMLDivElement>(null);
   // Set initial data for queries
-  useQuery(["issues"], { initialData: issues });
-  useQuery(["sprints"], { initialData: sprints });
+  const issuesQuery = useQuery(["issues"], { initialData: issues });
+  const sprintsQuery = useQuery(["sprints"], { initialData: sprints });
   useQuery(["project"], { initialData: project });
 
   function filterIssuesBySprintAndStatus({
@@ -80,8 +80,12 @@ const Board: React.FC<{
             <IssueList
               key={status}
               status={status}
-              issues={issues.filter((issue) =>
-                filterIssuesBySprintAndStatus({ issue, status, sprints })
+              issues={issuesQuery.data.filter((issue) =>
+                filterIssuesBySprintAndStatus({
+                  issue,
+                  status,
+                  sprints: sprintsQuery.data,
+                })
               )}
             />
           ))}
