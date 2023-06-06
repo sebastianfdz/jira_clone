@@ -6,32 +6,51 @@ import { BiLink } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { CgAttachment } from "react-icons/cg";
 
-const IssueDetailsInfoActions: React.FC<{ onAddChildIssue: () => void }> = ({
-  onAddChildIssue,
-}) => {
+const IssueDetailsInfoActions: React.FC<{
+  onAddChildIssue: () => void;
+  variant?: "sm" | "lg";
+}> = ({ onAddChildIssue, variant = "sm" }) => {
   return (
     <div className="flex gap-x-2 text-gray-700">
       <NotImplemented feature="attachment">
-        <Button customColors className="bg-gray-100 hover:bg-gray-200">
+        <Button
+          customColors
+          className="flex items-center whitespace-nowrap bg-gray-100 hover:bg-gray-200"
+        >
           <CgAttachment className="rotate-45 text-xl" />
+          <span className="ml-2 whitespace-nowrap  text-sm font-medium">
+            {variant === "sm" ? null : "Attach"}
+          </span>
         </Button>
       </NotImplemented>
       <TooltipWrapper text="Add child issue">
         <Button
           onClick={onAddChildIssue}
           customColors
-          className="bg-gray-100 hover:bg-gray-200"
+          className="flex items-center whitespace-nowrap bg-gray-100 hover:bg-gray-200"
         >
           <ChildrenTreeIcon />
+          <span className="ml-2 whitespace-nowrap  text-sm font-medium">
+            {variant === "sm" ? null : "Add a child issue"}
+          </span>
         </Button>
       </TooltipWrapper>
       <NotImplemented feature="link">
-        <Button customColors className="bg-gray-100 hover:bg-gray-200">
+        <Button
+          customColors
+          className="flex items-center whitespace-nowrap bg-gray-100 hover:bg-gray-200"
+        >
           <BiLink className="text-xl" />
+          <span className="ml-2 whitespace-nowrap  text-sm font-medium">
+            {variant === "sm" ? null : "Link issue"}
+          </span>
         </Button>
       </NotImplemented>
       <NotImplemented feature="add apps">
-        <Button customColors className="bg-gray-100 hover:bg-gray-200">
+        <Button
+          customColors
+          className="flex items-center whitespace-nowrap bg-gray-100 hover:bg-gray-200"
+        >
           <BsThreeDots className="text-xl" />
         </Button>
       </NotImplemented>
