@@ -4,7 +4,7 @@ import { IssueType, type Issue, IssueStatus } from "@prisma/client";
 import { type IssueType as IssueT } from "@/utils/types";
 import { z } from "zod";
 import { clerkClient } from "@clerk/nextjs/server";
-import { filterUserForClient } from "@/utils/helpers";
+import { filterUserForClient, generateIssuesForClient } from "@/utils/helpers";
 
 const postIssuesBodyValidator = z.object({
   name: z.string(),
@@ -38,19 +38,19 @@ export type GetIssuesResponse = {
   })[];
 };
 
-export async function getIssuesFromServer() {
+export async function GET() {
+  // return NextResponse.json<GetIssuesResponse>({ issues: activeIssues });
   const activeIssues = await prisma.issue.findMany({
     where: {
       isDeleted: false,
     },
   });
   if (!activeIssues) {
-    return [];
+    return NextResponse.json({ issues: [] });
   }
 
   const userIds = activeIssues
-    .map((issue) => [issue.assigneeId, issue.reporterId] as string[])
-    .flat()
+    .flatMap((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .filter(Boolean);
 
   const users = (
@@ -60,19 +60,8 @@ export async function getIssuesFromServer() {
     })
   ).map(filterUserForClient);
 
-  const issuesForClient = activeIssues.map((issue) => {
-    const parent = activeIssues.find((i) => i.key === issue.parentKey) ?? null;
-    const assignee = users.find((u) => u.id === issue.assigneeId) ?? null;
-    const reporter = users.find((u) => u.id === issue.reporterId) ?? null;
-    const children = activeIssues.filter((i) => i.parentKey === issue.key);
-    return { ...issue, parent, assignee, reporter, children };
-  });
-  return issuesForClient as GetIssuesResponse["issues"];
-}
-
-export async function GET() {
-  // return NextResponse.json<GetIssuesResponse>({ issues: activeIssues });
-  const issuesForClient = await getIssuesFromServer();
+  const issuesForClient = generateIssuesForClient(activeIssues, users);
+  // const issuesForClient = await getIssuesFromServer();
   return NextResponse.json({ issues: issuesForClient });
 }
 

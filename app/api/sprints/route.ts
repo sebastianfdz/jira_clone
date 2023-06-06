@@ -1,5 +1,5 @@
 import { prisma } from "@/server/db";
-import { type Sprint } from "@prisma/client";
+import { SprintStatus, type Sprint } from "@prisma/client";
 import { NextResponse } from "next/server";
 
 export type PostSprintResponse = {
@@ -23,27 +23,16 @@ export async function POST() {
   return NextResponse.json({ sprint });
 }
 
-export async function getSprintsFromServer() {
+export async function GET() {
   const sprints = await prisma.sprint.findMany({
     where: {
-      OR: [
-        {
-          status: "ACTIVE",
-        },
-        {
-          status: "PENDING",
-        },
-      ],
+      OR: [{ status: SprintStatus.ACTIVE }, { status: SprintStatus.PENDING }],
     },
     orderBy: {
       createdAt: "asc",
     },
   });
-  return sprints;
-}
 
-export async function GET() {
-  const sprints = await getSprintsFromServer();
   // return NextResponse.json<GetSprintsResponse>({ sprints });
   return NextResponse.json({ sprints });
 }
