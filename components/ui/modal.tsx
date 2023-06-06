@@ -26,7 +26,7 @@ const ModalContent = React.forwardRef<ContentRef, ContentProps>(
   ({ children, className, ...props }, forwardedRef) => (
     <ModalPrimitive.Content
       className={clsx(
-        "fixed left-1/2 top-20 z-[999] -translate-x-1/2 rounded-[3px] bg-white p-8  shadow-md",
+        "fixed left-1/2 top-20 z-50 -translate-x-1/2 rounded-[3px] bg-white p-8 shadow-md",
         className
       )}
       {...props}
@@ -59,10 +59,7 @@ type OverlayRef = React.ElementRef<typeof ModalPrimitive.Overlay>;
 const ModalOverlay = React.forwardRef<OverlayRef, OverlayProps>(
   ({ children, className, ...props }, forwardedRef) => (
     <ModalPrimitive.Overlay
-      className={clsx(
-        "fixed inset-0 z-[999] bg-black bg-opacity-40",
-        className
-      )}
+      className={clsx("fixed inset-0 z-50 bg-black bg-opacity-40", className)}
       {...props}
       ref={forwardedRef}
     >
