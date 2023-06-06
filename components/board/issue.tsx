@@ -9,17 +9,21 @@ import { BsThreeDots } from "react-icons/bs";
 import { isEpic } from "@/utils/helpers";
 import { EpicName } from "../backlog/issue";
 
+import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+
 const Issue: React.FC<{ issue: IssueType; index: number }> = ({
   issue,
   index,
 }) => {
+  const { setIssueId } = useSelectedIssueContext();
+
   return (
     <Draggable draggableId={issue.key} index={index}>
       {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
         <div
           role="button"
           // data-state={issueId == issue.key ? "selected" : "not-selected"}
-          // onClick={() => setIssueId(issue.key)}
+          onClick={() => setIssueId(issue.key)}
           ref={innerRef}
           {...draggableProps}
           {...dragHandleProps}
