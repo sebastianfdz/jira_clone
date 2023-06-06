@@ -18,24 +18,17 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
   }
 
   return (
-    <Droppable droppableId={status}>
-      {({ droppableProps, innerRef, placeholder }) => (
-        <div
-          className={clsx("min-h-full w-[300px] rounded-md bg-gray-100 p-1")}
-        >
-          <h2 className="mb-4 mt-3 px-2 text-xs text-gray-500">
-            {statusMap[status]}{" "}
-            {issues.filter((issue) => issue.status == status).length}
-            {issues.filter((issue) => issue.status == status).length > 1
-              ? " ISSUES"
-              : " ISSUE"}
-          </h2>
-
-          <div
-            {...droppableProps}
-            ref={innerRef}
-            className="-mt-10 h-full pt-10"
-          >
+    <div className={clsx("w-[300px] rounded-md bg-gray-100 px-1.5 pb-1.5")}>
+      <h2 className="sticky top-0 -mx-1.5 -mt-1.5 h-max rounded-t-md bg-gray-100 px-2 py-3 text-xs text-gray-500">
+        {statusMap[status]}{" "}
+        {issues.filter((issue) => issue.status == status).length}
+        {issues.filter((issue) => issue.status == status).length > 1
+          ? " ISSUES"
+          : " ISSUE"}
+      </h2>
+      <Droppable droppableId={status}>
+        {({ droppableProps, innerRef, placeholder }) => (
+          <div {...droppableProps} ref={innerRef} className="h-full ">
             {issues
               .sort((a, b) => {
                 if (
@@ -52,9 +45,9 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
               ))}
             {placeholder}
           </div>
-        </div>
-      )}
-    </Droppable>
+        )}
+      </Droppable>
+    </div>
   );
 };
 
