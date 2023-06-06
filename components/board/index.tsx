@@ -1,5 +1,5 @@
 "use client";
-import React, { useLayoutEffect } from "react";
+import React, { Fragment, useLayoutEffect, useRef } from "react";
 import { type Sprint, type IssueStatus, type Project } from "@prisma/client";
 // import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
@@ -11,6 +11,7 @@ import { type IssueType } from "@/utils/types";
 
 import { isNullish } from "@/utils/helpers";
 import { IssueList } from "./issue-list";
+import { IssueDetailsModal } from "../modals/board-issue-details";
 
 const STATUSES: IssueStatus[] = ["TODO", "IN_PROGRESS", "DONE"];
 
@@ -18,7 +19,7 @@ const Board: React.FC<{
   project: Project;
 }> = ({ project }) => {
   // const { issueId, setIssueId } = useSelectedIssueContext();
-  const renderContainerRef = React.useRef<HTMLDivElement>(null);
+  const renderContainerRef = useRef<HTMLDivElement>(null);
   const { issues } = useIssues();
   const { sprints } = useSprints();
 
@@ -63,10 +64,14 @@ const Board: React.FC<{
   };
 
   return (
-    <div>
+    <Fragment>
+      <IssueDetailsModal />
       <BoardHeader project={project} />
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex min-h-full w-full max-w-full gap-x-4 overflow-y-auto">
+        <div
+          ref={renderContainerRef}
+          className="flex min-h-max w-full max-w-full gap-x-4 overflow-y-auto"
+        >
           {STATUSES.map((status) => (
             <IssueList
               key={status}
@@ -78,7 +83,7 @@ const Board: React.FC<{
           ))}
         </div>
       </DragDropContext>
-    </div>
+    </Fragment>
   );
 };
 
