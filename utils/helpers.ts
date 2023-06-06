@@ -2,6 +2,7 @@ import { type IssueCountType } from "./types";
 import { type IssueType } from "@/utils/types";
 import type { User as ClerkUser } from "@clerk/nextjs/dist/api";
 import { type User } from "@/server/db";
+import { type Issue } from "@prisma/client";
 
 type IssueT = IssueType | IssueType["parent"];
 
@@ -190,4 +191,20 @@ export function hexToRgba(hex: string | null, opacity?: number) {
   const b = parseInt(hex.slice(5, 7), 16);
 
   return `rgba(${r}, ${g}, ${b}, ${opacity ?? 1})`;
+}
+
+export function generateIssuesForClient(issues: Issue[], users: User[]) {
+  // Construct map for faster lookup
+  const userMap = new Map(users.map((user) => [user.id, user]));
+  const parentMap = new Map(issues.map((issue) => [issue.key, issue]));
+
+  const issuesForClient = issues.map((issue) => {
+    const parent = parentMap.get(issue.parentKey ?? "") ?? null;
+    const assignee = userMap.get(issue.assigneeId ?? "") ?? null;
+    const reporter = userMap.get(issue.reporterId) ?? null;
+    const children = issues.filter((i) => i.parentKey === issue.key);
+    return { ...issue, parent, assignee, reporter, children };
+  });
+
+  return issuesForClient as IssueType[];
 }
