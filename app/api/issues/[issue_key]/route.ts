@@ -152,7 +152,6 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
 
     if (moveInBoardIsNeeded) {
       // HANDLE BOARD MOVE
-
       const statusColumnIssueList = await getIssuesInActiveSprint({
         status,
         activeSprints,
@@ -189,6 +188,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
       sprintId: sprintId === undefined ? currentIssue.sprintId : sprintId,
       parentKey: parentKey === undefined ? currentIssue.parentKey : parentKey,
       sprintColor: sprintColor ?? currentIssue.sprintColor,
+      boardPosition: boardPosition ?? null,
     },
   });
 
@@ -215,6 +215,7 @@ export async function DELETE(req: NextRequest, { params }: ParamsType) {
     },
     data: {
       isDeleted: true,
+      boardPosition: null,
     },
   });
 
