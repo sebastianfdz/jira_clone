@@ -1,5 +1,6 @@
+"use client";
 import { type ReactNode } from "react";
-import { toast as _toast } from "react-hot-toast";
+import { toast as _toast, Toaster } from "react-hot-toast";
 import {
   BsCheckCircleFill,
   BsX,
@@ -10,6 +11,8 @@ type ToastProps = {
   message: string;
   description: string;
 };
+
+export default Toaster;
 
 export const toast = {
   success: (props: ToastProps) => {
