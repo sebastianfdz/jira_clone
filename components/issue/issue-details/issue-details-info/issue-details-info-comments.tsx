@@ -96,12 +96,12 @@ const CommentPreview: React.FC<{
   }
 
   return (
-    <div className="flex gap-x-2">
+    <div className="flex w-full gap-x-2">
       <Avatar
         src={comment.author?.avatar ?? ""}
         alt={`${comment.author?.name ?? "Guest"}`}
       />
-      <div>
+      <div className="w-full">
         <div className="flex items-center gap-x-3 text-xs">
           <span className="font-semibold text-gray-600 ">
             {comment.author?.name}
