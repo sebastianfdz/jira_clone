@@ -38,13 +38,17 @@ export type GetIssuesResponse = {
   })[];
 };
 
-export async function GET() {
-  const issues = await prisma.issue.findMany();
-  if (!issues) {
-    return NextResponse.json({ issues: [] });
+export async function getIssuesFromServer() {
+  const activeIssues = await prisma.issue.findMany({
+    where: {
+      isDeleted: false,
+    },
+  });
+  if (!activeIssues) {
+    return [];
   }
-  const activeIssues = issues.filter((issue) => !issue.isDeleted);
-  const userIds = issues
+
+  const userIds = activeIssues
     .map((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .flat()
     .filter(Boolean);
@@ -52,7 +56,7 @@ export async function GET() {
   const users = (
     await clerkClient.users.getUserList({
       userId: userIds,
-      limit: 110,
+      limit: 20,
     })
   ).map(filterUserForClient);
 
@@ -63,8 +67,12 @@ export async function GET() {
     const children = activeIssues.filter((i) => i.parentKey === issue.key);
     return { ...issue, parent, assignee, reporter, children };
   });
+  return issuesForClient as GetIssuesResponse["issues"];
+}
 
+export async function GET() {
   // return NextResponse.json<GetIssuesResponse>({ issues: activeIssues });
+  const issuesForClient = await getIssuesFromServer();
   return NextResponse.json({ issues: issuesForClient });
 }
 

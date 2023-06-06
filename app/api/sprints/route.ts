@@ -23,7 +23,7 @@ export async function POST() {
   return NextResponse.json({ sprint });
 }
 
-export async function GET() {
+export async function getSprintsFromServer() {
   const sprints = await prisma.sprint.findMany({
     where: {
       OR: [
@@ -39,7 +39,11 @@ export async function GET() {
       createdAt: "asc",
     },
   });
+  return sprints;
+}
 
+export async function GET() {
+  const sprints = await getSprintsFromServer();
   // return NextResponse.json<GetSprintsResponse>({ sprints });
   return NextResponse.json({ sprints });
 }
