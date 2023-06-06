@@ -55,7 +55,7 @@ const ColorPicker: React.FC<{ issue: IssueType }> = ({ issue }) => {
           <ColorSquare color={selected ?? "#9f8fef"} />
         </SelectValue>
       </SelectTrigger>
-      <SelectPortal className="z-[999] w-full">
+      <SelectPortal className="z-50 w-full">
         <SelectContent position="popper">
           <SelectViewport className="flex w-full flex-col gap-y-2 rounded-md border border-gray-300 bg-white p-2 shadow-md">
             <SelectGroup>
