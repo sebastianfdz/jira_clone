@@ -8,7 +8,20 @@
 const config = {
   reactStrictMode: true,
   experimental: { appDir: true },
-
+  redirects: async () => {
+    return [
+      {
+        source: "/project",
+        destination: "/project/backlog",
+        permanent: true,
+      },
+      {
+        source: "/",
+        destination: "/project/backlog",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     domains: [
       "images.clerk.dev",
