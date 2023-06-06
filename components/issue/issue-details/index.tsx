@@ -2,7 +2,7 @@
 import React, {
   useCallback,
   useEffect,
-  useLayoutEffect,
+  // useLayoutEffect,
   useState,
 } from "react";
 import { useIssues } from "@/hooks/query-hooks/useIssues";
@@ -26,11 +26,11 @@ const IssueDetails: React.FC<{
   );
   const [issueInfo, setIssueInfo] = useState(() => getIssue(issueId));
 
-  useLayoutEffect(() => {
-    if (!renderContainerRef.current) return;
-    const calculatedHeight = renderContainerRef.current.offsetTop;
-    renderContainerRef.current.style.minHeight = `calc(100vh - ${calculatedHeight}px)`;
-  }, []);
+  // useLayoutEffect(() => {
+  //   if (!renderContainerRef.current) return;
+  //   const calculatedHeight = renderContainerRef.current.offsetTop;
+  //   renderContainerRef.current.style.minHeight = `calc(100vh - ${calculatedHeight}px)`;
+  // }, []);
 
   useEffect(() => {
     setIssueInfo(() => getIssue(issueId));
