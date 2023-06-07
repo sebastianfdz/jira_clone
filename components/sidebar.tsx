@@ -9,7 +9,7 @@ import {
 } from "./ui/navigation-menu";
 import { usePathname } from "next/navigation";
 import { FaChessPawn, FaChevronRight } from "react-icons/fa";
-import { useProject } from "@/hooks/query-hooks/useProject";
+import { useProject } from "@/hooks/query-hooks/use-project";
 
 type NavItem = {
   id: string;

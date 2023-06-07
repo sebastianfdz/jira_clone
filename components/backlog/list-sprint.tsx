@@ -19,7 +19,7 @@ import { CompleteSprintModal } from "../modals/complete-sprint";
 import { UpdateSprintModal } from "../modals/update-sprint";
 import { AlertModal } from "../modals/alert";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSprints } from "@/hooks/query-hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { toast } from "../toast";
 
 const SprintList: React.FC<{

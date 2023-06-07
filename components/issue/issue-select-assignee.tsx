@@ -9,7 +9,7 @@ import {
   SelectViewport,
 } from "@/components/ui/select";
 import clsx from "clsx";
-import { useProject } from "@/hooks/query-hooks/useProject";
+import { useProject } from "@/hooks/query-hooks/use-project";
 import { type User } from "@/server/db";
 import { type IssueType } from "@/utils/types";
 import { Fragment, useState } from "react";

@@ -14,7 +14,7 @@ import {
   isSubtask,
   sprintId,
 } from "@/utils/helpers";
-import { useSprints } from "@/hooks/query-hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/use-sprints";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();

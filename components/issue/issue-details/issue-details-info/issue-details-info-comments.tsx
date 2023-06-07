@@ -1,4 +1,4 @@
-import { useIssueDetails } from "@/hooks/query-hooks/useIssueDetails";
+import { useIssueDetails } from "@/hooks/query-hooks/use-issue-details";
 import { type UserResource } from "@clerk/types";
 import { type GetIssueCommentResponse } from "@/app/api/issues/[issue_key]/comments/route";
 import {
@@ -7,7 +7,7 @@ import {
 } from "@/components/text-editor/editor";
 import { useKeydownListener } from "@/hooks/useKeydownListener";
 import { Fragment, useRef, useState } from "react";
-import { useIsInViewport } from "@/hooks/useIsInViewport";
+import { useIsInViewport } from "@/hooks/use-is-in-viewport";
 import { useUser } from "@clerk/clerk-react";
 import { type SerializedEditorState } from "lexical";
 import { type IssueType } from "@/utils/types";

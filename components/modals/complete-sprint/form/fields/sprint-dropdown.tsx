@@ -15,7 +15,7 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
-import { useSprints } from "@/hooks/query-hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/use-sprints";
 
 const SprintDropdownField: React.FC<{
   control: Control<FormValues, "duration">;

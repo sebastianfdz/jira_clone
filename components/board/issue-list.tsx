@@ -1,4 +1,4 @@
-import { useStrictModeDroppable } from "@/hooks/useStrictModeDroppable";
+import { useStrictModeDroppable } from "@/hooks/use-strictmode-droppable";
 import { isNullish } from "@/utils/helpers";
 import { type IssueType } from "@/utils/types";
 import { Droppable } from "react-beautiful-dnd";

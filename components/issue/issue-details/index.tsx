@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
-import { useIsInViewport } from "@/hooks/useIsInViewport";
+import { useIsInViewport } from "@/hooks/use-is-in-viewport";
 import { IssueDetailsHeader } from "./issue-details-header";
 import { IssueDetailsInfo } from "./issue-details-info";
 

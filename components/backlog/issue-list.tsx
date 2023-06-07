@@ -10,7 +10,7 @@ import { EmtpyIssue } from "./issue-empty";
 import { type IssueType } from "@/utils/types";
 import clsx from "clsx";
 import { useUser } from "@clerk/clerk-react";
-import { useStrictModeDroppable } from "@/hooks/useStrictModeDroppable";
+import { useStrictModeDroppable } from "@/hooks/use-strictmode-droppable";
 
 const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   sprintId,

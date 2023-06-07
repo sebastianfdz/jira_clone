@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar } from "@/components/avatar";
 
-import { useSprints } from "@/hooks/query-hooks/useSprints";
+import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { IssueAssigneeSelect } from "../../issue-select-assignee";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { useState } from "react";
