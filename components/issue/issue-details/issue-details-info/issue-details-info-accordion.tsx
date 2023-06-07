@@ -12,7 +12,7 @@ import { Avatar } from "@/components/avatar";
 
 import { useSprints } from "@/hooks/query-hooks/useSprints";
 import { IssueAssigneeSelect } from "../../issue-select-assignee";
-import { useIssues } from "@/hooks/query-hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { useState } from "react";
 const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,

@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { useIssues } from "@/hooks/query-hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/use-issues";
 import clsx from "clsx";
 import { Button } from "../ui/button";
 import { MdCheck, MdClose } from "react-icons/md";

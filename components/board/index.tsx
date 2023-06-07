@@ -5,7 +5,7 @@ import { type Sprint, type IssueStatus, type Project } from "@prisma/client";
 import "@/styles/split.css";
 import { BoardHeader } from "./header";
 import { DragDropContext, type DropResult } from "react-beautiful-dnd";
-import { useIssues } from "@/hooks/query-hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { type IssueType } from "@/utils/types";
 
 import { isNullish } from "@/utils/helpers";

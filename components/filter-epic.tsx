@@ -6,7 +6,7 @@ import {
   DropdownTrigger,
 } from "@/components/ui/dropdown-menu";
 import { FaChevronDown } from "react-icons/fa";
-import { useIssues } from "@/hooks/query-hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { isEpic } from "@/utils/helpers";
 import { TooltipWrapper } from "@/components/ui/tooltip";
 import { type IssueType } from "@/utils/types";

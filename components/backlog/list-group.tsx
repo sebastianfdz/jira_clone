@@ -1,5 +1,5 @@
 "use client";
-import { useIssues } from "@/hooks/query-hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/use-issues";
 import clsx from "clsx";
 import { BacklogList } from "./list-backlog";
 import { SprintList } from "./list-sprint";

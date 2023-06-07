@@ -1,5 +1,5 @@
 import { type ReactNode } from "react";
-import { useIssues } from "@/hooks/query-hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { type IssueType } from "@/utils/types";
 import { type MenuOptionType } from "@/utils/types";
 import clsx from "clsx";

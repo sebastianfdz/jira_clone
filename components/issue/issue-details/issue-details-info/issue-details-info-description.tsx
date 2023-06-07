@@ -3,7 +3,7 @@ import { type SerializedEditorState } from "lexical";
 import { EditorPreview } from "@/components/text-editor/preview";
 import { Fragment, useState } from "react";
 import { type IssueType } from "@/utils/types";
-import { useIssues } from "@/hooks/query-hooks/useIssues";
+import { useIssues } from "@/hooks/query-hooks/use-issues";
 const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { updateIssue } = useIssues();
