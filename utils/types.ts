@@ -11,4 +11,4 @@ export type MenuOptionType = {
   id: string;
 };
 
-export type IssueType = GetIssuesResponse["issues"][0];
+export type IssueType = GetIssuesResponse["issues"][number];
