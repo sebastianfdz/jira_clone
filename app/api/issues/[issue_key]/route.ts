@@ -4,7 +4,11 @@ import { IssueStatus, type Issue, IssueType } from "@prisma/client";
 import { z } from "zod";
 import { type GetIssuesResponse } from "../route";
 import { clerkClient } from "@clerk/nextjs";
-import { filterUserForClient, isNullish } from "@/utils/helpers";
+import {
+  calculateInsertPosition,
+  filterUserForClient,
+  isNullish,
+} from "@/utils/helpers";
 import {
   getIssuesInActiveSprint,
   handleBoardPositionChange,
@@ -100,14 +104,22 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
     return new Response("Issue not found", { status: 404 });
   }
 
-  if (sprintPosition !== undefined && sprintId !== undefined) {
+  if (!isNullish(sprintPosition) && sprintId !== undefined) {
     // HANDLE DND ACTION ON BACKLOG
+
+    const sprint = await prisma.sprint.findUnique({
+      where: {
+        id: sprintId ?? undefined,
+      },
+    });
+
     const updatedIssues = await handleSprintPositionChange({
       sourceSprint: currentIssue.sprintId,
       destinationSprint: sprintId,
       sourcePosition: currentIssue.sprintPosition,
       destinationPosition: sprintPosition,
       issue: currentIssue,
+      moveInBoardIsNeeded: sprint?.status === "ACTIVE",
     });
 
     return NextResponse.json({
@@ -157,11 +169,13 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
         activeSprints,
       });
 
+      const positionToInsert = calculateInsertPosition(statusColumnIssueList);
+
       const updatedIssues = await handleBoardPositionChange({
         sourceStatus: currentIssue.status,
         destinationStatus: status,
-        sourcePosition: statusColumnIssueList.length,
-        destinationPosition: statusColumnIssueList.length,
+        sourcePosition: positionToInsert,
+        destinationPosition: positionToInsert,
         issue: currentIssue,
       });
 
@@ -176,18 +190,17 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
       key: issue_key,
     },
     data: {
-      name: name ?? currentIssue.name,
-      description: description ?? currentIssue.description,
-      status: status ?? currentIssue.status,
-      type: type ?? currentIssue.type,
-      sprintPosition: sprintPosition ?? currentIssue.sprintPosition,
-      assigneeId:
-        assigneeId === undefined ? currentIssue.assigneeId : assigneeId,
-      reporterId: reporterId ?? currentIssue.reporterId,
-      isDeleted: isDeleted ?? currentIssue.isDeleted,
-      sprintId: sprintId === undefined ? currentIssue.sprintId : sprintId,
-      parentKey: parentKey === undefined ? currentIssue.parentKey : parentKey,
-      sprintColor: sprintColor ?? currentIssue.sprintColor,
+      name: name ?? undefined,
+      description: description ?? undefined,
+      status: status ?? undefined,
+      type: type ?? undefined,
+      sprintPosition: sprintPosition ?? undefined,
+      assigneeId: assigneeId === undefined ? undefined : assigneeId,
+      reporterId: reporterId ?? undefined,
+      isDeleted: isDeleted ?? undefined,
+      sprintId: sprintId === undefined ? undefined : sprintId,
+      parentKey: parentKey === undefined ? undefined : parentKey,
+      sprintColor: sprintColor ?? undefined,
       boardPosition: boardPosition ?? null,
     },
   });
@@ -216,6 +229,8 @@ export async function DELETE(req: NextRequest, { params }: ParamsType) {
     data: {
       isDeleted: true,
       boardPosition: null,
+      sprintPosition: -1,
+      sprintId: "DELETED-SPRINT-ID",
     },
   });
 
