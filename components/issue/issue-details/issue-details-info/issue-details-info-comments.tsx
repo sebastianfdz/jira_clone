@@ -5,7 +5,7 @@ import {
   Editor,
   type EditorContentType,
 } from "@/components/text-editor/editor";
-import { useKeydownListener } from "@/hooks/useKeydownListener";
+import { useKeydownListener } from "@/hooks/use-keydown-listener";
 import { Fragment, useRef, useState } from "react";
 import { useIsInViewport } from "@/hooks/use-is-in-viewport";
 import { useUser } from "@clerk/clerk-react";

@@ -14,7 +14,7 @@ import { IssueDetailsInfoActions } from "./issue-details-info-actions";
 import { ChildIssueList } from "./issue-details-info-child-issues";
 import { hasChildren, isEpic } from "@/utils/helpers";
 import { ColorPicker } from "@/components/color-picker";
-import { useContainerWidth } from "@/hooks/useContainerWidth";
+import { useContainerWidth } from "@/hooks/use-container-width";
 import Split from "react-split";
 import "@/styles/split.css";
 

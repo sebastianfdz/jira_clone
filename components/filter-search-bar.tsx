@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useFocus } from "@/hooks/useFocus";
+import { useFocus } from "@/hooks/use-focus";
 import { MdSearch } from "react-icons/md";
 import debounce from "lodash.debounce";
 import { BsX } from "react-icons/bs";
