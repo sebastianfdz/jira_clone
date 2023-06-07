@@ -1,10 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { type User, prisma } from "@/server/db";
 import { IssueType, type Issue, IssueStatus } from "@prisma/client";
-import { type IssueType as IssueT } from "@/utils/types";
 import { z } from "zod";
 import { clerkClient } from "@clerk/nextjs/server";
-import { filterUserForClient, generateIssuesForClient } from "@/utils/helpers";
+import {
+  calculateInsertPosition,
+  filterUserForClient,
+  generateIssuesForClient,
+} from "@/utils/helpers";
 
 const postIssuesBodyValidator = z.object({
   name: z.string(),
@@ -29,13 +32,22 @@ const patchIssuesBodyValidator = z.object({
 
 export type PatchIssuesBody = z.infer<typeof patchIssuesBodyValidator>;
 
-export type GetIssuesResponse = {
-  issues: (Issue & {
+type IssueT = Issue & {
+  children: IssueT[];
+  sprintIsActive: boolean;
+  parent: Issue & {
+    sprintIsActive: boolean;
     children: IssueT[];
-    parent: Issue;
+    parent: null;
     assignee: User | null;
     reporter: User | null;
-  })[];
+  };
+  assignee: User | null;
+  reporter: User | null;
+};
+
+export type GetIssuesResponse = {
+  issues: IssueT[];
 };
 
 export async function GET() {
@@ -49,6 +61,12 @@ export async function GET() {
     return NextResponse.json({ issues: [] });
   }
 
+  const activeSprints = await prisma.sprint.findMany({
+    where: {
+      status: "ACTIVE",
+    },
+  });
+
   const userIds = activeIssues
     .flatMap((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .filter(Boolean);
@@ -60,7 +78,11 @@ export async function GET() {
     })
   ).map(filterUserForClient);
 
-  const issuesForClient = generateIssuesForClient(activeIssues, users);
+  const issuesForClient = generateIssuesForClient(
+    activeIssues,
+    users,
+    activeSprints.map((sprint) => sprint.id)
+  );
   // const issuesForClient = await getIssuesFromServer();
   return NextResponse.json({ issues: issuesForClient });
 }
@@ -87,8 +109,36 @@ export async function POST(req: NextRequest) {
       isDeleted: false,
     },
   });
+
+  const sprint = await prisma.sprint.findUnique({
+    where: {
+      id: sprintId ?? undefined,
+    },
+  });
+
+  let boardPosition = null;
+
+  if (sprint && sprint.status === "ACTIVE") {
+    const issuesInColum = currentSprintIssues.filter(
+      (issue) => issue.status === "TODO"
+    );
+    boardPosition = calculateInsertPosition(issuesInColum);
+  }
+
   const k = issues.length + 1;
-  const positionToInsert = currentSprintIssues.length + 1;
+
+  console.log(
+    "currentSprintIssues",
+    currentSprintIssues
+      .sort((a, b) => a.sprintPosition - b.sprintPosition)
+      .map((issue) => ({
+        key: issue.key,
+        name: issue.name,
+        sprintPosition: issue.sprintPosition,
+      }))
+  );
+
+  const positionToInsert = calculateInsertPosition(currentSprintIssues);
 
   const issue = await prisma.issue.create({
     data: {
@@ -99,6 +149,7 @@ export async function POST(req: NextRequest) {
       sprintId,
       sprintPosition: positionToInsert,
       parentKey,
+      boardPosition,
     },
   });
   // return NextResponse.json<PostIssueResponse>({ issue });
@@ -142,13 +193,13 @@ export async function PATCH(req: NextRequest) {
           id: issue.id,
         },
         data: {
-          type: type ?? issue.type,
-          status: status ?? issue.status,
-          assigneeId: assigneeId ?? issue.assigneeId,
-          reporterId: reporterId ?? issue.reporterId,
-          isDeleted: isDeleted ?? issue.isDeleted,
-          sprintId: sprintId === undefined ? issue.sprintId : sprintId,
-          parentKey: parentKey ?? issue.parentKey,
+          type: type ?? undefined,
+          status: status ?? undefined,
+          assigneeId: assigneeId ?? undefined,
+          reporterId: reporterId ?? undefined,
+          isDeleted: isDeleted ?? undefined,
+          sprintId: sprintId === undefined ? undefined : sprintId,
+          parentKey: parentKey ?? undefined,
         },
       });
     })
