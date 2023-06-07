@@ -1,10 +1,12 @@
 import { prisma } from "@/server/db";
 import {
+  calculateInsertPosition,
   insertIssueIntoBacklogList,
   insertIssueIntoBoardList,
   moveIssueWithinBacklogList,
   moveIssueWithinBoardList,
 } from "@/utils/helpers";
+import { type IssueType } from "@/utils/types";
 import { type IssueStatus, type Issue, type Sprint } from "@prisma/client";
 
 export async function handleSprintPositionChange(payload: {
@@ -13,6 +15,7 @@ export async function handleSprintPositionChange(payload: {
   sourcePosition: number;
   destinationPosition: number;
   issue: Issue;
+  moveInBoardIsNeeded: boolean;
 }) {
   const {
     sourceSprint,
@@ -20,15 +23,16 @@ export async function handleSprintPositionChange(payload: {
     sourcePosition,
     destinationPosition,
     issue,
+    moveInBoardIsNeeded,
   } = payload;
 
   let newIssues: Issue[] = [];
   if (sourceSprint === destinationSprint) {
     // MOVE WITHIN LIST
-    const issueList = await prisma.issue.findMany({
+    const issueList = (await prisma.issue.findMany({
       where: { sprintId: sourceSprint },
       orderBy: { sprintPosition: "asc" },
-    });
+    })) as IssueType[];
 
     newIssues = moveIssueWithinBacklogList({
       issueList,
@@ -37,14 +41,20 @@ export async function handleSprintPositionChange(payload: {
     });
   } else {
     // MOVE BETWEEN LISTS
-    const destinationList = await prisma.issue.findMany({
+    const destinationList = (await prisma.issue.findMany({
       where: { sprintId: destinationSprint },
       orderBy: { sprintPosition: "asc" },
-    });
-    const updatedIssue = await prisma.issue.update({
+    })) as IssueType[];
+
+    const updatedIssue = (await prisma.issue.update({
       where: { key: issue.key },
-      data: { sprintId: destinationSprint },
-    });
+      data: {
+        sprintId: destinationSprint,
+        boardPosition: moveInBoardIsNeeded
+          ? calculateInsertPosition(destinationList)
+          : undefined,
+      },
+    })) as IssueType;
 
     newIssues = insertIssueIntoBacklogList({
       issueList: destinationList,
@@ -111,10 +121,10 @@ export async function handleBoardPositionChange(payload: {
   });
   if (sourceStatus === destinationStatus) {
     // MOVE WITHIN LIST
-    const issueList = await getIssuesInActiveSprint({
+    const issueList = (await getIssuesInActiveSprint({
       status: sourceStatus,
       activeSprints,
-    });
+    })) as IssueType[];
 
     newIssues = moveIssueWithinBoardList({
       issueList,
@@ -123,15 +133,15 @@ export async function handleBoardPositionChange(payload: {
     });
   } else {
     // MOVE BETWEEN LISTS
-    const destinationList = await getIssuesInActiveSprint({
+    const destinationList = (await getIssuesInActiveSprint({
       status: destinationStatus,
       activeSprints,
-    });
+    })) as IssueType[];
 
-    const updatedIssue = await prisma.issue.update({
+    const updatedIssue = (await prisma.issue.update({
       where: { key: issue.key },
       data: { status: destinationStatus },
-    });
+    })) as IssueType;
 
     newIssues = insertIssueIntoBoardList({
       issueList: destinationList,
