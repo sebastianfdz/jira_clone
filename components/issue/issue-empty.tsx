@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { IssueSelectType } from "../issue/issue-select-type";
+import { IssueSelectType } from "./issue-select-type";
 import { Button } from "../ui/button";
 import { MdCheck, MdClose } from "react-icons/md";
 import { Spinner } from "../ui/spinner";

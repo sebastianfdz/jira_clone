@@ -3,7 +3,7 @@ import { Fragment, useEffect, useState } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
 import { IssueList } from "./issue-list";
-import { IssueStatusCount } from "./issue-status-count";
+import { IssueStatusCount } from "../issue/issue-status-count";
 import { type IssueType } from "@/utils/types";
 import {
   Accordion,

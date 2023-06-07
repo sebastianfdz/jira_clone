@@ -4,7 +4,7 @@ import { FaChevronRight } from "react-icons/fa";
 import { BsThreeDots } from "react-icons/bs";
 import { Button } from "@/components/ui/button";
 import { IssueList } from "./issue-list";
-import { IssueStatusCount } from "./issue-status-count";
+import { IssueStatusCount } from "../issue/issue-status-count";
 import { type Sprint } from "@prisma/client";
 import { type IssueType } from "@/utils/types";
 import { SprintDropdownMenu } from "./sprint-menu";

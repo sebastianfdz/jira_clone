@@ -6,7 +6,7 @@ import { AccordionContent } from "../ui/accordion";
 import { Issue } from "./issue";
 import { Button } from "../ui/button";
 import { AiOutlinePlus } from "react-icons/ai";
-import { EmtpyIssue } from "./issue-empty";
+import { EmtpyIssue } from "../issue/issue-empty";
 import { type IssueType } from "@/utils/types";
 import clsx from "clsx";
 import { useUser } from "@clerk/clerk-react";

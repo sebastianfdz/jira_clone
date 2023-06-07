@@ -14,7 +14,7 @@ import { getIssueCountByStatus } from "@/utils/helpers";
 import { TooltipWrapper } from "@/components/ui/tooltip";
 
 import { AiOutlinePlus } from "react-icons/ai";
-import { EmtpyIssue } from "@/components/backlog/issue-empty";
+import { EmtpyIssue } from "@/components/issue/issue-empty";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 
 const ChildIssueList: React.FC<{
