@@ -4,8 +4,6 @@ import type { User as ClerkUser } from "@clerk/nextjs/dist/api";
 import { type User } from "@/server/db";
 import { type Issue } from "@prisma/client";
 
-type IssueT = IssueType | IssueType["parent"];
-
 export function getBaseUrl() {
   if (typeof window !== "undefined") return ""; // browser should use relative url
   if (process.env.VERCEL_URL) return `https://${process.env.VERCEL_URL}`; // SSR should use vercel url
@@ -19,7 +17,7 @@ export function getHeaders() {
 }
 
 export function moveIssueWithinBoardList(payload: {
-  issueList: IssueT[];
+  issueList: IssueType[];
   oldIndex: number;
   newIndex: number;
 }) {
@@ -36,7 +34,7 @@ export function moveIssueWithinBoardList(payload: {
   issueListClone.splice(newIndex, 0, removedItem);
 
   return issueListClone.map((issue, index) => {
-    return <IssueT>{
+    return <IssueType>{
       ...issue,
       boardPosition: index,
     };
@@ -44,7 +42,7 @@ export function moveIssueWithinBoardList(payload: {
 }
 
 export function moveIssueWithinBacklogList(payload: {
-  issueList: IssueT[];
+  issueList: IssueType[];
   oldIndex: number;
   newIndex: number;
 }) {
@@ -61,7 +59,7 @@ export function moveIssueWithinBacklogList(payload: {
   issueListClone.splice(newIndex, 0, removedItem);
 
   return issueListClone.map((issue, index) => {
-    return <IssueT>{
+    return <IssueType>{
       ...issue,
       sprintPosition: index,
     };
@@ -69,8 +67,8 @@ export function moveIssueWithinBacklogList(payload: {
 }
 
 export function insertIssueIntoBacklogList(payload: {
-  issueList: IssueT[];
-  issue: IssueT;
+  issueList: IssueType[];
+  issue: IssueType;
   index: number;
 }) {
   const { issueList, issue, index } = payload;
@@ -79,7 +77,7 @@ export function insertIssueIntoBacklogList(payload: {
   );
   issueListClone.splice(index, 0, issue);
   return issueListClone.map((issue, index) => {
-    return <IssueT>{
+    return <IssueType>{
       ...issue,
       sprintPosition: index,
     };
@@ -87,8 +85,8 @@ export function insertIssueIntoBacklogList(payload: {
 }
 
 export function insertIssueIntoBoardList(payload: {
-  issueList: IssueT[];
-  issue: IssueT;
+  issueList: IssueType[];
+  issue: IssueType;
   index: number;
 }) {
   const { issueList, issue, index } = payload;
@@ -99,7 +97,7 @@ export function insertIssueIntoBoardList(payload: {
   });
   issueListClone.splice(index, 0, issue);
   return issueListClone.map((issue, index) => {
-    return <IssueT>{
+    return <IssueType>{
       ...issue,
       boardPosition: index,
     };
@@ -136,12 +134,12 @@ export function isEpic(issue: IssueType | IssueType["parent"] | null) {
   return issue.type == "EPIC";
 }
 
-export function isSubtask(issue: IssueType | IssueType["parent"] | null) {
+export function isSubtask(issue: IssueType | null) {
   if (!issue) return false;
   return issue.type == "SUBTASK";
 }
 
-export function hasChildren(issue: IssueType | null) {
+export function hasChildren(issue: IssueType | IssueType["parent"] | null) {
   if (!issue) return false;
   return issue.children.length > 0;
 }
@@ -193,7 +191,11 @@ export function hexToRgba(hex: string | null, opacity?: number) {
   return `rgba(${r}, ${g}, ${b}, ${opacity ?? 1})`;
 }
 
-export function generateIssuesForClient(issues: Issue[], users: User[]) {
+export function generateIssuesForClient(
+  issues: Issue[],
+  users: User[],
+  activeSprintIds?: string[]
+) {
   // Construct map for faster lookup
   const userMap = new Map(users.map((user) => [user.id, user]));
   const parentMap = new Map(issues.map((issue) => [issue.key, issue]));
@@ -203,8 +205,13 @@ export function generateIssuesForClient(issues: Issue[], users: User[]) {
     const assignee = userMap.get(issue.assigneeId ?? "") ?? null;
     const reporter = userMap.get(issue.reporterId) ?? null;
     const children = issues.filter((i) => i.parentKey === issue.key);
-    return { ...issue, parent, assignee, reporter, children };
+    const sprintIsActive = activeSprintIds?.includes(issue.sprintId ?? "");
+    return { ...issue, sprintIsActive, parent, assignee, reporter, children };
   });
 
   return issuesForClient as IssueType[];
+}
+
+export function calculateInsertPosition(issues: Issue[]) {
+  return Math.max(...issues.map((issue) => issue.sprintPosition)) + 1;
 }
