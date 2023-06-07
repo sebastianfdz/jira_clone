@@ -18,8 +18,12 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
   }
 
   return (
-    <div className={clsx("w-[300px] rounded-md bg-gray-100 px-1.5 pb-1.5")}>
-      <h2 className="sticky top-0 -mx-1.5 -mt-1.5 h-max rounded-t-md bg-gray-100 px-2 py-3 text-xs text-gray-500">
+    <div
+      className={clsx(
+        "mb-5 h-max min-h-full w-[300px] rounded-md bg-gray-100 px-1.5 pb-1.5"
+      )}
+    >
+      <h2 className="sticky top-0 -mx-1.5 -mt-1.5 mb-1.5 rounded-t-md bg-gray-100 px-2 py-3 text-xs text-gray-500">
         {statusMap[status]}{" "}
         {issues.filter((issue) => issue.status == status).length}
         {issues.filter((issue) => issue.status == status).length > 1
