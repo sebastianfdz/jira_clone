@@ -10,6 +10,7 @@ import clsx from "clsx";
 import { BacklogHeader } from "./header";
 import { type IssueType } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
+import { api } from "@/utils/api";
 
 const Backlog: React.FC<{
   project: Project;
@@ -17,9 +18,9 @@ const Backlog: React.FC<{
   sprints: Sprint[];
 }> = ({ project, issues, sprints }) => {
   // Set initial data for queries
-  useQuery(["issues"], { initialData: issues });
-  useQuery(["sprints"], { initialData: sprints });
-  useQuery(["project"], { initialData: project });
+  useQuery(["issues"], api.issues.getIssues, { initialData: issues });
+  useQuery(["sprints"], api.sprints.getSprints, { initialData: sprints });
+  useQuery(["project"], api.project.getProject, { initialData: project });
   const { issueId, setIssueId } = useSelectedIssueContext();
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 

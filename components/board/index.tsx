@@ -12,6 +12,7 @@ import { isNullish } from "@/utils/helpers";
 import { IssueList } from "./issue-list";
 import { IssueDetailsModal } from "../modals/board-issue-details";
 import { useQuery } from "@tanstack/react-query";
+import { api } from "@/utils/api";
 
 const STATUSES: IssueStatus[] = ["TODO", "IN_PROGRESS", "DONE"];
 
@@ -23,9 +24,13 @@ const Board: React.FC<{
   // const { issueId, setIssueId } = useSelectedIssueContext();
   const renderContainerRef = useRef<HTMLDivElement>(null);
   // Set initial data for queries
-  const issuesQuery = useQuery(["issues"], { initialData: issues });
-  const sprintsQuery = useQuery(["sprints"], { initialData: sprints });
-  useQuery(["project"], { initialData: project });
+  const issuesQuery = useQuery(["issues"], api.issues.getIssues, {
+    initialData: issues,
+  });
+  const sprintsQuery = useQuery(["sprints"], api.sprints.getSprints, {
+    initialData: sprints,
+  });
+  useQuery(["project"], api.project.getProject, { initialData: project });
 
   function filterIssuesBySprintAndStatus({
     issue,
