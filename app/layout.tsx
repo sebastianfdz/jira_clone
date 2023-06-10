@@ -2,6 +2,8 @@ import { ClerkProvider } from "@clerk/nextjs/app-beta";
 import { type Metadata } from "next";
 import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
+import Toaster from "@/components/toast";
+import QueryProvider from "@/utils/provider";
 
 export const metadata: Metadata = {
   title: {
@@ -39,9 +41,22 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <ClerkProvider>
-        <body>{children}</body>
-      </ClerkProvider>
+      <head />
+      <body>
+        <ClerkProvider>
+          <QueryProvider>
+            <Toaster
+              position="bottom-left"
+              reverseOrder={false}
+              containerStyle={{
+                height: "92vh",
+                marginLeft: "3vw",
+              }}
+            />
+            {children}
+          </QueryProvider>
+        </ClerkProvider>
+      </body>
     </html>
   );
 };
