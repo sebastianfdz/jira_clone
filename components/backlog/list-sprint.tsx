@@ -54,6 +54,7 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const queryClient = useQueryClient();
+
   const { deleteSprint } = useSprints();
   function handleDeleteSprint() {
     deleteSprint(
