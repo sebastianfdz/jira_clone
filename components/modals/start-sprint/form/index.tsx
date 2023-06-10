@@ -1,3 +1,4 @@
+"use client";
 import { type Sprint } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -43,6 +44,7 @@ const StartSprintForm: React.FC<{
   const { updateSprint, isUpdating } = useSprints();
 
   const queryClient = useQueryClient();
+
   function handleStartSprint(data: FormValues) {
     updateSprint(
       {
