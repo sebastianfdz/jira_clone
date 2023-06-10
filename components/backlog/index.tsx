@@ -1,6 +1,5 @@
 "use client";
 import React, { Fragment, useLayoutEffect } from "react";
-import { type Sprint, type Project } from "@prisma/client";
 import Split from "react-split";
 import { ListGroup } from "./list-group";
 import { IssueDetails } from "../issue/issue-details";
@@ -8,19 +7,10 @@ import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
 import clsx from "clsx";
 import { BacklogHeader } from "./header";
-import { type IssueType } from "@/utils/types";
-import { useQuery } from "@tanstack/react-query";
-import { api } from "@/utils/api";
+import { useProject } from "@/hooks/query-hooks/use-project";
 
-const Backlog: React.FC<{
-  project: Project;
-  issues: IssueType[];
-  sprints: Sprint[];
-}> = ({ project, issues, sprints }) => {
-  // Set initial data for queries
-  useQuery(["issues"], api.issues.getIssues, { initialData: issues });
-  useQuery(["sprints"], api.sprints.getSprints, { initialData: sprints });
-  useQuery(["project"], api.project.getProject, { initialData: project });
+const Backlog: React.FC = () => {
+  const { project } = useProject();
   const { issueId, setIssueId } = useSelectedIssueContext();
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -29,6 +19,8 @@ const Backlog: React.FC<{
     const calculatedHeight = renderContainerRef.current.offsetTop;
     renderContainerRef.current.style.height = `calc(100vh - ${calculatedHeight}px)`;
   }, []);
+
+  if (!project) return null;
 
   return (
     <Fragment>
