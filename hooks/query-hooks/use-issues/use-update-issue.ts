@@ -1,6 +1,8 @@
+"use client";
 import { type PatchIssueBody } from "@/app/api/issues/[issue_key]/route";
 import { toast } from "@/components/toast";
 import { api } from "@/utils/api";
+//
 import {
   insertIssueIntoBacklogList,
   insertIssueIntoBoardList,
@@ -34,7 +36,7 @@ const useUpdateIssue = () => {
           !isNullish(newIssue.boardPosition) &&
           !isNullish(previousIssues)
         ) {
-          handleOptimisticBoardDragAndDrop({ previousIssues, newIssue });
+          handleOptimisticBoardDragAndDrop({ newIssue });
         } else {
           // Otherwise, we are generically updating the issue
           queryClient.setQueryData(["issues"], (old?: IssueType[]) => {
@@ -134,31 +136,36 @@ const useUpdateIssue = () => {
   }
 
   function handleOptimisticBoardDragAndDrop({
-    previousIssues,
     newIssue,
   }: {
-    previousIssues: IssueType[];
     newIssue: { issue_key: string } & PatchIssueBody;
   }) {
-    const { issue_key, boardPosition, status } = newIssue;
-    const oldIssue = previousIssues.find((issue) => issue.key === issue_key);
-
-    console.log("oldIssue", oldIssue);
-    console.log("newIssue", newIssue);
-    console.log("boardPosition", boardPosition);
-    console.log("previousIssues", previousIssues);
-    if (
-      isNullish(boardPosition) ||
-      isNullish(oldIssue) ||
-      (status === undefined && newIssue.status === undefined)
-    ) {
-      return;
-    }
+    // if (
+    //   isNullish(boardPosition) ||
+    //   isNullish(oldIssue) ||
+    //   (status === undefined && newIssue.status === undefined)
+    // ) {
+    //   return previousIssues;
+    // }
 
     // const sprints = queryClient.getQueryData<Sprint[]>(["sprints"]);
 
     queryClient.setQueryData(["issues"], (old?: IssueType[]) => {
-      if (isNullish(old) || isNullish(oldIssue.boardPosition)) return;
+      console.log("old", old);
+      const { issue_key, boardPosition, status } = newIssue;
+
+      if (isNullish(old) || isNullish(boardPosition)) {
+        return;
+      }
+      const oldIssue = old.find((issue) => issue.key === issue_key);
+      if (isNullish(oldIssue) || isNullish(oldIssue.boardPosition)) {
+        return;
+      }
+
+      console.log("oldIssue", oldIssue);
+      console.log("newIssue", newIssue);
+      console.log("boardPosition", boardPosition);
+      // console.log("previousIssues", previousIssues);
       if (status === oldIssue.status) {
         // MOVE WITHIN COLUMN
 
@@ -167,7 +174,7 @@ const useUpdateIssue = () => {
           // issueSprintIsActive(issue, sprints)
         );
         const unaffectedIssues = old.filter(
-          (issue) => issue.status !== oldIssue.status
+          (issue) => issue.status !== oldIssue.status || !issue.sprintIsActive
         );
 
         const newAffectedIssues = moveIssueWithinBoardList({

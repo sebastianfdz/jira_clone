@@ -1,3 +1,4 @@
+"use client";
 import { toast } from "@/components/toast";
 import { api } from "@/utils/api";
 import { type IssueType } from "@/utils/types";

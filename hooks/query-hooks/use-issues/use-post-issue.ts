@@ -1,3 +1,4 @@
+"use client";
 import { toast } from "@/components/toast";
 import { api } from "@/utils/api";
 
@@ -5,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const usePostIssue = () => {
   const queryClient = useQueryClient();
+
   const { mutate: createIssue, isLoading: isCreating } = useMutation(
     api.issues.postIssue,
     {

@@ -1,3 +1,4 @@
+"use client";
 import { toast } from "@/components/toast";
 import { api } from "@/utils/api";
 import { type Sprint } from "@prisma/client";
@@ -5,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useSprints = () => {
   const queryClient = useQueryClient();
+
   // GET
   const { data: sprints, isLoading: sprintsLoading } = useQuery(
     ["sprints"],

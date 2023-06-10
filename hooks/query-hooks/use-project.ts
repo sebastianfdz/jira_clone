@@ -1,3 +1,4 @@
+"use client";
 import { api } from "@/utils/api";
 import { useQuery } from "@tanstack/react-query";
 

@@ -1,3 +1,4 @@
+"use client";
 import { toast } from "@/components/toast";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { api } from "@/utils/api";
@@ -8,6 +9,7 @@ const useDeleteIssue = () => {
   const { issueId, setIssueId } = useSelectedIssueContext();
 
   const queryClient = useQueryClient();
+
   const { mutate: deleteIssue, isLoading: isDeleting } = useMutation(
     api.issues.deleteIssue,
     {

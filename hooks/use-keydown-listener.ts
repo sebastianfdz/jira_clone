@@ -1,3 +1,4 @@
+"use client";
 import { useRef, useEffect, type RefObject } from "react";
 
 export const useKeydownListener = (

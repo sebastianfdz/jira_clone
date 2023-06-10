@@ -1,3 +1,4 @@
+"use client";
 import { api } from "@/utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
@@ -7,6 +8,7 @@ import { toast } from "@/components/toast";
 export const useIssueDetails = () => {
   const { issueId } = useSelectedIssueContext();
   const queryClient = useQueryClient();
+
   // GET
   const { data: comments, isLoading: commentsLoading } = useQuery(
     ["issues", "comments", issueId],
