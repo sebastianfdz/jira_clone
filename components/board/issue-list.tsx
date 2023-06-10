@@ -30,9 +30,14 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
           ? " ISSUES"
           : " ISSUE"}
       </h2>
+
       <Droppable droppableId={status}>
         {({ droppableProps, innerRef, placeholder }) => (
-          <div {...droppableProps} ref={innerRef} className="h-full ">
+          <div
+            {...droppableProps}
+            ref={innerRef}
+            className="h-max min-h-[550px]"
+          >
             {issues
               .sort((a, b) => {
                 if (
