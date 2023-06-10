@@ -1,10 +1,13 @@
 import { Board } from "@/components/board";
-import { notFound } from "next/navigation";
+// import { notFound } from "next/navigation";
 import { type Metadata } from "next";
 import { prisma } from "@/server/db";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient, generateIssuesForClient } from "@/utils/helpers";
 import { SprintStatus } from "@prisma/client";
+import { getQueryClient } from "@/utils/get-query-client";
+import { Hydrate } from "@/utils/hydrate";
+import { dehydrate } from "@tanstack/query-core";
 
 export const metadata: Metadata = {
   title: "Board",
@@ -18,6 +21,12 @@ async function getIssuesFromServer() {
     return [];
   }
 
+  const activeSprints = await prisma.sprint.findMany({
+    where: {
+      status: "ACTIVE",
+    },
+  });
+
   const userIds = activeIssues
     .flatMap((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .filter(Boolean);
@@ -29,7 +38,11 @@ async function getIssuesFromServer() {
     })
   ).map(filterUserForClient);
 
-  const issues = generateIssuesForClient(activeIssues, users);
+  const issues = generateIssuesForClient(
+    activeIssues,
+    users,
+    activeSprints.map((sprint) => sprint.id)
+  );
   return issues;
 }
 
@@ -53,17 +66,33 @@ async function getSprintsFromServer() {
 }
 
 const BoardPage = async () => {
-  const [project, issues, sprints] = await Promise.all([
-    getProjectFromServer(),
-    getIssuesFromServer(),
-    getSprintsFromServer(),
+  // const [project, issues, sprints] = await Promise.all([
+  //   getProjectFromServer(),
+  //   getIssuesFromServer(),
+  //   getSprintsFromServer(),
+  // ]);
+
+  const queryClient = getQueryClient();
+
+  await Promise.all([
+    await queryClient.prefetchQuery(["issues"], getIssuesFromServer),
+    await queryClient.prefetchQuery(["sprints"], getSprintsFromServer),
+    await queryClient.prefetchQuery(["project"], getProjectFromServer),
   ]);
 
-  if (!project || !issues || !sprints) {
-    return notFound();
-  }
+  // if (!project || !issues || !sprints) {
+  //   return notFound();
+  // }
 
-  return <Board project={project} issues={issues} sprints={sprints} />;
+  const dehydratedState = dehydrate(queryClient);
+
+  return (
+    <Hydrate state={dehydratedState}>
+      <Board
+      // project={project} issues={issues} sprints={sprints}
+      />
+    </Hydrate>
+  );
 };
 
 export default BoardPage;
