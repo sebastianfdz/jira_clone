@@ -22,7 +22,9 @@ export function moveIssueWithinBoardList(payload: {
   newIndex: number;
 }) {
   const { issueList, oldIndex, newIndex } = payload;
+  console.log("moveIssueWithinBoardList", issueList);
   const issueListClone = [...issueList].sort((a, b) => {
+    if (a.boardPosition == b.boardPosition) return 0;
     if (a.boardPosition == null) return 1;
     if (b.boardPosition == null) return -1;
     return a.boardPosition - b.boardPosition;
@@ -91,6 +93,7 @@ export function insertIssueIntoBoardList(payload: {
 }) {
   const { issueList, issue, index } = payload;
   const issueListClone = [...issueList].sort((a, b) => {
+    if (a.boardPosition == b.boardPosition) return 0;
     if (a.boardPosition == null) return 1;
     if (b.boardPosition == null) return -1;
     return a.boardPosition - b.boardPosition;
