@@ -1,10 +1,13 @@
 import { Backlog } from "@/components/backlog";
-import { notFound } from "next/navigation";
+// import { notFound } from "next/navigation";
 import { type Metadata } from "next";
 import { prisma } from "@/server/db";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient, generateIssuesForClient } from "@/utils/helpers";
 import { SprintStatus } from "@prisma/client";
+import { getQueryClient } from "@/utils/get-query-client";
+import { dehydrate } from "@tanstack/query-core";
+import { Hydrate } from "@/utils/hydrate";
 
 export const metadata: Metadata = {
   title: "Backlog",
@@ -53,17 +56,33 @@ async function getSprintsFromServer() {
 }
 
 const BacklogPage = async () => {
-  const [project, issues, sprints] = await Promise.all([
-    getProjectFromServer(),
-    getIssuesFromServer(),
-    getSprintsFromServer(),
+  const queryClient = getQueryClient();
+
+  await Promise.all([
+    await queryClient.prefetchQuery(["issues"], getIssuesFromServer),
+    await queryClient.prefetchQuery(["sprints"], getSprintsFromServer),
+    await queryClient.prefetchQuery(["project"], getProjectFromServer),
   ]);
 
-  if (!project || !issues || !sprints) {
-    return notFound();
-  }
+  // const [project, issues, sprints] = await Promise.all([
+  //   getProjectFromServer(),
+  //   getIssuesFromServer(),
+  //   getSprintsFromServer(),
+  // ]);
 
-  return <Backlog project={project} issues={issues} sprints={sprints} />;
+  const dehydratedState = dehydrate(queryClient);
+
+  // if (!project || !issues || !sprints) {
+  //   return notFound();
+  // }
+
+  return (
+    <Hydrate state={dehydratedState}>
+      <Backlog
+      //  project={project} issues={issues} sprints={sprints}
+      />
+    </Hydrate>
+  );
 };
 
 export default BacklogPage;
