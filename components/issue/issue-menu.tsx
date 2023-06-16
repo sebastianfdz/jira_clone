@@ -26,10 +26,11 @@ type MenuOptionsType = {
 
 const menuOptions: MenuOptionsType = {
   actions: [
-    { id: "add-flag", label: "Add Flag" },
-    { id: "change-parent", label: "Change Parent" },
-    { id: "copy-issue-link", label: "Copy Issue Link" },
-    { id: "split-issue", label: "Split Issue" },
+    // ONLY DELETE IS IMPLEMENTED
+    // { id: "add-flag", label: "Add Flag" },
+    // { id: "change-parent", label: "Change Parent" },
+    // { id: "copy-issue-link", label: "Copy Issue Link" },
+    // { id: "split-issue", label: "Split Issue" },
     { id: "delete", label: "Delete" },
   ],
 };
@@ -38,15 +39,22 @@ const IssueDropdownMenu: React.FC<{
   children: ReactNode;
   issue: IssueType;
 }> = ({ children, issue }) => {
-  const { deleteIssue } = useIssues();
+  const { deleteIssue, updateIssue } = useIssues();
 
   const handleIssueAction = (
     id: MenuOptionType["id"],
-    e: React.SyntheticEvent
+    e: React.SyntheticEvent,
+    sprintId?: string
   ) => {
     e.stopPropagation();
     if (id == "delete") {
       deleteIssue({ issue_key: issue.key });
+    }
+    if (id == "move-to") {
+      updateIssue({
+        issue_key: issue.key,
+        sprintId,
+      });
     }
   };
   return (
@@ -57,7 +65,7 @@ const IssueDropdownMenu: React.FC<{
           side="top"
           sideOffset={5}
           align="end"
-          className="z-50 w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md"
+          className="z-50 w-fit min-w-[100px] rounded-md border border-gray-300 bg-white pt-2 shadow-md"
         >
           <DropdownLabel className="p-2 text-xs font-normal text-gray-400">
             ACTIONS
@@ -76,6 +84,31 @@ const IssueDropdownMenu: React.FC<{
               </DropdownItem>
             ))}
           </DropdownGroup>
+          {/* TODO: Implement "move to" actions */}
+          {/* <DropdownLabel className="p-2 text-xs font-normal text-gray-400">
+            MOVE TO
+          </DropdownLabel>
+          <DropdownGroup>
+            {[
+              ...(sprints ?? []),
+              {
+                id: "backlog",
+                name: "Backlog",
+                key: "backlog",
+              },
+            ].map((sprint) => (
+              <DropdownItem
+                onClick={(e) => handleIssueAction("move-to", e, sprint.key)}
+                key={sprint.id}
+                textValue={sprint.name}
+                className={clsx(
+                  "border-transparent p-2 text-sm hover:cursor-default hover:bg-gray-100"
+                )}
+              >
+                <span className={clsx("pr-2 text-sm")}>{sprint.name}</span>
+              </DropdownItem>
+            ))}
+          </DropdownGroup> */}
         </DropdownContent>
       </DropdownPortal>
     </Dropdown>
@@ -94,7 +127,7 @@ const IssueContextMenu: React.FC<{
       <Context>
         {children}
         <ContextPortal>
-          <ContextContent className="w-fit rounded-md border border-gray-300 bg-white pt-2 shadow-md">
+          <ContextContent className="w-fit min-w-[100px] rounded-md border border-gray-300 bg-white pt-2 shadow-md">
             <ContextLabel className="p-2 text-xs font-normal text-gray-400">
               ACTIONS
             </ContextLabel>
