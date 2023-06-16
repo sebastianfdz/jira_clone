@@ -46,11 +46,8 @@ const useUpdateIssue = () => {
       },
       onSettled: () => {
         // Always refetch after error or success
-        if (!queryClient.isMutating({ mutationKey: ["issues"] })) {
-          // If there are no other mutations happening, invalidate the cache
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          queryClient.invalidateQueries(["issues"]);
-        }
+        // eslint-disable-next-line @typescript-eslint/no-floating-promises
+        queryClient.invalidateQueries(["issues"]);
       },
     }
   );
