@@ -23,8 +23,7 @@ export const useIssueDetails = () => {
   const { mutate: addComment, isLoading: isAddingComment } = useMutation(
     api.issues.addCommentToIssue,
     {
-      onSuccess: (newComment) => {
-        console.log("newComment", newComment);
+      onSuccess: () => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         queryClient.invalidateQueries(["issues", "comments", issueId]);
       },

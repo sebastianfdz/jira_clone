@@ -28,7 +28,6 @@ export const issuesRoutes = {
     return data?.issues;
   },
   updateBatchIssues: async (body: PatchIssuesBody) => {
-    console.log("body batch patch", body);
     const { data } = await axios.patch<GetIssuesResponse>(
       `${baseUrl}/api/issues`,
       body,
@@ -78,7 +77,6 @@ export const issuesRoutes = {
     } & PostCommentBody
   ) => {
     const { issue_key, content, authorId } = payload;
-    console.log("payload", payload);
     const { data } = await axios.post<GetIssueCommentResponse>(
       `${baseUrl}/api/issues/${issue_key}/comments`,
       { content, authorId },
@@ -92,7 +90,6 @@ export const issuesRoutes = {
       `${baseUrl}/api/issues/${issue_key}/comments`
     );
 
-    console.log("data", data);
     return data?.comments;
   },
 

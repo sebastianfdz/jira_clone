@@ -35,7 +35,6 @@ const IssueAssigneeSelect: React.FC<{
   );
   function handleSelectChange(value: User["id"]) {
     setSelected(value);
-    console.log("value =>", value);
     updateIssue(
       {
         issue_key: issue.key,
@@ -43,7 +42,6 @@ const IssueAssigneeSelect: React.FC<{
       },
       {
         onSuccess: (data) => {
-          console.log("dataaaa =>", data);
           toast.success({
             message: `Issue assignee updated to ${
               data.assignee?.name ?? "Unassigned"

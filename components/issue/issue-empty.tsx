@@ -50,7 +50,6 @@ const EmtpyIssue: React.FC<{
   function handleCreateIssue(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
-      console.log("create issue", type);
 
       onCreate({ name, type, parentKey: parentKey ?? null });
       setName("");

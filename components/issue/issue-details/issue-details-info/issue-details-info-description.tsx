@@ -19,7 +19,6 @@ const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
   }
 
   function handleSave(state: SerializedEditorState | undefined) {
-    console.log("description state: ", state);
     setContent(state);
     updateIssue({
       issue_key: issue.key,
