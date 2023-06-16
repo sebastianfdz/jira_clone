@@ -3,18 +3,25 @@ import { useIssues } from "@/hooks/query-hooks/use-issues";
 import clsx from "clsx";
 import { BacklogList } from "./list-backlog";
 import { SprintList } from "./list-sprint";
-import { DragDropContext, type DropResult } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  type DraggableLocation,
+  type DropResult,
+} from "react-beautiful-dnd";
 import { type IssueType } from "@/utils/types";
 import { useCallback } from "react";
 import { useFiltersContext } from "@/context/useFiltersContext";
 import {
   filterIssuesSearch,
+  insertItemIntoArray,
   isEpic,
   isNullish,
   isSubtask,
+  moveItemWithinArray,
   sprintId,
 } from "@/utils/helpers";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
+import { type Sprint } from "@prisma/client";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();
@@ -59,7 +66,12 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
     updateIssue({
       issue_key: result.draggableId,
       sprintId: sprintId(destination.droppableId),
-      sprintPosition: destination.index,
+      sprintPosition: calculateIssueSprintPosition({
+        activeIssues: issues ?? [],
+        destination,
+        source,
+        droppedIssueId: result.draggableId,
+      }),
     });
   };
 
@@ -85,6 +97,78 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
     </div>
   );
 };
+
+function calculateIssueSprintPosition(props: IssueListPositionProps) {
+  const { prevIssue, nextIssue } = getAfterDropPrevNextIssue(props);
+  let position: number;
+
+  if (isNullish(prevIssue) && isNullish(nextIssue)) {
+    position = 1;
+  } else if (isNullish(prevIssue) && nextIssue) {
+    position = nextIssue.sprintPosition - 1;
+  } else if (isNullish(nextIssue) && prevIssue) {
+    position = prevIssue.sprintPosition + 1;
+  } else if (prevIssue && nextIssue) {
+    position =
+      prevIssue.sprintPosition +
+      (nextIssue.sprintPosition - prevIssue.sprintPosition) / 2;
+  } else {
+    throw new Error("Invalid position");
+  }
+  return position;
+}
+
+type IssueListPositionProps = {
+  activeIssues: IssueType[];
+  destination: DraggableLocation;
+  source: DraggableLocation;
+  droppedIssueId: string;
+};
+
+function getAfterDropPrevNextIssue(props: IssueListPositionProps) {
+  const { activeIssues, destination, source, droppedIssueId } = props;
+  const beforeDropDestinationIssues = getSortedSprintIssues({
+    activeIssues,
+    sprintId: destination.droppableId,
+  });
+  const droppedIssue = activeIssues.find(
+    (issue) => issue.key === droppedIssueId
+  );
+
+  if (!droppedIssue) {
+    throw new Error("dropped issue not found");
+  }
+  const isSameList = destination.droppableId === source.droppableId;
+
+  const afterDropDestinationIssues = isSameList
+    ? moveItemWithinArray(
+        beforeDropDestinationIssues,
+        droppedIssue,
+        destination.index
+      )
+    : insertItemIntoArray(
+        beforeDropDestinationIssues,
+        droppedIssue,
+        destination.index
+      );
+
+  return {
+    prevIssue: afterDropDestinationIssues[destination.index - 1],
+    nextIssue: afterDropDestinationIssues[destination.index + 1],
+  };
+}
+
+function getSortedSprintIssues({
+  activeIssues,
+  sprintId,
+}: {
+  activeIssues: IssueType[];
+  sprintId: Sprint["id"] | null;
+}) {
+  return activeIssues
+    .filter((issue) => issue.sprintId === sprintId)
+    .sort((a, b) => a.sprintPosition - b.sprintPosition);
+}
 
 ListGroup.displayName = "ListGroup";
 
