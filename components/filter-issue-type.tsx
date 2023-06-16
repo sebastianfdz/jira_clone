@@ -13,6 +13,7 @@ import { ISSUE_TYPES } from "@/components/issue/issue-select-type";
 import { IssueIcon } from "@/components/issue/issue-icon";
 import { useFiltersContext } from "@/context/useFiltersContext";
 import { Button } from "@/components/ui/button";
+import { CountBall } from "./issue/issue-status-count";
 
 const IssueTypeFilter: React.FC = () => {
   const { issueTypes, setIssueTypes } = useFiltersContext();
@@ -35,6 +36,12 @@ const IssueTypeFilter: React.FC = () => {
           className="flex items-center  gap-x-2 transition-all duration-200 hover:bg-gray-200"
         >
           <span className="text-sm">Type</span>
+          {issueTypes.length ? (
+            <CountBall
+              count={issueTypes.length}
+              className="bg-inprogress text-xs text-white"
+            />
+          ) : null}
           <FaChevronDown className="text-xs" />
         </Button>
       </DropdownTrigger>

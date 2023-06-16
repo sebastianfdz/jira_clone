@@ -14,6 +14,7 @@ import { useFiltersContext } from "@/context/useFiltersContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SearchBar } from "./filter-search-bar";
+import { CountBall } from "./issue/issue-status-count";
 const EpicFilter: React.FC = () => {
   const { epics, setEpics } = useFiltersContext();
   const { issues } = useIssues();
@@ -43,6 +44,12 @@ const EpicFilter: React.FC = () => {
           className="flex items-center gap-x-2 transition-all duration-200 hover:bg-gray-200"
         >
           <span className="text-sm">Epic</span>
+          {epics.length ? (
+            <CountBall
+              count={epics.length}
+              className="bg-inprogress text-xs text-white"
+            />
+          ) : null}
           <FaChevronDown className="text-xs" />
         </Button>
       </DropdownTrigger>
