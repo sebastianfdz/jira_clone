@@ -16,97 +16,6 @@ export function getHeaders() {
   };
 }
 
-export function moveIssueWithinBoardList(payload: {
-  issueList: IssueType[];
-  oldIndex: number;
-  newIndex: number;
-}) {
-  const { issueList, oldIndex, newIndex } = payload;
-  console.log("moveIssueWithinBoardList", issueList);
-  const issueListClone = [...issueList].sort((a, b) => {
-    if (a.boardPosition == b.boardPosition) return 0;
-    if (a.boardPosition == null) return 1;
-    if (b.boardPosition == null) return -1;
-    return a.boardPosition - b.boardPosition;
-  });
-  const [removedItem] = issueListClone.splice(oldIndex, 1);
-
-  if (!removedItem) return issueListClone;
-
-  issueListClone.splice(newIndex, 0, removedItem);
-
-  return issueListClone.map((issue, index) => {
-    return <IssueType>{
-      ...issue,
-      boardPosition: index,
-    };
-  });
-}
-
-export function moveIssueWithinBacklogList(payload: {
-  issueList: IssueType[];
-  oldIndex: number;
-  newIndex: number;
-}) {
-  const { issueList, oldIndex, newIndex } = payload;
-
-  const issueListClone = [...issueList].sort(
-    (a, b) => a.sprintPosition - b.sprintPosition
-  );
-
-  const [removedItem] = issueListClone.splice(oldIndex, 1);
-
-  if (!removedItem) return issueListClone;
-
-  issueListClone.splice(newIndex, 0, removedItem);
-
-  return issueListClone.map((issue, index) => {
-    return <IssueType>{
-      ...issue,
-      sprintPosition: index,
-    };
-  });
-}
-
-export function insertIssueIntoBacklogList(payload: {
-  issueList: IssueType[];
-  issue: IssueType;
-  index: number;
-}) {
-  const { issueList, issue, index } = payload;
-  const issueListClone = [...issueList].sort(
-    (a, b) => a.sprintPosition - b.sprintPosition
-  );
-  issueListClone.splice(index, 0, issue);
-  return issueListClone.map((issue, index) => {
-    return <IssueType>{
-      ...issue,
-      sprintPosition: index,
-    };
-  });
-}
-
-export function insertIssueIntoBoardList(payload: {
-  issueList: IssueType[];
-  issue: IssueType;
-  index: number;
-}) {
-  const { issueList, issue, index } = payload;
-  const issueListClone = [...issueList].sort((a, b) => {
-    if (a.boardPosition == b.boardPosition) return 0;
-    if (a.boardPosition == null) return 1;
-    if (b.boardPosition == null) return -1;
-    return a.boardPosition - b.boardPosition;
-  });
-  issueListClone.splice(index, 0, issue);
-  return issueListClone.map((issue, index) => {
-    return <IssueType>{
-      ...issue,
-      boardPosition: index,
-    };
-  });
-}
-
 export function capitalize(str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
@@ -199,7 +108,7 @@ export function generateIssuesForClient(
   users: User[],
   activeSprintIds?: string[]
 ) {
-  // Construct map for faster lookup
+  // Maps are used to make lookups faster
   const userMap = new Map(users.map((user) => [user.id, user]));
   const parentMap = new Map(issues.map((issue) => [issue.key, issue]));
 
@@ -216,5 +125,19 @@ export function generateIssuesForClient(
 }
 
 export function calculateInsertPosition(issues: Issue[]) {
-  return Math.max(...issues.map((issue) => issue.sprintPosition)) + 1;
+  return Math.max(...issues.map((issue) => issue.sprintPosition), 0) + 1;
+}
+
+export function moveItemWithinArray<T>(arr: T[], item: T, newIndex: number) {
+  const arrClone = [...arr];
+  const oldIndex = arrClone.indexOf(item);
+  const oldItem = arrClone.splice(oldIndex, 1)[0];
+  if (oldItem) arrClone.splice(newIndex, 0, oldItem);
+  return arrClone;
+}
+
+export function insertItemIntoArray<T>(arr: T[], item: T, index: number) {
+  const arrClone = [...arr];
+  arrClone.splice(index, 0, item);
+  return arrClone;
 }
