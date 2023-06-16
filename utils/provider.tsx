@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import {
+  QueryClient,
   QueryClientProvider,
   //  QueryClient
 } from "@tanstack/react-query";
-import { getQueryClient } from "./get-query-client";
+// import { getQueryClient } from "./get-query-client";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function Providers({ children }: React.PropsWithChildren) {
@@ -16,7 +17,8 @@ function Providers({ children }: React.PropsWithChildren) {
   }, []);
 
   const [client] = useState(
-    () => getQueryClient()
+    () => new QueryClient()
+    // getQueryClient()
     // new QueryClient()
     // { defaultOptions: { queries: { staleTime: 1000 } } }
   );
