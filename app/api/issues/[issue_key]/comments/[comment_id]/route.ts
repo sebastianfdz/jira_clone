@@ -24,14 +24,14 @@ export async function PATCH(
     return new Response(message, { status: 400 });
   }
 
-  const { content } = validated.data;
+  const { data: valid } = validated;
 
   const comment = await prisma.comment.update({
     where: {
       id: comment_id,
     },
     data: {
-      content,
+      content: valid.content,
       isEdited: true,
     },
   });

@@ -34,8 +34,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
     return new Response(message, { status: 400 });
   }
 
-  const { name, description, startDate, endDate, status, duration } =
-    validated.data;
+  const { data: valid } = validated;
 
   const current = await prisma.sprint.findUnique({
     where: {
@@ -52,12 +51,12 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
       id: sprint_id,
     },
     data: {
-      name: name ?? current.name,
-      description: description ?? current.description,
-      startDate: startDate ?? current.startDate,
-      endDate: endDate ?? current.endDate,
-      status: status ?? current.status,
-      duration: duration ?? current.duration,
+      name: valid.name ?? current.name,
+      description: valid.description ?? current.description,
+      startDate: valid.startDate ?? current.startDate,
+      endDate: valid.endDate ?? current.endDate,
+      status: valid.status ?? current.status,
+      duration: valid.duration ?? current.duration,
     },
   });
 

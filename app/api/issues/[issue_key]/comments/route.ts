@@ -69,13 +69,13 @@ export async function POST(
     return new Response(message, { status: 400 });
   }
 
-  const { content, authorId } = validated.data;
+  const { data: valid } = validated;
 
   const comment = await prisma.comment.create({
     data: {
       issueKey: issue_key,
-      content,
-      authorId,
+      content: valid.content,
+      authorId: valid.authorId,
     },
   });
 
