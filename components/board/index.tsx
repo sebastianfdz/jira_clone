@@ -1,6 +1,6 @@
 "use client";
-import React, { Fragment, useLayoutEffect, useRef } from "react";
-import { type Sprint, type IssueStatus } from "@prisma/client";
+import React, { Fragment, useCallback, useLayoutEffect, useRef } from "react";
+import { type IssueStatus } from "@prisma/client";
 // import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
 import { BoardHeader } from "./header";
@@ -12,14 +12,21 @@ import {
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { type IssueType } from "@/utils/types";
 import {
+  assigneeNotInFilters,
+  epicNotInFilters,
   insertItemIntoArray,
+  isEpic,
   isNullish,
+  isSubtask,
+  issueNotInSearch,
+  issueTypeNotInFilters,
   moveItemWithinArray,
 } from "@/utils/helpers";
 import { IssueList } from "./issue-list";
 import { IssueDetailsModal } from "../modals/board-issue-details";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { useProject } from "@/hooks/query-hooks/use-project";
+import { useFiltersContext } from "@/context/useFiltersContext";
 
 const STATUSES: IssueStatus[] = ["TODO", "IN_PROGRESS", "DONE"];
 
@@ -29,20 +36,31 @@ const Board: React.FC = () => {
   const { issues } = useIssues();
   const { sprints } = useSprints();
   const { project } = useProject();
+  const { search, assignees, issueTypes, epics } = useFiltersContext();
 
-  function filterIssuesBySprintAndStatus({
-    issue,
-    sprints,
-    status,
-  }: {
-    issue: IssueType;
-    sprints: Sprint[];
-    status: IssueStatus;
-  }) {
-    const sprint = sprints.find((sprint) => sprint.id == issue.sprintId);
-    if (!sprint) return false;
-    return issue.status == status && sprint.status == "ACTIVE";
-  }
+  const filterIssues = useCallback(
+    (issues: IssueType[] | undefined, status: IssueStatus) => {
+      if (!issues) return [];
+      const filteredIssues = issues.filter((issue) => {
+        if (
+          issue.status === status &&
+          issue.sprintIsActive &&
+          !isEpic(issue) &&
+          !isSubtask(issue)
+        ) {
+          if (issueNotInSearch({ issue, search })) return false;
+          if (assigneeNotInFilters({ issue, assignees })) return false;
+          if (epicNotInFilters({ issue, epics })) return false;
+          if (issueTypeNotInFilters({ issue, issueTypes })) return false;
+          return true;
+        }
+        return false;
+      });
+
+      return filteredIssues;
+    },
+    [search, assignees, epics, issueTypes]
+  );
 
   const { updateIssue } = useIssues();
   useLayoutEffect(() => {
@@ -84,13 +102,7 @@ const Board: React.FC = () => {
             <IssueList
               key={status}
               status={status}
-              issues={issues.filter((issue) =>
-                filterIssuesBySprintAndStatus({
-                  issue,
-                  status,
-                  sprints: sprints,
-                })
-              )}
+              issues={filterIssues(issues, status)}
             />
           ))}
         </div>

@@ -12,11 +12,14 @@ import { type IssueType } from "@/utils/types";
 import { useCallback } from "react";
 import { useFiltersContext } from "@/context/useFiltersContext";
 import {
-  filterIssuesSearch,
+  assigneeNotInFilters,
+  epicNotInFilters,
   insertItemIntoArray,
   isEpic,
   isNullish,
   isSubtask,
+  issueNotInSearch,
+  issueTypeNotInFilters,
   moveItemWithinArray,
   sprintId,
 } from "@/utils/helpers";
@@ -25,39 +28,30 @@ import { type Sprint } from "@prisma/client";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();
-  const { search, assignees, isseTypes, epics } = useFiltersContext();
+  const { search, assignees, issueTypes, epics } = useFiltersContext();
   const { sprints } = useSprints();
 
   const filterIssues = useCallback(
     (issues: IssueType[] | undefined, sprintId: string | null) => {
       if (!issues) return [];
-      let sprintIssues = issues.filter(
-        (issue) =>
-          issue.sprintId === sprintId && !isEpic(issue) && !isSubtask(issue)
-      );
-      if (search.length) {
-        sprintIssues = sprintIssues.filter((issue) =>
-          filterIssuesSearch(issue, search)
-        );
-      }
-      if (assignees.length) {
-        sprintIssues = sprintIssues.filter((issue) =>
-          assignees.includes(issue.assignee?.id ?? "unassigned")
-        );
-      }
-      if (epics.length) {
-        sprintIssues = sprintIssues.filter(
-          (issue) => issue.parentKey && epics.includes(issue.parentKey)
-        );
-      }
-      if (isseTypes.length) {
-        sprintIssues = sprintIssues.filter((issue) =>
-          isseTypes.includes(issue.type)
-        );
-      }
-      return sprintIssues;
+      const filteredIssues = issues.filter((issue) => {
+        if (
+          issue.sprintId === sprintId &&
+          !isEpic(issue) &&
+          !isSubtask(issue)
+        ) {
+          if (issueNotInSearch({ issue, search })) return false;
+          if (assigneeNotInFilters({ issue, assignees })) return false;
+          if (epicNotInFilters({ issue, epics })) return false;
+          if (issueTypeNotInFilters({ issue, issueTypes })) return false;
+          return true;
+        }
+        return false;
+      });
+
+      return filteredIssues;
     },
-    [search, assignees, epics, isseTypes]
+    [search, assignees, epics, issueTypes]
   );
 
   const onDragEnd = (result: DropResult) => {
