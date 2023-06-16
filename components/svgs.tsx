@@ -414,7 +414,7 @@ const SubTaskIcon: React.FC<{ className?: string; size?: number }> = ({
       <g
         id="Page-1"
         stroke="none"
-        stroke-width="1"
+        strokeWidth="1"
         fill="none"
         fillRule="evenodd"
       >
@@ -427,7 +427,6 @@ const SubTaskIcon: React.FC<{ className?: string; size?: number }> = ({
               y="0"
               width="14"
               height="14"
-              // rx="2"
             />
             <rect
               id="Rectangle-80"
@@ -436,7 +435,6 @@ const SubTaskIcon: React.FC<{ className?: string; size?: number }> = ({
               y="2"
               width="5"
               height="5"
-              // rx="0.800000012"
             />
             <rect
               id="Rectangle-80-Copy"
@@ -446,7 +444,6 @@ const SubTaskIcon: React.FC<{ className?: string; size?: number }> = ({
               y="5"
               width="5"
               height="5"
-              // rx="0.800000012"
             />
           </g>
         </g>

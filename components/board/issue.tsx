@@ -22,7 +22,6 @@ const Issue: React.FC<{ issue: IssueType; index: number }> = ({
       {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
         <div
           role="button"
-          // data-state={issueId == issue.key ? "selected" : "not-selected"}
           onClick={() => setIssueId(issue.key)}
           ref={innerRef}
           {...draggableProps}

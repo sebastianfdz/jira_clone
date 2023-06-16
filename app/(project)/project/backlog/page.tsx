@@ -1,5 +1,4 @@
 import { Backlog } from "@/components/backlog";
-// import { notFound } from "next/navigation";
 import { type Metadata } from "next";
 import { prisma } from "@/server/db";
 import { clerkClient } from "@clerk/nextjs";
@@ -64,23 +63,11 @@ const BacklogPage = async () => {
     await queryClient.prefetchQuery(["project"], getProjectFromServer),
   ]);
 
-  // const [project, issues, sprints] = await Promise.all([
-  //   getProjectFromServer(),
-  //   getIssuesFromServer(),
-  //   getSprintsFromServer(),
-  // ]);
-
   const dehydratedState = dehydrate(queryClient);
-
-  // if (!project || !issues || !sprints) {
-  //   return notFound();
-  // }
 
   return (
     <Hydrate state={dehydratedState}>
-      <Backlog
-      //  project={project} issues={issues} sprints={sprints}
-      />
+      <Backlog />
     </Hydrate>
   );
 };

@@ -43,10 +43,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
               ref={ref}
               value={currentTitle}
               onChange={(e) => setCurrentTitle(e.target.value)}
-              className={clsx(
-                "w-full min-w-max whitespace-pre-wrap px-1 py-1.5 outline-2 outline-blue-400"
-                // className
-              )}
+              className="w-full min-w-max whitespace-pre-wrap px-1 py-1.5 outline-2 outline-blue-400"
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
                   handleNameChange(e);

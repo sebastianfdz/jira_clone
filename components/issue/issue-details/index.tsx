@@ -1,10 +1,5 @@
 "use client";
-import React, {
-  useCallback,
-  useEffect,
-  // useLayoutEffect,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { useIsInViewport } from "@/hooks/use-is-in-viewport";
 import { IssueDetailsHeader } from "./issue-details-header";
@@ -25,12 +20,6 @@ const IssueDetails: React.FC<{
     [issues]
   );
   const [issueInfo, setIssueInfo] = useState(() => getIssue(issueId));
-
-  // useLayoutEffect(() => {
-  //   if (!renderContainerRef.current) return;
-  //   const calculatedHeight = renderContainerRef.current.offsetTop;
-  //   renderContainerRef.current.style.minHeight = `calc(100vh - ${calculatedHeight}px)`;
-  // }, []);
 
   useEffect(() => {
     setIssueInfo(() => getIssue(issueId));

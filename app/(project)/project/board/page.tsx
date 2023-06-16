@@ -1,5 +1,4 @@
 import { Board } from "@/components/board";
-// import { notFound } from "next/navigation";
 import { type Metadata } from "next";
 import { prisma } from "@/server/db";
 import { clerkClient } from "@clerk/nextjs";
@@ -66,12 +65,6 @@ async function getSprintsFromServer() {
 }
 
 const BoardPage = async () => {
-  // const [project, issues, sprints] = await Promise.all([
-  //   getProjectFromServer(),
-  //   getIssuesFromServer(),
-  //   getSprintsFromServer(),
-  // ]);
-
   const queryClient = getQueryClient();
 
   await Promise.all([
@@ -80,17 +73,11 @@ const BoardPage = async () => {
     await queryClient.prefetchQuery(["project"], getProjectFromServer),
   ]);
 
-  // if (!project || !issues || !sprints) {
-  //   return notFound();
-  // }
-
   const dehydratedState = dehydrate(queryClient);
 
   return (
     <Hydrate state={dehydratedState}>
-      <Board
-      // project={project} issues={issues} sprints={sprints}
-      />
+      <Board />
     </Hydrate>
   );
 };
