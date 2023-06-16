@@ -30,7 +30,7 @@ const TopNavbar: React.FC = () => {
           <span className="text-sm font-medium text-gray-600">
             {user?.fullName ?? user?.emailAddresses[0]?.emailAddress ?? "Guest"}
           </span>
-          <UserButton />
+          <UserButton afterSignOutUrl="/" />
         </div>
       ) : (
         <div className="flex items-center gap-x-3">
