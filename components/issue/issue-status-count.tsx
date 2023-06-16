@@ -17,20 +17,34 @@ const IssueStatusCount: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
   return (
     <Fragment>
       {Object.entries(statusCount ?? {})?.map(([status, count]) => (
-        <span
+        <CountBall
           key={status}
+          count={count}
           className={clsx(
             status == "TODO" && "bg-todo text-black",
             status == "IN_PROGRESS" && "bg-inprogress text-white",
-            status == "DONE" && "bg-done text-white",
-            "flex h-5 items-center justify-center rounded-full px-1.5 py-0.5 text-sm font-semibold"
+            status == "DONE" && "bg-done text-white"
           )}
-        >
-          {count}
-        </span>
+        />
       ))}
     </Fragment>
   );
 };
 
-export { IssueStatusCount };
+const CountBall: React.FC<{ count: number; className: string }> = ({
+  count,
+  className,
+}) => {
+  return (
+    <span
+      className={clsx(
+        "flex h-5 items-center justify-center rounded-full px-1.5 py-0.5 text-sm font-semibold",
+        className
+      )}
+    >
+      {count}
+    </span>
+  );
+};
+
+export { IssueStatusCount, CountBall };
