@@ -22,10 +22,10 @@ import {
 export const statuses: StatusObject[] = [
   {
     value: "TODO",
-    smBgColor: "#d4d4d8",
-    lgBgColor: "#d4d4d8",
-    smTextColor: "#4b5563",
-    lgTextColor: "#4b5563",
+    smBgColor: "#f5f5f5",
+    lgBgColor: "#f5f5f5",
+    smTextColor: "#383939",
+    lgTextColor: "#383939",
   },
   {
     value: "IN_PROGRESS",
