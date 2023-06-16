@@ -54,8 +54,8 @@ model Issue {
     description    String?     @db.Text()
     status         IssueStatus @default(TODO)
     type           IssueType   @default(TASK)
-    sprintPosition Int
-    boardPosition  Int?
+    sprintPosition Float
+    boardPosition  Float       @default(-1)
     reporterId     String      @default("1")
     assigneeId     String?
     parentKey      String?
