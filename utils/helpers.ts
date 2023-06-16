@@ -75,12 +75,53 @@ export function filterUserForClient(user: ClerkUser) {
   };
 }
 
-export function filterIssuesSearch(issue: IssueType, search: string) {
+export function issueNotInSearch({
+  issue,
+  search,
+}: {
+  issue: IssueType;
+  search: string;
+}) {
   return (
-    issue.name.toLowerCase().includes(search.toLowerCase()) ||
-    issue.assignee?.name.toLowerCase().includes(search.toLowerCase()) ||
-    issue.key.toLowerCase().includes(search.toLowerCase())
+    search.length &&
+    !(
+      issue.name.toLowerCase().includes(search.toLowerCase()) ||
+      issue.assignee?.name.toLowerCase().includes(search.toLowerCase()) ||
+      issue.key.toLowerCase().includes(search.toLowerCase())
+    )
   );
+}
+
+export function assigneeNotInFilters({
+  issue,
+  assignees,
+}: {
+  issue: IssueType;
+  assignees: string[];
+}) {
+  return (
+    assignees.length && !assignees.includes(issue.assignee?.id ?? "unassigned")
+  );
+}
+
+export function epicNotInFilters({
+  issue,
+  epics,
+}: {
+  issue: IssueType;
+  epics: string[];
+}) {
+  return epics.length && (!issue.parentKey || !epics.includes(issue.parentKey));
+}
+
+export function issueTypeNotInFilters({
+  issue,
+  issueTypes,
+}: {
+  issue: IssueType;
+  issueTypes: string[];
+}) {
+  return issueTypes.length && !issueTypes.includes(issue.type);
 }
 
 export function dateToLongString(date: Date) {
