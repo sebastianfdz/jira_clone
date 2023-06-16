@@ -15,16 +15,16 @@ import { useFiltersContext } from "@/context/useFiltersContext";
 import { Button } from "@/components/ui/button";
 
 const IssueTypeFilter: React.FC = () => {
-  const { isseTypes, setIsseTypes } = useFiltersContext();
+  const { issueTypes, setIssueTypes } = useFiltersContext();
 
   function onSelectChange(
     e: React.ChangeEvent<HTMLInputElement>,
     issueType: IssueType["type"]
   ) {
     if (e.target.checked) {
-      setIsseTypes((prev) => [...prev, issueType]);
+      setIssueTypes((prev) => [...prev, issueType]);
     } else {
-      setIsseTypes((prev) => prev.filter((type) => type !== issueType));
+      setIssueTypes((prev) => prev.filter((type) => type !== issueType));
     }
   }
   return (
@@ -57,7 +57,7 @@ const IssueTypeFilter: React.FC = () => {
                 <input
                   type="checkbox"
                   className="form-checkbox h-3 w-3 rounded-sm text-inprogress"
-                  checked={isseTypes.includes(type)}
+                  checked={issueTypes.includes(type)}
                 />
 
                 <IssueIcon issueType={type} />
