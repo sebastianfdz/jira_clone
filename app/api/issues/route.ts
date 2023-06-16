@@ -100,23 +100,23 @@ export async function POST(req: NextRequest) {
     return new Response(message, { status: 400 });
   }
 
-  const { name, type, reporterId, sprintId, parentKey } = validated.data;
+  const { data: valid } = validated;
 
   const issues = await prisma.issue.findMany();
   const currentSprintIssues = await prisma.issue.findMany({
     where: {
-      sprintId,
+      sprintId: valid.sprintId,
       isDeleted: false,
     },
   });
 
   const sprint = await prisma.sprint.findUnique({
     where: {
-      id: sprintId ?? undefined,
+      id: valid.sprintId ?? "",
     },
   });
 
-  let boardPosition = null;
+  let boardPosition = -1;
 
   if (sprint && sprint.status === "ACTIVE") {
     const issuesInColum = currentSprintIssues.filter(
@@ -127,29 +127,18 @@ export async function POST(req: NextRequest) {
 
   const k = issues.length + 1;
 
-  console.log(
-    "currentSprintIssues",
-    currentSprintIssues
-      .sort((a, b) => a.sprintPosition - b.sprintPosition)
-      .map((issue) => ({
-        key: issue.key,
-        name: issue.name,
-        sprintPosition: issue.sprintPosition,
-      }))
-  );
-
   const positionToInsert = calculateInsertPosition(currentSprintIssues);
 
   const issue = await prisma.issue.create({
     data: {
       key: `ISSUE-${k}`,
-      name,
-      type,
-      reporterId: reporterId ?? "user_2PwZmH2xP5aE0svR6hDH4AwDlcu", // Rogan as default reporter
-      sprintId,
+      name: valid.name,
+      type: valid.type,
+      reporterId: valid.reporterId ?? "user_2PwZmH2xP5aE0svR6hDH4AwDlcu", // Rogan as default reporter
+      sprintId: valid.sprintId ?? undefined,
       sprintPosition: positionToInsert,
-      parentKey,
       boardPosition,
+      parentKey: valid.parentKey,
     },
   });
   // return NextResponse.json<PostIssueResponse>({ issue });
@@ -167,21 +156,12 @@ export async function PATCH(req: NextRequest) {
     return new Response(message, { status: 400 });
   }
 
-  const {
-    keys,
-    type,
-    status,
-    assigneeId,
-    reporterId,
-    isDeleted,
-    sprintId,
-    parentKey,
-  } = validated.data;
+  const { data: valid } = validated;
 
   const issuesToUpdate = await prisma.issue.findMany({
     where: {
       key: {
-        in: keys,
+        in: valid.keys,
       },
     },
   });
@@ -193,13 +173,13 @@ export async function PATCH(req: NextRequest) {
           id: issue.id,
         },
         data: {
-          type: type ?? undefined,
-          status: status ?? undefined,
-          assigneeId: assigneeId ?? undefined,
-          reporterId: reporterId ?? undefined,
-          isDeleted: isDeleted ?? undefined,
-          sprintId: sprintId === undefined ? undefined : sprintId,
-          parentKey: parentKey ?? undefined,
+          type: valid.type ?? undefined,
+          status: valid.status ?? undefined,
+          assigneeId: valid.assigneeId ?? undefined,
+          reporterId: valid.reporterId ?? undefined,
+          isDeleted: valid.isDeleted ?? undefined,
+          sprintId: valid.sprintId === undefined ? undefined : valid.sprintId,
+          parentKey: valid.parentKey ?? undefined,
         },
       });
     })
