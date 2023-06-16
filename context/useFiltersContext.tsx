@@ -8,8 +8,8 @@ type FiltersContextProps = {
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   epics: string[];
   setEpics: React.Dispatch<React.SetStateAction<string[]>>;
-  isseTypes: string[];
-  setIsseTypes: React.Dispatch<React.SetStateAction<string[]>>;
+  issueTypes: string[];
+  setIssueTypes: React.Dispatch<React.SetStateAction<string[]>>;
 };
 
 const FiltersContext = createContext<FiltersContextProps>({
@@ -22,16 +22,16 @@ const FiltersContext = createContext<FiltersContextProps>({
   epics: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setEpics: () => {},
-  isseTypes: [],
+  issueTypes: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setIsseTypes: () => {},
+  setIssueTypes: () => {},
 });
 
 export const FiltersProvider = ({ children }: { children: ReactNode }) => {
   const [assignees, setAssignees] = useState<string[]>([]);
   const [search, setSearch] = useState<string>("");
   const [epics, setEpics] = useState<string[]>([]);
-  const [isseTypes, setIsseTypes] = useState<string[]>([]);
+  const [issueTypes, setIssueTypes] = useState<string[]>([]);
 
   return (
     <FiltersContext.Provider
@@ -42,8 +42,8 @@ export const FiltersProvider = ({ children }: { children: ReactNode }) => {
         setSearch,
         epics,
         setEpics,
-        isseTypes,
-        setIsseTypes,
+        issueTypes,
+        setIssueTypes,
       }}
     >
       {children}
