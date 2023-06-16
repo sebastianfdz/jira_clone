@@ -43,8 +43,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <head />
       <body>
-        <ClerkProvider>
-          <QueryProvider>
+        <QueryProvider>
+          <ClerkProvider>
             <Toaster
               position="bottom-left"
               reverseOrder={false}
@@ -54,8 +54,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
               }}
             />
             {children}
-          </QueryProvider>
-        </ClerkProvider>
+          </ClerkProvider>
+        </QueryProvider>
       </body>
     </html>
   );
