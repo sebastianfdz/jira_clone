@@ -1,5 +1,4 @@
 import { useStrictModeDroppable } from "@/hooks/use-strictmode-droppable";
-import { isNullish } from "@/utils/helpers";
 import { type IssueType } from "@/utils/types";
 import { Droppable } from "react-beautiful-dnd";
 import { Issue } from "./issue";
@@ -39,16 +38,7 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
             className="h-max min-h-[550px]"
           >
             {issues
-              .sort((a, b) => {
-                if (
-                  !isNullish(a.boardPosition) &&
-                  !isNullish(b.boardPosition)
-                ) {
-                  return a.boardPosition - b.boardPosition;
-                } else {
-                  return a.sprintPosition - b.sprintPosition;
-                }
-              })
+              .sort((a, b) => a.boardPosition - b.boardPosition)
               .map((issue, index) => (
                 <Issue key={issue.key} index={index} issue={issue} />
               ))}
