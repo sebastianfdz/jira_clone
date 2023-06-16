@@ -6,6 +6,7 @@ import { EpicFilter } from "@/components/filter-epic";
 import { IssueTypeFilter } from "@/components/filter-issue-type";
 import { SearchBar } from "@/components/filter-search-bar";
 import { Members } from "../members";
+import { ClearFilters } from "../filter-issue-clear";
 
 const BacklogHeader: React.FC<{ project: Project }> = ({ project }) => {
   const { search, setSearch } = useFiltersContext();
@@ -18,6 +19,7 @@ const BacklogHeader: React.FC<{ project: Project }> = ({ project }) => {
         <Members />
         <EpicFilter />
         <IssueTypeFilter />
+        <ClearFilters />
       </div>
     </div>
   );
