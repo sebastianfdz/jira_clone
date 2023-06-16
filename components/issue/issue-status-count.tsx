@@ -31,10 +31,12 @@ const IssueStatusCount: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
   );
 };
 
-const CountBall: React.FC<{ count: number; className: string }> = ({
-  count,
-  className,
-}) => {
+const CountBall: React.FC<{
+  count: number;
+  className: string;
+  hideOnZero?: boolean;
+}> = ({ count, className, hideOnZero = false }) => {
+  if (hideOnZero && count === 0) return null;
   return (
     <span
       className={clsx(

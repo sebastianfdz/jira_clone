@@ -36,12 +36,11 @@ const IssueTypeFilter: React.FC = () => {
           className="flex items-center  gap-x-2 transition-all duration-200 hover:bg-gray-200"
         >
           <span className="text-sm">Type</span>
-          {issueTypes.length ? (
-            <CountBall
-              count={issueTypes.length}
-              className="bg-inprogress text-xs text-white"
-            />
-          ) : null}
+          <CountBall
+            count={issueTypes.length}
+            className="bg-inprogress text-xs text-white"
+            hideOnZero={true}
+          />
           <FaChevronDown className="text-xs" />
         </Button>
       </DropdownTrigger>

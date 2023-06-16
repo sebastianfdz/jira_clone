@@ -44,12 +44,11 @@ const EpicFilter: React.FC = () => {
           className="flex items-center gap-x-2 transition-all duration-200 hover:bg-gray-200"
         >
           <span className="text-sm">Epic</span>
-          {epics.length ? (
-            <CountBall
-              count={epics.length}
-              className="bg-inprogress text-xs text-white"
-            />
-          ) : null}
+          <CountBall
+            count={epics.length}
+            className="bg-inprogress text-xs text-white"
+            hideOnZero={true}
+          />
           <FaChevronDown className="text-xs" />
         </Button>
       </DropdownTrigger>
