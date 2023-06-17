@@ -19,6 +19,7 @@ import {
   isNullish,
   isSubtask,
   issueNotInSearch,
+  issueSprintNotInFilters,
   issueTypeNotInFilters,
   moveItemWithinArray,
 } from "@/utils/helpers";
@@ -36,7 +37,13 @@ const Board: React.FC = () => {
   const { issues } = useIssues();
   const { sprints } = useSprints();
   const { project } = useProject();
-  const { search, assignees, issueTypes, epics } = useFiltersContext();
+  const {
+    search,
+    assignees,
+    issueTypes,
+    epics,
+    sprints: filterSprints,
+  } = useFiltersContext();
 
   const filterIssues = useCallback(
     (issues: IssueType[] | undefined, status: IssueStatus) => {
@@ -52,6 +59,9 @@ const Board: React.FC = () => {
           if (assigneeNotInFilters({ issue, assignees })) return false;
           if (epicNotInFilters({ issue, epics })) return false;
           if (issueTypeNotInFilters({ issue, issueTypes })) return false;
+          if (issueSprintNotInFilters({ issue, sprintIds: filterSprints })) {
+            return false;
+          }
           return true;
         }
         return false;
@@ -59,7 +69,7 @@ const Board: React.FC = () => {
 
       return filteredIssues;
     },
-    [search, assignees, epics, issueTypes]
+    [search, assignees, epics, issueTypes, filterSprints]
   );
 
   const { updateIssue } = useIssues();
