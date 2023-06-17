@@ -3,11 +3,11 @@ import { SignInButton, useUser, UserButton } from "@clerk/nextjs";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { AiFillGithub } from "react-icons/ai";
-import { usePathname } from "next/navigation";
+import { useFullURL } from "@/hooks/use-full-url";
 
 const TopNavbar: React.FC = () => {
   const { user } = useUser();
-  const currentPath = usePathname();
+  const [url] = useFullURL();
   return (
     <div className="flex h-12 w-full items-center justify-between border-b px-4">
       <div className="flex items-center gap-x-2">
@@ -37,7 +37,7 @@ const TopNavbar: React.FC = () => {
       ) : (
         <div className="flex items-center gap-x-3">
           <div className="rounded-sm bg-inprogress px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-600">
-            <SignInButton mode="modal" redirectUrl={currentPath} />
+            <SignInButton mode="modal" redirectUrl={url} />
           </div>
         </div>
       )}
