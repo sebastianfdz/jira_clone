@@ -7,6 +7,7 @@ import { IssueTypeFilter } from "@/components/filter-issue-type";
 import { SearchBar } from "@/components/filter-search-bar";
 import { Members } from "../members";
 import { ClearFilters } from "../filter-issue-clear";
+import { SprintFilter } from "../filter-sprint";
 
 const BoardHeader: React.FC<{ project: Project }> = ({ project }) => {
   const { search, setSearch } = useFiltersContext();
@@ -19,6 +20,7 @@ const BoardHeader: React.FC<{ project: Project }> = ({ project }) => {
         <Members />
         <EpicFilter />
         <IssueTypeFilter />
+        <SprintFilter />
         <ClearFilters />
       </div>
     </div>
