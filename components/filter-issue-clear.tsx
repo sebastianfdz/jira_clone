@@ -11,18 +11,22 @@ const ClearFilters: React.FC = () => {
     setEpics,
     search,
     setSearch,
+    sprints,
+    setSprints,
   } = useFiltersContext();
 
   function clearAllFilters() {
     setIssueTypes([]);
     setAssignees([]);
     setEpics([]);
+    setSprints([]);
     setSearch("");
   }
   if (
     issueTypes.length === 0 &&
     assignees.length === 0 &&
     epics.length === 0 &&
+    sprints.length === 0 &&
     search === ""
   ) {
     return null;
