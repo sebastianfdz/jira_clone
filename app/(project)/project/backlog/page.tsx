@@ -20,6 +20,12 @@ async function getIssuesFromServer() {
     return [];
   }
 
+  const activeSprints = await prisma.sprint.findMany({
+    where: {
+      status: "ACTIVE",
+    },
+  });
+
   const userIds = activeIssues
     .flatMap((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .filter(Boolean);
@@ -31,7 +37,11 @@ async function getIssuesFromServer() {
     })
   ).map(filterUserForClient);
 
-  const issues = generateIssuesForClient(activeIssues, users);
+  const issues = generateIssuesForClient(
+    activeIssues,
+    users,
+    activeSprints.map((sprint) => sprint.id)
+  );
   return issues;
 }
 
