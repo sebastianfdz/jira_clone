@@ -11,12 +11,12 @@ const Signup = () => {
         appearance={{
           elements: {
             formButtonPrimary:
-              "bg-iskrive hover:bg-iskrive hover:brightness-95 text-sm normal-case",
+              "bg-inprogress hover:bg-inprogress hover:brightness-95 text-sm normal-case",
 
-            formButtonSecondary: "bg-iskrive text-sm normal-case",
+            formButtonSecondary: "bg-inprogress text-sm normal-case",
             footerActionText: " text-md",
             footerActionLink:
-              "text-iskrive hover:text-iskrive hover:brightness-95 font-semibold text-md",
+              "text-inprogress hover:text-inprogress hover:brightness-95 font-semibold text-md",
           },
         }}
       />
