@@ -124,6 +124,17 @@ export function issueTypeNotInFilters({
   return issueTypes.length && !issueTypes.includes(issue.type);
 }
 
+export function issueSprintNotInFilters({
+  issue,
+  sprintIds,
+}: {
+  issue: IssueType;
+  sprintIds: string[];
+}) {
+  if (isNullish(issue.sprintId)) return false;
+  return sprintIds.length && !sprintIds.includes(issue.sprintId);
+}
+
 export function dateToLongString(date: Date) {
   const dateString = new Date(date).toDateString();
   const timeStirng = new Date(date).toLocaleTimeString();
