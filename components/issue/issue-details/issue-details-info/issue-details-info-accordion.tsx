@@ -14,7 +14,7 @@ import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { IssueAssigneeSelect } from "../../issue-select-assignee";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { type UserResource } from "@clerk/types";
-import { usePathname } from "next/navigation";
+import { useFullURL } from "@/hooks/use-full-url";
 
 const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
@@ -105,7 +105,7 @@ const AssignToMeButton: React.FC<{
   user: UserResource | null | undefined;
   onClick: () => void;
 }> = ({ user, issue, onClick }) => {
-  const currentPath = usePathname();
+  const [url] = useFullURL();
   return (
     <Fragment>
       {user?.id ? (
@@ -119,7 +119,7 @@ const AssignToMeButton: React.FC<{
           Assign to me
         </Button>
       ) : (
-        <SignInButton mode="modal" redirectUrl={currentPath}>
+        <SignInButton mode="modal" redirectUrl={url}>
           <button
             data-state={issue.assignee ? "assigned" : "unassigned"}
             className="mt-1 hidden text-sm text-blue-600 underline-offset-2 hover:underline [&[data-state=unassigned]]:flex"
