@@ -8,7 +8,7 @@ import {
 import { useKeydownListener } from "@/hooks/use-keydown-listener";
 import { Fragment, useRef, useState } from "react";
 import { useIsInViewport } from "@/hooks/use-is-in-viewport";
-import { useUser } from "@clerk/clerk-react";
+import { SignInButton, useUser } from "@clerk/clerk-react";
 import { type SerializedEditorState } from "lexical";
 import { type IssueType } from "@/utils/types";
 import { Avatar } from "@/components/avatar";
@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { EditorPreview } from "@/components/text-editor/preview";
 import { Button } from "@/components/ui/button";
+import { useFullURL } from "@/hooks/use-full-url";
 dayjs.extend(relativeTime);
 
 const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
@@ -24,6 +25,8 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const [isInViewport, ref] = useIsInViewport();
   const { comments, addComment } = useIssueDetails();
   const { user } = useUser();
+  const signInRef = useRef<HTMLButtonElement>(null);
+  const [url] = useFullURL();
 
   useKeydownListener(scrollRef, ["m", "M"], handleEdit);
   function handleEdit(ref: React.RefObject<HTMLElement>) {
@@ -36,7 +39,15 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   }
 
   function handleSave(state: SerializedEditorState | undefined) {
-    if (!state || !user?.id) {
+    if (!user?.id) {
+      // Very hacky way to open the modal
+      // TODO: Find a better way to do this with Clerk api
+      if (signInRef.current) {
+        signInRef.current.click();
+      }
+      return;
+    }
+    if (!state) {
       setIsWritingComment(false);
       return;
     }
@@ -52,6 +63,10 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   }
   return (
     <Fragment>
+      {/* eslint-disable-next-line */}
+      <SignInButton mode="modal" redirectUrl={url}>
+        <button ref={signInRef} />
+      </SignInButton>
       <h2>Comments</h2>
       <div className="sticky bottom-0 mb-5 w-full bg-white">
         <div ref={scrollRef} id="dummy-scroll-div" />
