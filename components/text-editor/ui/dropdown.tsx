@@ -15,7 +15,7 @@ import {
   useState,
 } from "react";
 import * as React from "react";
-import { createPortal } from "react-dom";
+// import { createPortal } from "react-dom";
 import { FaChevronDown } from "react-icons/fa";
 
 type DropDownContextType = {
@@ -52,7 +52,7 @@ export function DropDownItem({
   return (
     <button
       className={
-        "flex items-center gap-x-2 rounded-[3px] px-2 py-0.5 text-start text-sm hover:bg-gray-200"
+        "flex items-center gap-x-2 whitespace-nowrap rounded-[3px] px-2 py-0.5 text-start text-sm hover:bg-gray-200"
       }
       onClick={onClick}
       ref={ref}
@@ -129,7 +129,7 @@ function DropDownItems({
   return (
     <DropDownContext.Provider value={contextValue}>
       <div
-        className="fixed z-50 flex flex-col rounded-[3px] bg-white  p-1.5 shadow-md"
+        className="z-50 flex flex-col rounded-[3px] bg-white  p-1.5 shadow-md"
         ref={dropDownRef}
         onKeyDown={handleKeyDown}
       >
@@ -203,7 +203,7 @@ export default function DropDown({
   }, [dropDownRef, buttonRef, showDropDown, stopCloseOnClickSelf]);
 
   return (
-    <>
+    <div className="relative">
       <button
         disabled={disabled}
         aria-label={buttonAriaLabel || buttonLabel}
@@ -215,13 +215,19 @@ export default function DropDown({
         <FaChevronDown className="text-xs" />
       </button>
 
-      {showDropDown &&
-        createPortal(
-          <DropDownItems dropDownRef={dropDownRef} onClose={handleClose}>
-            {children}
-          </DropDownItems>,
-          document.body
-        )}
-    </>
+      {
+        showDropDown && (
+          // createPortal(
+          <div className="absolute right-0 top-12 z-50">
+            <DropDownItems dropDownRef={dropDownRef} onClose={handleClose}>
+              {children}
+            </DropDownItems>
+          </div>
+        )
+        // ,
+        // document.body
+        // )
+      }
+    </div>
   );
 }
