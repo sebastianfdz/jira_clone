@@ -1,6 +1,7 @@
-import { useUser } from "@clerk/nextjs";
+import { SignInButton, useUser } from "@clerk/nextjs";
 import { FaChevronUp } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { Fragment, useState } from "react";
 import { type IssueType } from "@/utils/types";
 import {
   Accordion,
@@ -9,11 +10,12 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Avatar } from "@/components/avatar";
-
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { IssueAssigneeSelect } from "../../issue-select-assignee";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
-import { useState } from "react";
+import { type UserResource } from "@clerk/types";
+import { usePathname } from "next/navigation";
+
 const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   issue,
 }) => {
@@ -23,10 +25,8 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
   const [openAccordion, setOpenAccordion] = useState("details");
 
   function handleAutoAssign() {
-    if (!user?.id) {
-      console.error("No user found");
-      return;
-    }
+    if (!user) return;
+
     updateIssue({
       issue_key: issue.key,
       assigneeId: user.id,
@@ -63,15 +63,12 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
             </span>
             <div className="flex flex-col">
               <IssueAssigneeSelect issue={issue} />
-              <Button
+              <AssignToMeButton
+                key={user?.id}
+                issue={issue}
+                user={user}
                 onClick={handleAutoAssign}
-                data-state={issue.assignee ? "assigned" : "unassigned"}
-                customColors
-                customPadding
-                className="mt-1 hidden text-sm text-blue-600 underline-offset-2 hover:underline [&[data-state=unassigned]]:flex"
-              >
-                Assign to me
-              </Button>
+              />
             </div>
           </div>
           <div className="my-4 grid grid-cols-3 items-center">
@@ -100,6 +97,38 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
         </AccordionContent>
       </AccordionItem>
     </Accordion>
+  );
+};
+
+const AssignToMeButton: React.FC<{
+  issue: IssueType;
+  user: UserResource | null | undefined;
+  onClick: () => void;
+}> = ({ user, issue, onClick }) => {
+  const currentPath = usePathname();
+  return (
+    <Fragment>
+      {user?.id ? (
+        <Button
+          onClick={onClick}
+          data-state={issue.assignee ? "assigned" : "unassigned"}
+          customColors
+          customPadding
+          className="mt-1 hidden text-sm text-blue-600 underline-offset-2 hover:underline [&[data-state=unassigned]]:flex"
+        >
+          Assign to me
+        </Button>
+      ) : (
+        <SignInButton mode="modal" redirectUrl={currentPath}>
+          <button
+            data-state={issue.assignee ? "assigned" : "unassigned"}
+            className="mt-1 hidden text-sm text-blue-600 underline-offset-2 hover:underline [&[data-state=unassigned]]:flex"
+          >
+            Assign to me
+          </button>
+        </SignInButton>
+      )}
+    </Fragment>
   );
 };
 
