@@ -28,9 +28,7 @@ export const SelectedIssueProvider = ({
 }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const [issueId, setIssueId] = useState<string | null>(
-    searchParams.get("selectedIssue")
-  );
+  const [issueId, setIssueId] = useState<string | null>(null);
 
   const setSelectedIssueUrl = useCallback(
     (id: string | null) => {
@@ -39,6 +37,10 @@ export const SelectedIssueProvider = ({
     },
     [pathname]
   );
+
+  useEffect(() => {
+    setIssueId(searchParams.get("selectedIssue"));
+  }, [searchParams]);
 
   useEffect(() => {
     setSelectedIssueUrl(issueId);
