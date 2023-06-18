@@ -3,11 +3,8 @@ import React, { Fragment, useLayoutEffect, useRef } from "react";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
 import { RoadmapHeader } from "./header";
-import { useIssues } from "@/hooks/query-hooks/use-issues";
-import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { useProject } from "@/hooks/query-hooks/use-project";
 import Split from "react-split";
-import "@/styles/split.css";
 import { IssueDetails } from "../issue/issue-details";
 import { notFound } from "next/navigation";
 import { EpicsTable } from "./epics-table";
@@ -16,8 +13,6 @@ const Roadmap: React.FC = () => {
   const { issueId, setIssueId } = useSelectedIssueContext();
   const renderContainerRef = useRef<HTMLDivElement>(null);
 
-  const { issues } = useIssues();
-  const { sprints } = useSprints();
   const { project } = useProject();
 
   useLayoutEffect(() => {
@@ -26,7 +21,7 @@ const Roadmap: React.FC = () => {
     renderContainerRef.current.style.height = `calc(100vh - ${calculatedHeight}px)`;
   }, []);
 
-  if (!issues || !sprints || !project) {
+  if (!project) {
     return notFound();
   }
 
