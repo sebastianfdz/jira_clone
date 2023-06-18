@@ -27,6 +27,7 @@ import {
   issueTypeNotInFilters,
 } from "@/utils/helpers";
 import { useFiltersContext } from "@/context/useFiltersContext";
+import { ProgressBar } from "@/components/progress-bar";
 
 type CreateIssueProps = {
   name: string;
@@ -164,16 +165,25 @@ const EpicsAccordion: React.FC<{
                 />
               </AccordionTrigger>
               <div
-                className="flex flex-grow items-center"
+                className="flex flex-grow items-center py-1.5"
                 role="button"
                 onClick={() => setIssueId(issue.key)}
               >
                 <IssueIcon issueType="EPIC" />
-                <div className="flex items-center gap-x-2">
-                  <div className="ml-3 text-sm font-normal text-gray-500">
-                    {issue.key}
+                <div>
+                  <div className="flex items-center">
+                    <div className="flex items-center gap-x-2">
+                      <span className="ml-3 text-sm font-normal text-gray-500">
+                        {issue.key}
+                      </span>
+                      <span className="text-sm font-normal">{issue.name}</span>
+                    </div>
                   </div>
-                  <div className="text-sm font-normal">{issue.name}</div>
+                  <div className="ml-3 w-64">
+                    {issue.children.length ? (
+                      <ProgressBar variant="sm" issues={issue.children} />
+                    ) : null}
+                  </div>
                 </div>
               </div>
               <Button
