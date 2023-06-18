@@ -7,15 +7,13 @@ import { IssueSelectStatus } from "../../issue-select-status";
 import { IssueAssigneeSelect } from "../../issue-select-assignee";
 import clsx from "clsx";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { ContextTrigger } from "@/components/ui/context-menu";
 import { type IssueType } from "@/utils/types";
-import { getIssueCountByStatus } from "@/utils/helpers";
-import { TooltipWrapper } from "@/components/ui/tooltip";
-
 import { AiOutlinePlus } from "react-icons/ai";
 import { EmtpyIssue } from "@/components/issue/issue-empty";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
+import { ProgressBar } from "@/components/progress-bar";
 
 const ChildIssueList: React.FC<{
   issues: IssueType[];
@@ -72,6 +70,7 @@ const ChildIssueList: React.FC<{
         </Button>
       </div>
       {issues.length ? <ProgressBar issues={issues} /> : null}
+      <div className="mt-3" />
       {issues.map((issue) => {
         return <ChildIssue key={issue.key} issue={issue} />;
       })}
@@ -153,61 +152,6 @@ const ChildIssue: React.FC<{ issue: IssueType }> = ({ issue }) => {
           currentStatus={issue.status}
           issueId={issue.key}
         />
-      </div>
-    </div>
-  );
-};
-
-const ProgressBar: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
-  const memoizedCount = useCallback(getIssueCountByStatus, []);
-  const [statusCount, setStatusCount] = useState(() =>
-    memoizedCount(issues ?? [])
-  );
-
-  useEffect(() => {
-    setStatusCount(() => memoizedCount(issues ?? []));
-  }, [issues, memoizedCount]);
-  return (
-    <div className="mb-3 flex items-center gap-x-5">
-      <div
-        style={{ width: "100%" }}
-        className="flex h-2.5 gap-x-0.5 overflow-hidden rounded-full bg-white"
-      >
-        {statusCount.DONE ? (
-          <TooltipWrapper
-            text={`Done: ${statusCount.DONE} of ${issues.length} issues`}
-          >
-            <div
-              style={{ width: `${(statusCount.DONE / issues.length) * 100}%` }}
-              className="float-left h-full bg-done"
-            />
-          </TooltipWrapper>
-        ) : null}
-        {statusCount.IN_PROGRESS ? (
-          <TooltipWrapper
-            text={`In Progress: ${statusCount.IN_PROGRESS} of ${issues.length} issues`}
-          >
-            <div
-              style={{
-                width: `${(statusCount.IN_PROGRESS / issues.length) * 100}%`,
-              }}
-              className="float-left h-full bg-inprogress"
-            />
-          </TooltipWrapper>
-        ) : null}
-        {statusCount.TODO ? (
-          <TooltipWrapper
-            text={`To Do: ${statusCount.TODO} of ${issues.length} issues`}
-          >
-            <div
-              style={{ width: `${(statusCount.TODO / issues.length) * 100}%` }}
-              className="float-left h-full bg-todo"
-            />
-          </TooltipWrapper>
-        ) : null}
-      </div>
-      <div className=" whitespace-nowrap text-sm text-gray-500">
-        {((statusCount.DONE / issues.length) * 100).toFixed(0)}% Done
       </div>
     </div>
   );
