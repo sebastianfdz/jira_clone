@@ -8,6 +8,9 @@ import { SearchBar } from "@/components/filter-search-bar";
 import { Members } from "../members";
 import { ClearFilters } from "../filter-issue-clear";
 import { SprintFilter } from "../filter-sprint";
+import { NotImplemented } from "../not-implemented";
+import { Button } from "../ui/button";
+import { BiLineChart } from "react-icons/bi";
 
 const BoardHeader: React.FC<{ project: Project }> = ({ project }) => {
   const { search, setSearch } = useFiltersContext();
@@ -15,13 +18,21 @@ const BoardHeader: React.FC<{ project: Project }> = ({ project }) => {
     <div className="flex h-fit flex-col">
       <div className="text-sm text-gray-500">Projects / {project.name}</div>
       <h1>All sprints </h1>
-      <div className="my-3 flex items-center gap-x-5">
-        <SearchBar search={search} setSearch={setSearch} />
-        <Members />
-        <EpicFilter />
-        <IssueTypeFilter />
-        <SprintFilter />
-        <ClearFilters />
+      <div className="my-3 flex items-center justify-between">
+        <div className="flex items-center gap-x-5">
+          <SearchBar search={search} setSearch={setSearch} />
+          <Members />
+          <EpicFilter />
+          <IssueTypeFilter />
+          <SprintFilter />
+          <ClearFilters />
+        </div>
+        <NotImplemented feature="insights">
+          <Button className="flex items-center gap-x-2">
+            <BiLineChart className="text-gray-900" />
+            <span className="text-sm text-gray-900">Insights</span>
+          </Button>
+        </NotImplemented>
       </div>
     </div>
   );
