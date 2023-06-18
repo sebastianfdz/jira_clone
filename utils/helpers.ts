@@ -127,11 +127,16 @@ export function issueTypeNotInFilters({
 export function issueSprintNotInFilters({
   issue,
   sprintIds,
+  excludeBacklog = false,
 }: {
   issue: IssueType;
   sprintIds: string[];
+  excludeBacklog?: boolean;
 }) {
-  if (isNullish(issue.sprintId)) return false;
+  if (isNullish(issue.sprintId)) {
+    if (sprintIds.length && excludeBacklog) return true;
+    return false;
+  }
   return sprintIds.length && !sprintIds.includes(issue.sprintId);
 }
 
@@ -168,7 +173,12 @@ export function generateIssuesForClient(
     const parent = parentMap.get(issue.parentKey ?? "") ?? null;
     const assignee = userMap.get(issue.assigneeId ?? "") ?? null;
     const reporter = userMap.get(issue.reporterId) ?? null;
-    const children = issues.filter((i) => i.parentKey === issue.key);
+    const children = issues
+      .filter((i) => i.parentKey === issue.key)
+      .map((issue) => {
+        const assignee = userMap.get(issue.assigneeId ?? "") ?? null;
+        return Object.assign(issue, { assignee });
+      });
     const sprintIsActive = activeSprintIds?.includes(issue.sprintId ?? "");
     return { ...issue, sprintIsActive, parent, assignee, reporter, children };
   });
