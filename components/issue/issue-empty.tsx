@@ -6,6 +6,7 @@ import { Button } from "../ui/button";
 import { MdCheck, MdClose } from "react-icons/md";
 import { Spinner } from "../ui/spinner";
 import { type IssueType } from "@/utils/types";
+import { IssueIcon } from "./issue-icon";
 
 const EmtpyIssue: React.FC<{
   className?: string;
@@ -17,21 +18,27 @@ const EmtpyIssue: React.FC<{
   onCancel: () => void;
   isCreating: boolean;
   isSubtask?: boolean;
+  isEpic?: boolean;
   parentKey?: IssueType["key"];
 }> = ({
   onCreate,
   onCancel,
   isCreating,
   className,
+  isEpic,
   isSubtask,
   parentKey,
   ...props
 }) => {
   const [name, setName] = useState("");
-  const [type, setType] = useState<IssueType["type"]>(
-    isSubtask ? "SUBTASK" : "TASK"
-  );
+  const [type, setType] = useState<IssueType["type"]>(() => initialType());
   const inputRef = useRef<HTMLInputElement>(null);
+
+  function initialType() {
+    if (isSubtask) return "SUBTASK";
+    if (isEpic) return "EPIC";
+    return "TASK";
+  }
 
   useEffect(() => {
     focusInput();
@@ -66,6 +73,8 @@ const EmtpyIssue: React.FC<{
     >
       {isSubtask ? (
         <div className="py-4" />
+      ) : isEpic ? (
+        <IssueIcon issueType="EPIC" />
       ) : (
         <IssueSelectType
           currentType={type}
