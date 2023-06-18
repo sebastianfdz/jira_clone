@@ -33,15 +33,17 @@ const Roadmap: React.FC = () => {
   return (
     <Fragment>
       <RoadmapHeader project={project} />
-      <Split
-        sizes={issueId ? [60, 40] : [100, 0]}
-        gutterSize={issueId ? 2 : 0}
-        className="flex max-h-full w-full"
-        minSize={issueId ? 400 : 0}
-      >
-        <EpicsTable />
-        <IssueDetails setIssueId={setIssueId} issueId={issueId} />
-      </Split>
+      <div ref={renderContainerRef} className="min-w-full max-w-max">
+        <Split
+          sizes={issueId ? [60, 40] : [100, 0]}
+          gutterSize={issueId ? 2 : 0}
+          className="flex max-h-full w-full"
+          minSize={issueId ? 400 : 0}
+        >
+          <EpicsTable />
+          <IssueDetails setIssueId={setIssueId} issueId={issueId} />
+        </Split>
+      </div>
     </Fragment>
   );
 };
