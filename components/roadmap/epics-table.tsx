@@ -1,10 +1,4 @@
-import {
-  Fragment,
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import {
   AccordionItem,
   Accordion,
