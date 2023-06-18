@@ -170,7 +170,7 @@ const EpicsAccordion: React.FC<{
                 onClick={() => setIssueId(issue.key)}
               >
                 <IssueIcon issueType="EPIC" />
-                <div>
+                <div className="flex flex-col gap-y-1 py-1">
                   <div className="flex items-center">
                     <div className="flex items-center gap-x-2">
                       <span className="ml-3 text-sm font-normal text-gray-500">
