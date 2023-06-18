@@ -15,6 +15,7 @@ const postIssuesBodyValidator = z.object({
   sprintId: z.string().nullable(),
   reporterId: z.string().nullable(),
   parentKey: z.string().nullable(),
+  sprintColor: z.string().nullable().optional(),
 });
 
 export type PostIssueBody = z.infer<typeof postIssuesBodyValidator>;
@@ -139,6 +140,7 @@ export async function POST(req: NextRequest) {
       sprintPosition: positionToInsert,
       boardPosition,
       parentKey: valid.parentKey,
+      sprintColor: valid.sprintColor,
     },
   });
   // return NextResponse.json<PostIssueResponse>({ issue });
