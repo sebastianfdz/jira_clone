@@ -8,7 +8,7 @@ import {
 import { useKeydownListener } from "@/hooks/use-keydown-listener";
 import { Fragment, useRef, useState } from "react";
 import { useIsInViewport } from "@/hooks/use-is-in-viewport";
-import { SignInButton, useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
 import { type SerializedEditorState } from "lexical";
 import { type IssueType } from "@/utils/types";
 import { Avatar } from "@/components/avatar";
@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { EditorPreview } from "@/components/text-editor/preview";
 import { Button } from "@/components/ui/button";
-import { useFullURL } from "@/hooks/use-full-url";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 dayjs.extend(relativeTime);
 
 const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
@@ -24,9 +24,8 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const [isWritingComment, setIsWritingComment] = useState(false);
   const [isInViewport, ref] = useIsInViewport();
   const { comments, addComment } = useIssueDetails();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
   const { user } = useUser();
-  const signInRef = useRef<HTMLButtonElement>(null);
-  const [url] = useFullURL();
 
   useKeydownListener(scrollRef, ["m", "M"], handleEdit);
   function handleEdit(ref: React.RefObject<HTMLElement>) {
@@ -39,12 +38,8 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   }
 
   function handleSave(state: SerializedEditorState | undefined) {
-    if (!user?.id) {
-      // Very hacky way to open the modal
-      // TODO: Find a better way to do this with Clerk api
-      if (signInRef.current) {
-        signInRef.current.click();
-      }
+    if (!isAuthenticated) {
+      openAuthModal();
       return;
     }
     if (!state) {
@@ -54,7 +49,8 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
     addComment({
       issue_key: issue.key,
       content: JSON.stringify(state),
-      authorId: user?.id,
+      // eslint-disable-next-line
+      authorId: user!.id,
     });
     setIsWritingComment(false);
   }
@@ -63,10 +59,6 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
   }
   return (
     <Fragment>
-      {/* eslint-disable-next-line */}
-      <SignInButton mode="modal" redirectUrl={url}>
-        <button ref={signInRef} />
-      </SignInButton>
       <h2>Comments</h2>
       <div className="sticky bottom-0 mb-5 w-full bg-white">
         <div ref={scrollRef} id="dummy-scroll-div" />
@@ -99,9 +91,14 @@ const CommentPreview: React.FC<{
   user: UserResource | undefined | null;
 }> = ({ comment, user }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
   const { updateComment } = useIssueDetails();
 
   function handleSave(state: SerializedEditorState | undefined) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     updateComment({
       issue_key: comment.issueKey,
       commentId: comment.id,
