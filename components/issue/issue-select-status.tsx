@@ -18,6 +18,7 @@ import {
   SelectValue,
   SelectViewport,
 } from "@/components/ui/select";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 export const statuses: StatusObject[] = [
   {
@@ -72,8 +73,13 @@ const IssueSelectStatus: React.FC<{
   );
 
   const { updateIssue, isUpdating } = useIssues();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
 
   function handleSelectChange(value: IssueType["status"]) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const newStatus = statuses.find((status) => status.value == value)!;
     updateIssue({

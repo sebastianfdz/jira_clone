@@ -4,9 +4,12 @@ import { EditorPreview } from "@/components/text-editor/preview";
 import { Fragment, useState } from "react";
 import { type IssueType } from "@/utils/types";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const [isEditing, setIsEditing] = useState(false);
   const { updateIssue } = useIssues();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
+
   const [content, setContent] = useState<SerializedEditorState | undefined>(
     (issue.description
       ? JSON.parse(issue.description)
@@ -19,6 +22,10 @@ const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
   }
 
   function handleSave(state: SerializedEditorState | undefined) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     setContent(state);
     updateIssue({
       issue_key: issue.key,

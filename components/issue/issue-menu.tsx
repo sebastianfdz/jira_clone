@@ -19,6 +19,7 @@ import {
   ContextLabel,
   ContextPortal,
 } from "@/components/ui/context-menu";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 type MenuOptionsType = {
   actions: MenuOptionType[];
@@ -40,6 +41,7 @@ const IssueDropdownMenu: React.FC<{
   issue: IssueType;
 }> = ({ children, issue }) => {
   const { deleteIssue, updateIssue } = useIssues();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
 
   const handleIssueAction = (
     id: MenuOptionType["id"],
@@ -47,6 +49,10 @@ const IssueDropdownMenu: React.FC<{
     sprintId?: string
   ) => {
     e.stopPropagation();
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     if (id == "delete") {
       deleteIssue({ issue_key: issue.key });
     }

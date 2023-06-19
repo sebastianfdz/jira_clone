@@ -16,6 +16,7 @@ import { Fragment, useState } from "react";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { Avatar } from "../avatar";
 import { toast } from "../toast";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const IssueAssigneeSelect: React.FC<{
   issue: IssueType;
@@ -24,6 +25,7 @@ const IssueAssigneeSelect: React.FC<{
 }> = ({ issue, avatarSize, avatarOnly = false }) => {
   const { members } = useProject();
   const { updateIssue, isUpdating } = useIssues();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
   const unassigned = {
     id: "unassigned",
     name: "Unassigned",
@@ -34,6 +36,10 @@ const IssueAssigneeSelect: React.FC<{
     issue.assignee?.id ?? null
   );
   function handleSelectChange(value: User["id"]) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     setSelected(value);
     updateIssue(
       {

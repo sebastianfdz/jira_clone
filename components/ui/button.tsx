@@ -28,7 +28,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       return (
         <Link
           href={href}
-          target={target ?? "_self"}
+          // target={target ?? "_self"}
           className={clsx(
             !customColors && "bg-gray-200 hover:bg-gray-300",
             !customPadding && "p-1.5",

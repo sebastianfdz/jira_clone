@@ -19,14 +19,17 @@ const ModalTrigger = React.forwardRef<TriggerRef, TriggerProps>(
 
 ModalTrigger.displayName = "ModalTrigger";
 
-type ContentProps = React.ComponentProps<typeof ModalPrimitive.Content>;
+type ContentProps = React.ComponentProps<typeof ModalPrimitive.Content> & {
+  customStyle?: boolean;
+};
 type ContentRef = React.ElementRef<typeof ModalPrimitive.Content>;
 
 const ModalContent = React.forwardRef<ContentRef, ContentProps>(
-  ({ children, className, ...props }, forwardedRef) => (
+  ({ children, className, customStyle = false, ...props }, forwardedRef) => (
     <ModalPrimitive.Content
       className={clsx(
-        "fixed left-1/2 top-20 z-50 -translate-x-1/2 rounded-[3px] bg-white p-8 shadow-md",
+        customStyle ? "" : "top-20 bg-white p-8 shadow-md",
+        "fixed left-1/2 z-50 -translate-x-1/2 rounded-[3px]  ",
         className
       )}
       {...props}

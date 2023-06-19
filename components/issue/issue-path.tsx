@@ -10,6 +10,7 @@ import { isEpic } from "@/utils/helpers";
 import { type ReactNode } from "react";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { TooltipWrapper } from "../ui/tooltip";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const IssuePath: React.FC<{
   issue: IssueType;
@@ -62,8 +63,13 @@ const ParentContainer: React.FC<{
   setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
 }> = ({ children, issue, setIssueId }) => {
   const { updateIssue } = useIssues();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
 
   function handleSelectType(type: IssueType["type"]) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     updateIssue(
       {
         issue_key: issue.key,

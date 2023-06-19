@@ -25,9 +25,11 @@ import {
 } from "@/utils/helpers";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { type Sprint } from "@prisma/client";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   const { issues, updateIssue } = useIssues();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
   const { search, assignees, issueTypes, epics } = useFiltersContext();
   const { sprints } = useSprints();
 
@@ -55,6 +57,10 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
   );
 
   const onDragEnd = (result: DropResult) => {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     const { destination, source } = result;
     if (isNullish(destination) || isNullish(source)) return;
     updateIssue({

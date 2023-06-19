@@ -28,6 +28,7 @@ import { IssueDetailsModal } from "../modals/board-issue-details";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { useProject } from "@/hooks/query-hooks/use-project";
 import { useFiltersContext } from "@/context/useFiltersContext";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const STATUSES: IssueStatus[] = ["TODO", "IN_PROGRESS", "DONE"];
 
@@ -73,6 +74,8 @@ const Board: React.FC = () => {
   );
 
   const { updateIssue } = useIssues();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
+
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
     const calculatedHeight = renderContainerRef.current.offsetTop;
@@ -84,6 +87,10 @@ const Board: React.FC = () => {
   }
 
   const onDragEnd = (result: DropResult) => {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     const { destination, source } = result;
     if (isNullish(destination) || isNullish(source)) return;
 

@@ -6,6 +6,7 @@ import { type IssueType } from "@/utils/types";
 import { isDone } from "@/utils/helpers";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { FormSubmit } from "@/components/form/submit";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 export type FormValues = {
   moveToSprintId: string;
@@ -28,10 +29,14 @@ const CompleteSprintForm: React.FC<{
   });
 
   const { updateSprint, isUpdating } = useSprints();
-
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
   const { updateIssuesBatch, batchUpdating } = useIssues();
 
   function handleCompleteSprint(data: FormValues) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     updateSprint(
       {
         sprintId: sprint.id,

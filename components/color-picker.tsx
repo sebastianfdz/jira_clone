@@ -12,6 +12,7 @@ import {
 import { useState } from "react";
 import { type IssueType } from "@/utils/types";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 export const LIGHT_COLORS = [
   { hex: "#9f8fef", label: "purple" },
@@ -39,7 +40,13 @@ const ColorPicker: React.FC<{ issue: IssueType }> = ({ issue }) => {
   );
 
   const { updateIssue } = useIssues();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
+
   function handleSelectChange(value: string) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     setSelected(value);
     updateIssue({ issue_key: issue.key, sprintColor: value });
   }
