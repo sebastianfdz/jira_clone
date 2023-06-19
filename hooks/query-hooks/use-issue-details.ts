@@ -4,6 +4,8 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type GetIssueCommentsResponse } from "@/app/api/issues/[issue_key]/comments/route";
 import { toast } from "@/components/toast";
+import { type AxiosError } from "axios";
+import { TOO_MANY_REQUESTS } from "./use-issues";
 
 export const useIssueDetails = () => {
   const { issueId } = useSelectedIssueContext();
@@ -26,6 +28,16 @@ export const useIssueDetails = () => {
       onSuccess: () => {
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         queryClient.invalidateQueries(["issues", "comments", issueId]);
+      },
+      onError: (err: AxiosError) => {
+        if (err?.response?.data == "Too many requests") {
+          toast.error(TOO_MANY_REQUESTS);
+          return;
+        }
+        toast.error({
+          message: `Something went wrong while creating comment`,
+          description: "Please try again later.",
+        });
       },
     }
   );
@@ -58,12 +70,18 @@ export const useIssueDetails = () => {
         // Return a context object with the snapshotted value
         return { previousComments };
       },
-      onError: (err, newIssue, context) => {
+      onError: (err: AxiosError, newIssue, context) => {
         // If the mutation fails, use the context returned from onMutate to roll back
         queryClient.setQueryData(
           ["issues", "comments", issueId],
           context?.previousComments
         );
+
+        if (err?.response?.data == "Too many requests") {
+          toast.error(TOO_MANY_REQUESTS);
+          return;
+        }
+
         toast.error({
           message: `Something went wrong while updating comment`,
           description: "Please try again later.",

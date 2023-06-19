@@ -3,6 +3,8 @@ import { toast } from "@/components/toast";
 import { api } from "@/utils/api";
 import { type Sprint } from "@prisma/client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { type AxiosError } from "axios";
+import { TOO_MANY_REQUESTS } from "./use-issues";
 
 export const useSprints = () => {
   const queryClient = useQueryClient();
@@ -44,9 +46,14 @@ export const useSprints = () => {
         // Return a context object with the snapshotted value
         return { previousSprints };
       },
-      onError: (err, newSprint, context) => {
+      onError: (err: AxiosError, newSprint, context) => {
         // If the mutation fails, use the context returned from onMutate to roll back
         queryClient.setQueryData(["sprints"], context?.previousSprints);
+
+        if (err?.response?.data == "Too many requests") {
+          toast.error(TOO_MANY_REQUESTS);
+          return;
+        }
         toast.error({
           message: `Something went wrong while updating sprint ${newSprint.sprintId}`,
           description: "Please try again later.",
@@ -65,8 +72,12 @@ export const useSprints = () => {
     api.sprints.postSprint,
     {
       // NO OPTIMISTIC UPDATE BECAUSE WE DON'T KNOW THE KEY OF THE NEW SPRINT
-      onError: () => {
+      onError: (err: AxiosError) => {
         // If the mutation fails, use the context returned from onMutate to roll back
+        if (err?.response?.data == "Too many requests") {
+          toast.error(TOO_MANY_REQUESTS);
+          return;
+        }
         toast.error({
           message: `Something went wrong while creating sprint`,
           description: "Please try again later.",
@@ -97,8 +108,12 @@ export const useSprints = () => {
         // Return a context object with the snapshotted value
         return { previousSprints };
       },
-      onError: (err, deletedSprint, context) => {
+      onError: (err: AxiosError, deletedSprint, context) => {
         // If the mutation fails, use the context returned from onMutate to roll back
+        if (err?.response?.data == "Too many requests") {
+          toast.error(TOO_MANY_REQUESTS);
+          return;
+        }
         toast.error({
           message: `Something went wrong while deleting the sprint ${deletedSprint.sprintId}`,
           description: "Please try again later.",

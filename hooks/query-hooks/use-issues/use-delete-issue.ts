@@ -4,6 +4,8 @@ import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { api } from "@/utils/api";
 import { type IssueType } from "@/utils/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { type AxiosError } from "axios";
+import { TOO_MANY_REQUESTS } from ".";
 
 const useDeleteIssue = () => {
   const { issueId, setIssueId } = useSelectedIssueContext();
@@ -26,8 +28,12 @@ const useDeleteIssue = () => {
         // Return a context object with the snapshotted value
         return { previousIssues };
       },
-      onError: (err, deletedIssue, context) => {
+      onError: (err: AxiosError, deletedIssue, context) => {
         // If the mutation fails, use the context returned from onMutate to roll back
+        if (err?.response?.data == "Too many requests") {
+          toast.error(TOO_MANY_REQUESTS);
+          return;
+        }
         toast.error({
           message: `Something went wrong while deleting the issue ${deletedIssue.issue_key}`,
           description: "Please try again later.",

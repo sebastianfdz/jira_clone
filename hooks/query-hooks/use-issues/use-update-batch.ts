@@ -3,6 +3,8 @@ import { toast } from "@/components/toast";
 import { api } from "@/utils/api";
 import { type IssueType } from "@/utils/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { type AxiosError } from "axios";
+import { TOO_MANY_REQUESTS } from ".";
 
 const useUpdateIssuesBatch = () => {
   const queryClient = useQueryClient();
@@ -35,9 +37,14 @@ const useUpdateIssuesBatch = () => {
         // Return a context object with the snapshotted value
         return { previousIssues };
       },
-      onError: (err, newIssue, context) => {
+      onError: (err: AxiosError, newIssue, context) => {
         // If the mutation fails, use the context returned from onMutate to roll back
         queryClient.setQueryData(["issues"], context?.previousIssues);
+
+        if (err?.response?.data == "Too many requests") {
+          toast.error(TOO_MANY_REQUESTS);
+          return;
+        }
         toast.error({
           message: `Something went wrong while batch updating issues`,
           description: "Please try again later.",

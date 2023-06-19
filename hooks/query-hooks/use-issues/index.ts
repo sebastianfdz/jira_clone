@@ -6,6 +6,11 @@ import { useUpdateIssuesBatch } from "./use-update-batch";
 import { usePostIssue } from "./use-post-issue";
 import { useDeleteIssue } from "./use-delete-issue";
 
+export const TOO_MANY_REQUESTS = {
+  message: `You have exceeded the number of requests allowed per minute.`,
+  description: "Please try again later.",
+};
+
 export const useIssues = () => {
   const { data: issues, isLoading: issuesLoading } = useQuery(
     ["issues"],
