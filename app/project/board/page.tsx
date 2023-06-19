@@ -5,9 +5,9 @@ import { Hydrate } from "@/utils/hydrate";
 import { dehydrate } from "@tanstack/query-core";
 import { currentUser } from "@clerk/nextjs";
 import {
-  getIssuesFromServer,
-  getProjectFromServer,
-  getSprintsFromServer,
+  getInitialIssuesFromServer,
+  getInitialProjectFromServer,
+  getInitialSprintsFromServer,
 } from "@/server/db";
 
 export const metadata: Metadata = {
@@ -20,12 +20,12 @@ const BoardPage = async () => {
 
   await Promise.all([
     await queryClient.prefetchQuery(["issues"], () =>
-      getIssuesFromServer(user?.id)
+      getInitialIssuesFromServer(user?.id)
     ),
     await queryClient.prefetchQuery(["sprints"], () =>
-      getSprintsFromServer(user?.id)
+      getInitialSprintsFromServer(user?.id)
     ),
-    await queryClient.prefetchQuery(["project"], getProjectFromServer),
+    await queryClient.prefetchQuery(["project"], getInitialProjectFromServer),
   ]);
 
   const dehydratedState = dehydrate(queryClient);

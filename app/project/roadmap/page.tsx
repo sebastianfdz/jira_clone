@@ -4,9 +4,9 @@ import { Hydrate } from "@/utils/hydrate";
 import { dehydrate } from "@tanstack/query-core";
 import { Roadmap } from "@/components/roadmap";
 import {
-  getIssuesFromServer,
-  getProjectFromServer,
-  getSprintsFromServer,
+  getInitialIssuesFromServer,
+  getInitialProjectFromServer,
+  getInitialSprintsFromServer,
 } from "@/server/db";
 import { currentUser } from "@clerk/nextjs";
 
@@ -20,12 +20,12 @@ const RoadmapPage = async () => {
 
   await Promise.all([
     await queryClient.prefetchQuery(["issues"], () =>
-      getIssuesFromServer(user?.id)
+      getInitialIssuesFromServer(user?.id)
     ),
     await queryClient.prefetchQuery(["sprints"], () =>
-      getSprintsFromServer(user?.id)
+      getInitialSprintsFromServer(user?.id)
     ),
-    await queryClient.prefetchQuery(["project"], getProjectFromServer),
+    await queryClient.prefetchQuery(["project"], getInitialProjectFromServer),
   ]);
 
   const dehydratedState = dehydrate(queryClient);
