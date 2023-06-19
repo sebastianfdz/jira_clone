@@ -9,6 +9,7 @@ import { EndDateField } from "./fields/end-date";
 import { DescriptionField } from "./fields/description";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { FormSubmit } from "@/components/form/submit";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 export type FormValues = {
   name: string;
@@ -42,10 +43,16 @@ const StartSprintForm: React.FC<{
     },
   });
   const { updateSprint, isUpdating } = useSprints();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
 
   const queryClient = useQueryClient();
 
   function handleStartSprint(data: FormValues) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
+
     updateSprint(
       {
         sprintId: sprint.id,
