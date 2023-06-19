@@ -1,3 +1,4 @@
+"use client";
 import { Sidebar } from "@/components/sidebar";
 import { TopNavbar } from "@/components/top-navbar";
 import { FiltersProvider } from "@/context/useFiltersContext";
