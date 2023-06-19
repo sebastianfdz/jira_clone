@@ -1,6 +1,7 @@
-import { prisma } from "@/server/db";
+import { prisma, ratelimit } from "@/server/db";
+import { getAuth } from "@clerk/nextjs/server";
 import { SprintStatus, type Sprint } from "@prisma/client";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
 export type PostSprintResponse = {
   sprint: Sprint;
@@ -10,7 +11,12 @@ export type GetSprintsResponse = {
   sprints: Sprint[];
 };
 
-export async function POST() {
+export async function POST(req: NextRequest) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
+
   const sprints = await prisma.sprint.findMany();
   const k = sprints.length + 1;
 

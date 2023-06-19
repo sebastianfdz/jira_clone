@@ -1,7 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/server/db";
+import { prisma, ratelimit } from "@/server/db";
 import { SprintStatus, type Sprint } from "@prisma/client";
 import { z } from "zod";
+import { getAuth } from "@clerk/nextjs/server";
 
 const patchSprintBodyValidator = z.object({
   name: z.string().optional(),
@@ -22,6 +23,11 @@ type ParamsType = {
 };
 
 export async function PATCH(req: NextRequest, { params }: ParamsType) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
+
   const { sprint_id } = params;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -65,6 +71,11 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
 }
 
 export async function DELETE(req: NextRequest, { params }: ParamsType) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
+
   const { sprint_id } = params;
 
   await prisma.issue.updateMany({

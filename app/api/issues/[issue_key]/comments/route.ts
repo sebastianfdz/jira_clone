@@ -1,10 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/server/db";
+import { prisma, ratelimit } from "@/server/db";
 import { type Comment } from "@prisma/client";
 import { z } from "zod";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient } from "@/utils/helpers";
 import { type User } from "@/server/db";
+import { getAuth } from "@clerk/nextjs/server";
 
 export type GetIssueCommentsResponse = {
   comments: GetIssueCommentResponse["comment"][];
@@ -57,6 +58,11 @@ export async function POST(
   req: NextRequest,
   { params }: { params: { issue_key: string } }
 ) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
+
   const { issue_key } = params;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();

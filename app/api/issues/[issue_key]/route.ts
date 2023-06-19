@@ -1,10 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { type User, prisma } from "@/server/db";
+import { type User, prisma, ratelimit } from "@/server/db";
 import { IssueStatus, type Issue, IssueType } from "@prisma/client";
 import { z } from "zod";
 import { type GetIssuesResponse } from "../route";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient } from "@/utils/helpers";
+import { getAuth } from "@clerk/nextjs/server";
 
 export type GetIssueDetailsResponse = {
   issue: GetIssuesResponse["issues"][number] | null;
@@ -59,6 +60,10 @@ type ParamsType = {
 };
 
 export async function PATCH(req: NextRequest, { params }: ParamsType) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
   const { issue_key } = params;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -117,6 +122,11 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
 }
 
 export async function DELETE(req: NextRequest, { params }: ParamsType) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
+
   const { issue_key } = params;
 
   const issue = await prisma.issue.update({

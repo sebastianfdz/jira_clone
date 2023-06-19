@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { type User, prisma } from "@/server/db";
+import { type User, prisma, ratelimit } from "@/server/db";
 import { IssueType, type Issue, IssueStatus } from "@prisma/client";
 import { z } from "zod";
-import { clerkClient } from "@clerk/nextjs/server";
+import { clerkClient, getAuth } from "@clerk/nextjs/server";
 import {
   calculateInsertPosition,
   filterUserForClient,
@@ -58,6 +58,7 @@ export async function GET() {
       isDeleted: false,
     },
   });
+
   if (!activeIssues) {
     return NextResponse.json({ issues: [] });
   }
@@ -90,6 +91,11 @@ export async function GET() {
 
 // POST
 export async function POST(req: NextRequest) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
 
@@ -148,6 +154,11 @@ export async function POST(req: NextRequest) {
 }
 
 export async function PATCH(req: NextRequest) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
   const validated = patchIssuesBodyValidator.safeParse(body);

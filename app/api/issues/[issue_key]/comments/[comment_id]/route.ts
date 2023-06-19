@@ -1,8 +1,9 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { prisma } from "@/server/db";
+import { prisma, ratelimit } from "@/server/db";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient } from "@/utils/helpers";
+import { getAuth } from "@clerk/nextjs/server";
 
 const patchCommentBodyValidator = z.object({
   content: z.string(),
@@ -12,6 +13,11 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: { issue_key: string; comment_id: string } }
 ) {
+  const { userId } = getAuth(req);
+  if (!userId) return new Response("Unauthenticated request", { status: 403 });
+  const { success } = await ratelimit.limit(userId);
+  if (!success) return new Response("Too many requests", { status: 429 });
+
   const { comment_id } = params;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
