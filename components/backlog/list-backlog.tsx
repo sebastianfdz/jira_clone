@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const BacklogList: React.FC<{
   id: string;
@@ -40,8 +41,13 @@ const BacklogList: React.FC<{
 
 const BacklogListHeader: React.FC<{ issues: IssueType[] }> = ({ issues }) => {
   const { createSprint } = useSprints();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
 
   function handleCreateSprint() {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     createSprint();
   }
 
