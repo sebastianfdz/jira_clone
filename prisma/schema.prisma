@@ -58,7 +58,7 @@ model Issue {
     boardPosition  Float       @default(-1)
     reporterId     String      @default("1")
     assigneeId     String?
-    parentKey      String?
+    parentId       String?
     sprintId       String?
     isDeleted      Boolean     @default(false)
     createdAt      DateTime    @default(now())
