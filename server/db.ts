@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-
+import { Ratelimit } from "@upstash/ratelimit";
+import { Redis } from "@upstash/redis";
 import { env } from "@/env.mjs";
 
 export type User = {
@@ -12,6 +13,12 @@ export type User = {
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
+
+export const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(15, "1 m"), // 15 requests per minute
+  analytics: true,
+});
 
 export const prisma =
   globalForPrisma.prisma ??
