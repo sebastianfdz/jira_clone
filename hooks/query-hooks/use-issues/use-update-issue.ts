@@ -2,12 +2,18 @@
 import { toast } from "@/components/toast";
 import { api } from "@/utils/api";
 import { type IssueType } from "@/utils/types";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useIsMutating,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { type AxiosError } from "axios";
 import { TOO_MANY_REQUESTS } from ".";
 
 const useUpdateIssue = () => {
   const queryClient = useQueryClient();
+  const isMutating = useIsMutating();
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
 
   const { mutate: updateIssue, isLoading: isUpdating } = useMutation(
     ["issues"],
@@ -53,8 +59,11 @@ const useUpdateIssue = () => {
       },
       onSettled: () => {
         // Always refetch after error or success
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        queryClient.invalidateQueries(["issues"]);
+        // If there are other mutations running, we'll skip this until the last one is done.
+        if (!isMutating) {
+          // eslint-disable-next-line @typescript-eslint/no-floating-promises
+          queryClient.invalidateQueries(["issues"]);
+        }
       },
     }
   );
