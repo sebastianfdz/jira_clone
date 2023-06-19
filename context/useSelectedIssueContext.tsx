@@ -1,5 +1,6 @@
 "use client";
 
+import { type IssueType } from "@/utils/types";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
   type ReactNode,
@@ -11,14 +12,14 @@ import {
 } from "react";
 
 type SelectedIssueContextProps = {
-  issueId: string | null;
-  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
+  issueKey: IssueType["key"] | null;
+  setIssueKey: React.Dispatch<React.SetStateAction<IssueType["key"] | null>>;
 };
 
 const SelectedIssueContext = createContext<SelectedIssueContextProps>({
-  issueId: null,
+  issueKey: null,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  setIssueId: () => {},
+  setIssueKey: () => {},
 });
 
 export const SelectedIssueProvider = ({
@@ -28,26 +29,26 @@ export const SelectedIssueProvider = ({
 }) => {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const [issueId, setIssueId] = useState<string | null>(null);
+  const [issueKey, setIssueKey] = useState<IssueType["key"] | null>(null);
 
   const setSelectedIssueUrl = useCallback(
-    (id: string | null) => {
-      const urlWithQuery = pathname + (id ? `?selectedIssue=${id}` : "");
+    (key: IssueType["key"] | null) => {
+      const urlWithQuery = pathname + (key ? `?selectedIssue=${key}` : "");
       window.history.pushState(null, "", urlWithQuery);
     },
     [pathname]
   );
 
   useEffect(() => {
-    setIssueId(searchParams.get("selectedIssue"));
+    setIssueKey(searchParams.get("selectedIssue"));
   }, [searchParams]);
 
   useEffect(() => {
-    setSelectedIssueUrl(issueId);
-  }, [issueId, setSelectedIssueUrl]);
+    setSelectedIssueUrl(issueKey);
+  }, [issueKey, setSelectedIssueUrl]);
 
   return (
-    <SelectedIssueContext.Provider value={{ issueId, setIssueId }}>
+    <SelectedIssueContext.Provider value={{ issueKey, setIssueKey }}>
       {children}
     </SelectedIssueContext.Provider>
   );

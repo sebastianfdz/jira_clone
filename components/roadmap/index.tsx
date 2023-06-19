@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 import { EpicsTable } from "./epics-table";
 
 const Roadmap: React.FC = () => {
-  const { issueId, setIssueId } = useSelectedIssueContext();
+  const { issueKey, setIssueKey } = useSelectedIssueContext();
   const renderContainerRef = useRef<HTMLDivElement>(null);
 
   const { project } = useProject();
@@ -30,13 +30,13 @@ const Roadmap: React.FC = () => {
       <RoadmapHeader project={project} />
       <div ref={renderContainerRef} className="min-w-full max-w-max">
         <Split
-          sizes={issueId ? [60, 40] : [100, 0]}
-          gutterSize={issueId ? 2 : 0}
+          sizes={issueKey ? [60, 40] : [100, 0]}
+          gutterSize={issueKey ? 2 : 0}
           className="flex max-h-full w-full"
-          minSize={issueId ? 400 : 0}
+          minSize={issueKey ? 400 : 0}
         >
           <EpicsTable />
-          <IssueDetails setIssueId={setIssueId} issueId={issueId} />
+          <IssueDetails setIssueKey={setIssueKey} issueKey={issueKey} />
         </Split>
       </div>
     </Fragment>

@@ -8,7 +8,7 @@ import { type AxiosError } from "axios";
 import { TOO_MANY_REQUESTS } from ".";
 
 const useDeleteIssue = () => {
-  const { issueId, setIssueId } = useSelectedIssueContext();
+  const { issueKey, setIssueKey } = useSelectedIssueContext();
 
   const queryClient = useQueryClient();
 
@@ -46,8 +46,8 @@ const useDeleteIssue = () => {
         queryClient.invalidateQueries(["issues"]);
 
         // Unselect the deleted issue if it is currently selected
-        if (issueId == deletedIssue?.key) {
-          setIssueId(null);
+        if (issueKey == deletedIssue?.key) {
+          setIssueKey(null);
         }
       },
     }

@@ -11,7 +11,7 @@ import { useProject } from "@/hooks/query-hooks/use-project";
 
 const Backlog: React.FC = () => {
   const { project } = useProject();
-  const { issueId, setIssueId } = useSelectedIssueContext();
+  const { issueKey, setIssueKey } = useSelectedIssueContext();
   const renderContainerRef = React.useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -27,13 +27,13 @@ const Backlog: React.FC = () => {
       <BacklogHeader project={project} />
       <div ref={renderContainerRef} className="min-w-full max-w-max">
         <Split
-          sizes={issueId ? [60, 40] : [100, 0]}
-          gutterSize={issueId ? 2 : 0}
+          sizes={issueKey ? [60, 40] : [100, 0]}
+          gutterSize={issueKey ? 2 : 0}
           className="flex max-h-full w-full"
-          minSize={issueId ? 400 : 0}
+          minSize={issueKey ? 400 : 0}
         >
-          <ListGroup className={clsx(issueId && "pb-5 pr-4")} />
-          <IssueDetails setIssueId={setIssueId} issueId={issueId} />
+          <ListGroup className={clsx(issueKey && "pb-5 pr-4")} />
+          <IssueDetails setIssueKey={setIssueKey} issueKey={issueKey} />
         </Split>
       </div>
     </Fragment>

@@ -15,14 +15,14 @@ const Issue: React.FC<{ issue: IssueType; index: number }> = ({
   issue,
   index,
 }) => {
-  const { setIssueId } = useSelectedIssueContext();
+  const { setIssueKey } = useSelectedIssueContext();
 
   return (
     <Draggable draggableId={issue.id} index={index}>
       {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
         <div
           role="button"
-          onClick={() => setIssueId(issue.key)}
+          onClick={() => setIssueKey(issue.key)}
           ref={innerRef}
           {...draggableProps}
           {...dragHandleProps}

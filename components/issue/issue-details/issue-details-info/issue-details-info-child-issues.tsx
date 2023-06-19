@@ -101,12 +101,12 @@ const ChildIssueList: React.FC<{
 const ChildIssue: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { setIssueId, issueId } = useSelectedIssueContext();
+  const { setIssueKey, issueKey } = useSelectedIssueContext();
   return (
     <div
       key={issue.id}
-      data-state={issueId == issue.key ? "selected" : "not-selected"}
-      onClick={() => setIssueId(issue.key)}
+      data-state={issueKey == issue.key ? "selected" : "not-selected"}
+      onClick={() => setIssueKey(issue.key)}
       className={clsx(
         "group flex w-full max-w-full items-center justify-between border-[0.3px] border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 [&[data-state=selected]]:bg-blue-100"
       )}

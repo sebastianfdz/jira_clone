@@ -24,15 +24,15 @@ const Issue: React.FC<{
 }> = ({ index, issue }) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { setIssueId, issueId } = useSelectedIssueContext();
+  const { setIssueKey, issueKey } = useSelectedIssueContext();
 
   return (
     <Draggable draggableId={issue.id} index={index}>
       {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
         <div
           role="button"
-          data-state={issueId == issue.id ? "selected" : "not-selected"}
-          onClick={() => setIssueId(issue.key)}
+          data-state={issueKey == issue.key ? "selected" : "not-selected"}
+          onClick={() => setIssueKey(issue.key)}
           ref={innerRef}
           {...draggableProps}
           {...dragHandleProps}

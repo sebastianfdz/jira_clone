@@ -10,16 +10,16 @@ import { BsThreeDots } from "react-icons/bs";
 
 const IssueDetailsHeader: React.FC<{
   issue: IssueType;
-  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
+  setIssueKey: React.Dispatch<React.SetStateAction<string | null>>;
   isInViewport: boolean;
-}> = ({ issue, setIssueId, isInViewport }) => {
+}> = ({ issue, setIssueKey, isInViewport }) => {
   if (!issue) return <div />;
   return (
     <div
       data-state={isInViewport ? "inViewport" : "notInViewport"}
       className="sticky top-0 z-10 flex h-fit w-full items-center justify-between border-b-2 border-transparent bg-white p-0.5 [&[data-state=notInViewport]]:border-gray-200"
     >
-      <IssuePath issue={issue} setIssueId={setIssueId} />
+      <IssuePath issue={issue} setIssueKey={setIssueKey} />
       <div className="relative flex items-center gap-x-0.5">
         <NotImplemented feature="watch">
           <Button customColors className="bg-transparent hover:bg-gray-200">
@@ -49,7 +49,7 @@ const IssueDetailsHeader: React.FC<{
         <Button
           customColors
           className="bg-transparent hover:bg-gray-200"
-          onClick={() => setIssueId(null)}
+          onClick={() => setIssueKey(null)}
         >
           <MdClose className="text-2xl" />
         </Button>

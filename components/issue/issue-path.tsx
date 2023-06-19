@@ -14,15 +14,15 @@ import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const IssuePath: React.FC<{
   issue: IssueType;
-  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ issue, setIssueId }) => {
+  setIssueKey: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ issue, setIssueKey }) => {
   if (isEpic(issue))
     return (
       <div className="flex items-center">
         <IssueIcon issueType={issue.type} />
         <TooltipWrapper text={`${issue.key}: ${issue.name}`} side="top">
           <Button
-            onClick={() => setIssueId(issue.key)}
+            onClick={() => setIssueKey(issue.key)}
             customColors
             className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
           >
@@ -34,7 +34,7 @@ const IssuePath: React.FC<{
 
   if (issue.parent && isEpic(issue.parent))
     return (
-      <ParentContainer issue={issue} setIssueId={setIssueId}>
+      <ParentContainer issue={issue} setIssueKey={setIssueKey}>
         <IssueSelectEpic issue={issue}>
           <IssueIcon issueType={issue.parent.type} />
         </IssueSelectEpic>
@@ -43,13 +43,13 @@ const IssuePath: React.FC<{
 
   if (issue.parent)
     return (
-      <ParentContainer issue={issue} setIssueId={setIssueId}>
+      <ParentContainer issue={issue} setIssueKey={setIssueKey}>
         <IssueIcon issueType={issue.parent.type} />
       </ParentContainer>
     );
 
   return (
-    <ParentContainer issue={issue} setIssueId={setIssueId}>
+    <ParentContainer issue={issue} setIssueKey={setIssueKey}>
       <IssueSelectEpic issue={issue}>
         <AddEpic />
       </IssueSelectEpic>
@@ -60,8 +60,8 @@ const IssuePath: React.FC<{
 const ParentContainer: React.FC<{
   children: ReactNode;
   issue: IssueType;
-  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ children, issue, setIssueId }) => {
+  setIssueKey: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ children, issue, setIssueKey }) => {
   const { updateIssue } = useIssues();
   const [isAuthenticated, openAuthModal] = useIsAuthenticated();
 
@@ -89,7 +89,7 @@ const ParentContainer: React.FC<{
     <div className="flex gap-x-3">
       <div className="flex items-center">
         {children}
-        <IssueLink issue={issue.parent} setIssueId={setIssueId} />
+        <IssueLink issue={issue.parent} setIssueKey={setIssueKey} />
       </div>
       <span className="py-1.5 text-gray-500">/</span>
       <div className="relative flex items-center">
@@ -99,7 +99,7 @@ const ParentContainer: React.FC<{
           onSelect={handleSelectType}
         />
         <TooltipWrapper text={`${issue.key}: ${issue.name}`} side="top">
-          <IssueLink issue={issue} setIssueId={setIssueId} />
+          <IssueLink issue={issue} setIssueKey={setIssueKey} />
         </TooltipWrapper>
       </div>
     </div>
@@ -108,13 +108,13 @@ const ParentContainer: React.FC<{
 
 const IssueLink: React.FC<{
   issue: IssueType | IssueType["parent"] | null;
-  setIssueId: React.Dispatch<React.SetStateAction<string | null>>;
-}> = ({ issue, setIssueId }) => {
+  setIssueKey: React.Dispatch<React.SetStateAction<string | null>>;
+}> = ({ issue, setIssueKey }) => {
   if (!issue) return <div />;
   return (
     <TooltipWrapper text={`${issue.key}: ${issue.name}`} side="top">
       <Button
-        onClick={() => setIssueId(issue?.key ?? null)}
+        onClick={() => setIssueKey(issue?.key ?? null)}
         customColors
         className=" bg-transparent text-xs text-gray-500 underline-offset-2 hover:underline"
       >

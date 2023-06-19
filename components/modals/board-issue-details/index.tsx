@@ -9,28 +9,28 @@ import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { useEffect, useState } from "react";
 
 const IssueDetailsModal: React.FC = () => {
-  const { setIssueId, issueId } = useSelectedIssueContext();
-  const [isOpen, setIsOpen] = useState(() => !!issueId);
+  const { setIssueKey, issueKey } = useSelectedIssueContext();
+  const [isOpen, setIsOpen] = useState(() => !!issueKey);
 
   function handleOpenChange(open: boolean) {
     if (open) return;
-    setIssueId(null);
+    setIssueKey(null);
     setIsOpen(false);
   }
 
   useEffect(() => {
-    if (issueId) {
+    if (issueKey) {
       setIsOpen(true);
     } else {
       setIsOpen(false);
     }
-  }, [issueId, setIsOpen]);
+  }, [issueKey, setIsOpen]);
   return (
     <Modal open={isOpen} onOpenChange={handleOpenChange}>
       <ModalPortal>
         <ModalOverlay />
         <ModalContent className="h-fit max-h-[80vh] w-[80vw] overflow-hidden">
-          <IssueDetails issueId={issueId} setIssueId={setIssueId} />
+          <IssueDetails issueKey={issueKey} setIssueKey={setIssueKey} />
         </ModalContent>
       </ModalPortal>
     </Modal>

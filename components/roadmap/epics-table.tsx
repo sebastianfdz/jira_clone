@@ -118,7 +118,7 @@ const EpicsAccordion: React.FC<{
   handleCreateIssue: (props: CreateIssueProps) => void;
 }> = ({ handleCreateIssue }) => {
   const [creationParent, setCreationParent] = useState<number | null>(null);
-  const { setIssueId } = useSelectedIssueContext();
+  const { setIssueKey } = useSelectedIssueContext();
   const { issues, isCreating } = useIssues();
   const { search, assignees, issueTypes, epics, sprints } = useFiltersContext();
 
@@ -174,7 +174,7 @@ const EpicsAccordion: React.FC<{
               <div
                 className="flex flex-grow items-center py-1.5"
                 role="button"
-                onClick={() => setIssueId(issue.key)}
+                onClick={() => setIssueKey(issue.key)}
               >
                 <IssueIcon issueType="EPIC" />
                 <div className="flex flex-col gap-y-1 py-1">
@@ -206,7 +206,7 @@ const EpicsAccordion: React.FC<{
                 <div
                   key={child.key}
                   role="button"
-                  onClick={() => setIssueId(child.key)}
+                  onClick={() => setIssueKey(child.key)}
                   className="flex items-center justify-between p-1.5 pl-12 hover:bg-gray-100"
                 >
                   <div className="flex items-center gap-x-2">

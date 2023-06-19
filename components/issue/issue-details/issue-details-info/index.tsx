@@ -42,7 +42,7 @@ const SmallIssueDetailsInfo = React.forwardRef<
   HTMLDivElement,
   { issue: IssueType }
 >(({ issue }, ref) => {
-  const { issueId } = useSelectedIssueContext();
+  const { issueKey } = useSelectedIssueContext();
   const nameRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isAddingChildIssue, setIsAddingChildIssue] = useState(false);
@@ -88,7 +88,7 @@ const SmallIssueDetailsInfo = React.forwardRef<
           </Button>
         </NotImplemented>
       </div>
-      <Description issue={issue} key={String(issueId) + issue.id} />
+      <Description issue={issue} key={String(issueKey) + issue.id} />
       {hasChildren(issue) || isAddingChildIssue ? (
         <ChildIssueList
           issues={issue.children}
@@ -111,7 +111,7 @@ const LargeIssueDetails = React.forwardRef<
   HTMLDivElement,
   { issue: IssueType }
 >(({ issue }, ref) => {
-  const { issueId } = useSelectedIssueContext();
+  const { issueKey } = useSelectedIssueContext();
   const nameRef = useRef<HTMLInputElement>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isAddingChildIssue, setIsAddingChildIssue] = useState(false);
@@ -147,7 +147,7 @@ const LargeIssueDetails = React.forwardRef<
           onAddChildIssue={() => setIsAddingChildIssue(true)}
           variant={"lg"}
         />
-        <Description issue={issue} key={String(issueId) + issue.id} />
+        <Description issue={issue} key={String(issueKey) + issue.id} />
         {hasChildren(issue) || isAddingChildIssue ? (
           <ChildIssueList
             issues={issue.children}
