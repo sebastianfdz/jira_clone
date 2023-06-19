@@ -4,6 +4,8 @@ import { siteConfig } from "@/config/site";
 import "@/styles/globals.css";
 import Toaster from "@/components/toast";
 import QueryProvider from "@/utils/provider";
+import { AuthModalProvider } from "@/context/use-auth-modal";
+import { AuthModal } from "@/components/modals/auth";
 
 export const metadata: Metadata = {
   title: {
@@ -45,15 +47,18 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <ClerkProvider>
           <QueryProvider>
-            <Toaster
-              position="bottom-left"
-              reverseOrder={false}
-              containerStyle={{
-                height: "92vh",
-                marginLeft: "3vw",
-              }}
-            />
-            {children}
+            <AuthModalProvider>
+              <AuthModal />
+              <Toaster
+                position="bottom-left"
+                reverseOrder={false}
+                containerStyle={{
+                  height: "92vh",
+                  marginLeft: "3vw",
+                }}
+              />
+              {children}
+            </AuthModalProvider>
           </QueryProvider>
         </ClerkProvider>
       </body>
