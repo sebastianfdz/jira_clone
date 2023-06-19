@@ -51,13 +51,20 @@ export type GetIssuesResponse = {
   issues: IssueT[];
 };
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { userId } = getAuth(req);
+
+  console.log("USER UD =======>", userId);
+  // if (!userId) return NextResponse.json({ issues: [] });
   // return NextResponse.json<GetIssuesResponse>({ issues: activeIssues });
   const activeIssues = await prisma.issue.findMany({
     where: {
+      creatorId: userId ?? "",
       isDeleted: false,
     },
   });
+
+  console.log("ACTIVE ISSUES =======>", activeIssues);
 
   if (!activeIssues) {
     return NextResponse.json({ issues: [] });
@@ -76,7 +83,7 @@ export async function GET() {
   const users = (
     await clerkClient.users.getUserList({
       userId: userIds,
-      limit: 20,
+      limit: 10,
     })
   ).map(filterUserForClient);
 
@@ -85,6 +92,8 @@ export async function GET() {
     users,
     activeSprints.map((sprint) => sprint.id)
   );
+
+  console.log("ISSUES FOR CLIENT =======>", issuesForClient);
   // const issuesForClient = await getIssuesFromServer();
   return NextResponse.json({ issues: issuesForClient });
 }
@@ -113,6 +122,7 @@ export async function POST(req: NextRequest) {
   const currentSprintIssues = await prisma.issue.findMany({
     where: {
       sprintId: valid.sprintId,
+      creatorId: userId,
       isDeleted: false,
     },
   });
@@ -147,6 +157,7 @@ export async function POST(req: NextRequest) {
       boardPosition,
       parentKey: valid.parentKey,
       sprintColor: valid.sprintColor,
+      creatorId: userId,
     },
   });
   // return NextResponse.json<PostIssueResponse>({ issue });
