@@ -49,7 +49,7 @@ enum IssueStatus {
 
 model Issue {
     id             String      @id @default(uuid())
-    key            String      @unique
+    key            String
     name           String
     description    String?     @db.Text()
     status         IssueStatus @default(TODO)
@@ -65,10 +65,11 @@ model Issue {
     updatedAt      DateTime    @updatedAt
     deletedAt      DateTime?
     sprintColor    String?
+    creatorId      String
     comments       Comment[]
-    logs           Log[]
     Sprint         Sprint?     @relation(fields: [sprintId], references: [id])
 
+    @@unique([key, creatorId])
     @@index([sprintId])
 }
 
@@ -93,6 +94,7 @@ model Sprint {
     duration    String?
     startDate   DateTime?
     endDate     DateTime?
+    creatorId   String
     createdAt   DateTime     @default(now())
     updatedAt   DateTime?    @updatedAt
     deletedAt   DateTime?
@@ -108,22 +110,9 @@ model Comment {
     updatedAt DateTime  @updatedAt
     deletedAt DateTime?
     isEdited  Boolean   @default(false)
-    issueKey  String
+    issueId   String
     logId     String?
-    Issue     Issue?    @relation(fields: [issueKey], references: [key])
+    Issue     Issue?    @relation(fields: [issueId], references: [id])
 
-    @@index([issueKey])
-}
-
-model Log {
-    id        String    @id @default(uuid())
-    content   String    @db.Text()
-    authorId  String
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
-    deletedAt DateTime?
-    issueKey  String?
-    Issue     Issue?    @relation(fields: [issueKey], references: [key])
-
-    @@index([issueKey])
+    @@index([issueId])
 }
