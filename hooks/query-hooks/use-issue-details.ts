@@ -5,10 +5,29 @@ import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import { type GetIssueCommentsResponse } from "@/app/api/issues/[issueId]/comments/route";
 import { toast } from "@/components/toast";
 import { type AxiosError } from "axios";
-import { TOO_MANY_REQUESTS } from "./use-issues";
+import { TOO_MANY_REQUESTS, useIssues } from "./use-issues";
+import { useCallback, useEffect, useState } from "react";
+import { type IssueType } from "@/utils/types";
 
 export const useIssueDetails = () => {
-  const { issueId } = useSelectedIssueContext();
+  const { issueKey } = useSelectedIssueContext();
+  const { issues } = useIssues();
+
+  const getIssueId = useCallback(
+    (issues: IssueType[] | undefined) => {
+      return issues?.find((issue) => issue.key === issueKey)?.id ?? null;
+    },
+    [issueKey]
+  );
+
+  const [issueId, setIssueId] = useState<IssueType["id"] | null>(() =>
+    getIssueId(issues)
+  );
+
+  useEffect(() => {
+    setIssueId(getIssueId(issues));
+  }, [setIssueId, getIssueId, issues]);
+
   const queryClient = useQueryClient();
 
   // GET
