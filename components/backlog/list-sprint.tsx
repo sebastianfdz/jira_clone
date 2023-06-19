@@ -21,6 +21,7 @@ import { AlertModal } from "../modals/alert";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { toast } from "../toast";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const SprintList: React.FC<{
   sprint: Sprint;
@@ -54,9 +55,14 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
   const [updateModalIsOpen, setUpdateModalIsOpen] = useState(false);
   const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
   const queryClient = useQueryClient();
-
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
   const { deleteSprint } = useSprints();
+
   function handleDeleteSprint() {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     deleteSprint(
       { sprintId: sprint.id },
       {
