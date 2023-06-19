@@ -95,7 +95,7 @@ const Board: React.FC = () => {
     if (isNullish(destination) || isNullish(source)) return;
 
     updateIssue({
-      issue_key: result.draggableId,
+      issueId: result.draggableId,
       status: destination.droppableId as IssueStatus,
       boardPosition: calculateIssueBoardPosition({
         activeIssues: issues.filter((issue) => issue.sprintIsActive),
@@ -162,7 +162,7 @@ function getAfterDropPrevNextIssue(props: IssueListPositionProps) {
     status: destination.droppableId as IssueStatus,
   });
   const droppedIssue = activeIssues.find(
-    (issue) => issue.key === droppedIssueId
+    (issue) => issue.id === droppedIssueId
   );
 
   if (!droppedIssue) {

@@ -54,11 +54,11 @@ const IssueDropdownMenu: React.FC<{
       return;
     }
     if (id == "delete") {
-      deleteIssue({ issue_key: issue.key });
+      deleteIssue({ issueId: issue.id });
     }
     if (id == "move-to") {
       updateIssue({
-        issue_key: issue.key,
+        issueId: issue.id,
         sprintId,
       });
     }

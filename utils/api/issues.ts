@@ -10,12 +10,12 @@ import {
   type GetIssueDetailsResponse,
   type PatchIssueResponse,
   type PostIssueResponse,
-} from "@/app/api/issues/[issue_key]/route";
+} from "@/app/api/issues/[issueId]/route";
 import {
   type GetIssueCommentResponse,
   type GetIssueCommentsResponse,
   type PostCommentBody,
-} from "@/app/api/issues/[issue_key]/comments/route";
+} from "@/app/api/issues/[issueId]/comments/route";
 
 const baseUrl = getBaseUrl();
 
@@ -35,9 +35,9 @@ export const issuesRoutes = {
     );
     return data?.issues;
   },
-  getIssueDetails: async ({ issue_key }: { issue_key: string }) => {
+  getIssueDetails: async ({ issueId }: { issueId: string }) => {
     const { data } = await axios.get<GetIssueDetailsResponse>(
-      `${baseUrl}/api/issues/${issue_key}`
+      `${baseUrl}/api/issues/${issueId}`
     );
     return data?.issue;
   },
@@ -51,11 +51,11 @@ export const issuesRoutes = {
     return data?.issue;
   },
   patchIssue: async ({
-    issue_key,
+    issueId,
     ...body
-  }: { issue_key: string } & PatchIssueBody) => {
+  }: { issueId: string } & PatchIssueBody) => {
     const { data } = await axios.patch<PatchIssueResponse>(
-      `${baseUrl}/api/issues/${issue_key}`,
+      `${baseUrl}/api/issues/${issueId}`,
       body,
 
       { headers: getHeaders() }
@@ -63,9 +63,9 @@ export const issuesRoutes = {
 
     return data?.issue;
   },
-  deleteIssue: async ({ issue_key }: { issue_key: string }) => {
+  deleteIssue: async ({ issueId }: { issueId: string }) => {
     const { data } = await axios.delete<PostIssueResponse>(
-      `${baseUrl}/api/issues/${issue_key}`,
+      `${baseUrl}/api/issues/${issueId}`,
       { headers: getHeaders() }
     );
 
@@ -73,37 +73,37 @@ export const issuesRoutes = {
   },
   addCommentToIssue: async (
     payload: {
-      issue_key: string;
+      issueId: string;
     } & PostCommentBody
   ) => {
-    const { issue_key, content, authorId } = payload;
+    const { issueId, content, authorId } = payload;
     const { data } = await axios.post<GetIssueCommentResponse>(
-      `${baseUrl}/api/issues/${issue_key}/comments`,
+      `${baseUrl}/api/issues/${issueId}/comments`,
       { content, authorId },
       { headers: getHeaders() }
     );
 
     return data?.comment;
   },
-  getIssueComments: async ({ issue_key }: { issue_key: string }) => {
+  getIssueComments: async ({ issueId }: { issueId: string }) => {
     const { data } = await axios.get<GetIssueCommentsResponse>(
-      `${baseUrl}/api/issues/${issue_key}/comments`
+      `${baseUrl}/api/issues/${issueId}/comments`
     );
 
     return data?.comments;
   },
 
   updateIssueComment: async ({
-    issue_key,
+    issueId,
     content,
     commentId,
   }: {
-    issue_key: string;
+    issueId: string;
     commentId: string;
     content: string;
   }) => {
     const { data } = await axios.patch<GetIssueCommentResponse>(
-      `${baseUrl}/api/issues/${issue_key}/comments/${commentId}`,
+      `${baseUrl}/api/issues/${issueId}/comments/${commentId}`,
       { content },
       { headers: getHeaders() }
     );

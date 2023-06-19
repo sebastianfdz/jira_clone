@@ -33,7 +33,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
         return;
       }
       updateIssue({
-        issue_key: issue.key,
+        issueId: issue.id,
         name: currentTitle,
       });
       setIsEditing(false);

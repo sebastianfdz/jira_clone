@@ -72,7 +72,7 @@ const ParentContainer: React.FC<{
     }
     updateIssue(
       {
-        issue_key: issue.key,
+        issueId: issue.id,
         type,
       },
       {
@@ -94,7 +94,7 @@ const ParentContainer: React.FC<{
       <span className="py-1.5 text-gray-500">/</span>
       <div className="relative flex items-center">
         <IssueSelectType
-          key={issue.key + issue.type}
+          key={issue.id + issue.type}
           currentType={issue.type}
           onSelect={handleSelectType}
         />

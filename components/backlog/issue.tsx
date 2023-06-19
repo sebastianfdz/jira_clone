@@ -27,11 +27,11 @@ const Issue: React.FC<{
   const { setIssueId, issueId } = useSelectedIssueContext();
 
   return (
-    <Draggable draggableId={issue.key} index={index}>
+    <Draggable draggableId={issue.id} index={index}>
       {({ innerRef, dragHandleProps, draggableProps }, { isDragging }) => (
         <div
           role="button"
-          data-state={issueId == issue.key ? "selected" : "not-selected"}
+          data-state={issueId == issue.id ? "selected" : "not-selected"}
           onClick={() => setIssueId(issue.key)}
           ref={innerRef}
           {...draggableProps}
@@ -54,7 +54,7 @@ const Issue: React.FC<{
             </div>
 
             <IssueTitle
-              key={issue.key + issue.name}
+              key={issue.id + issue.name}
               className="truncate py-1.5 hover:cursor-pointer hover:underline"
               isEditing={isEditing}
               setIsEditing={setIsEditing}
@@ -87,9 +87,9 @@ const Issue: React.FC<{
               <ChildrenTreeIcon className="p-0.5 text-gray-600" />
             ) : null}
             <IssueSelectStatus
-              key={issue.key + issue.status}
+              key={issue.id + issue.status}
               currentStatus={issue.status}
-              issueId={issue.key}
+              issueId={issue.id}
             />
             <IssueAssigneeSelect issue={issue} avatarOnly />
             <IssueDropdownMenu issue={issue}>

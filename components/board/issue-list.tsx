@@ -40,7 +40,7 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
             {issues
               .sort((a, b) => a.boardPosition - b.boardPosition)
               .map((issue, index) => (
-                <Issue key={issue.key} index={index} issue={issue} />
+                <Issue key={issue.id} index={index} issue={issue} />
               ))}
             {placeholder}
           </div>

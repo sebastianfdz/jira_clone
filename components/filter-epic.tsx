@@ -31,9 +31,9 @@ const EpicFilter: React.FC = () => {
     issue: IssueType
   ) {
     if (e.target.checked) {
-      setEpics((prev) => [...prev, issue.key]);
+      setEpics((prev) => [...prev, issue.id]);
     } else {
-      setEpics((prev) => prev.filter((key) => key !== issue.key));
+      setEpics((prev) => prev.filter((id) => id !== issue.id));
     }
   }
   return (
@@ -79,7 +79,7 @@ const EpicFilter: React.FC = () => {
                 <input
                   type="checkbox"
                   className="form-checkbox h-3 w-3 rounded-sm text-inprogress"
-                  checked={epics.includes(issue.key)}
+                  checked={epics.includes(issue.id)}
                 />
                 <TooltipWrapper text={issue.name}>
                   <span className="text-sm text-gray-700">{issue.name}</span>

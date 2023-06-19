@@ -83,7 +83,7 @@ const IssueSelectStatus: React.FC<{
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const newStatus = statuses.find((status) => status.value == value)!;
     updateIssue({
-      issue_key: issueId,
+      issueId,
       status: value,
     });
     setSelected(newStatus);

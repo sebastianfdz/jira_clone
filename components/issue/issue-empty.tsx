@@ -13,13 +13,13 @@ const EmtpyIssue: React.FC<{
   onCreate: (payload: {
     name: string;
     type: IssueType["type"];
-    parentKey: IssueType["key"] | null;
+    parentId: IssueType["id"] | null;
   }) => void;
   onCancel: () => void;
   isCreating: boolean;
   isSubtask?: boolean;
   isEpic?: boolean;
-  parentKey?: IssueType["key"];
+  parentId?: IssueType["id"];
 }> = ({
   onCreate,
   onCancel,
@@ -27,7 +27,7 @@ const EmtpyIssue: React.FC<{
   className,
   isEpic,
   isSubtask,
-  parentKey,
+  parentId,
   ...props
 }) => {
   const [name, setName] = useState("");
@@ -58,7 +58,7 @@ const EmtpyIssue: React.FC<{
     if (e.key === "Enter") {
       e.preventDefault();
 
-      onCreate({ name, type, parentKey: parentKey ?? null });
+      onCreate({ name, type, parentId: parentId ?? null });
       setName("");
     }
   }
@@ -110,7 +110,7 @@ const EmtpyIssue: React.FC<{
               onCreate({
                 name,
                 type,
-                parentKey: parentKey ?? null,
+                parentId: parentId ?? null,
               })
             }
           >

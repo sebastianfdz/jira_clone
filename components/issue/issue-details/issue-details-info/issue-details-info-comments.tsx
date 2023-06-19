@@ -1,6 +1,6 @@
 import { useIssueDetails } from "@/hooks/query-hooks/use-issue-details";
 import { type UserResource } from "@clerk/types";
-import { type GetIssueCommentResponse } from "@/app/api/issues/[issue_key]/comments/route";
+import { type GetIssueCommentResponse } from "@/app/api/issues/[issueId]/comments/route";
 import {
   Editor,
   type EditorContentType,
@@ -47,7 +47,7 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
       return;
     }
     addComment({
-      issue_key: issue.key,
+      issueId: issue.id,
       content: JSON.stringify(state),
       // eslint-disable-next-line
       authorId: user!.id,
@@ -100,7 +100,7 @@ const CommentPreview: React.FC<{
       return;
     }
     updateComment({
-      issue_key: comment.issueKey,
+      issueId: comment.issueId,
       commentId: comment.id,
       content: JSON.stringify(state),
     });

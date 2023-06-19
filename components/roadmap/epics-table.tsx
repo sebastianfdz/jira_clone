@@ -33,7 +33,7 @@ import { useIsAuthenticated } from "@/hooks/use-is-authed";
 type CreateIssueProps = {
   name: string;
   type: IssueType["type"];
-  parentKey?: string | null;
+  parentId?: IssueType["id"] | null;
   sprintColor?: string | null;
 };
 
@@ -53,7 +53,7 @@ const EpicsTable: React.FC = () => {
   function handleCreateIssue({
     name,
     type,
-    parentKey = null,
+    parentId = null,
     sprintColor = null,
   }: CreateIssueProps) {
     if (!isAuthenticated) {
@@ -64,7 +64,7 @@ const EpicsTable: React.FC = () => {
       {
         name,
         type,
-        parentKey,
+        parentId,
         sprintId: null,
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         reporterId: user!.id,
@@ -155,7 +155,7 @@ const EpicsAccordion: React.FC<{
       {issues
         ?.filter((issue) => issue.type == "EPIC")
         .map((issue, index) => (
-          <AccordionItem key={issue.key} value={issue.key}>
+          <AccordionItem key={issue.id} value={issue.key}>
             <div
               className={clsx(
                 index % 2 == 0 ? "bg-white" : "bg-gray-100",
@@ -237,7 +237,7 @@ const EpicsAccordion: React.FC<{
                 data-state={creationParent == index ? "open" : "closed"}
                 className="[&[data-state=closed]]:hidden"
                 onCreate={({ name, type }) =>
-                  handleCreateIssue({ name, type, parentKey: issue.key })
+                  handleCreateIssue({ name, type, parentId: issue.id })
                 }
                 onCancel={() => setCreationParent(null)}
                 isCreating={isCreating}

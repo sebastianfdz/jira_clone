@@ -64,7 +64,7 @@ const ListGroup: React.FC<{ className?: string }> = ({ className }) => {
     const { destination, source } = result;
     if (isNullish(destination) || isNullish(source)) return;
     updateIssue({
-      issue_key: result.draggableId,
+      issueId: result.draggableId,
       sprintId: sprintId(destination.droppableId),
       sprintPosition: calculateIssueSprintPosition({
         activeIssues: issues ?? [],
@@ -132,7 +132,7 @@ function getAfterDropPrevNextIssue(props: IssueListPositionProps) {
     sprintId: destination.droppableId,
   });
   const droppedIssue = activeIssues.find(
-    (issue) => issue.key === droppedIssueId
+    (issue) => issue.id === droppedIssueId
   );
 
   if (!droppedIssue) {

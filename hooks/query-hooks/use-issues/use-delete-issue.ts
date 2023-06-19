@@ -23,7 +23,7 @@ const useDeleteIssue = () => {
         const previousIssues = queryClient.getQueryData(["issues"]);
         // Optimistically delete the issue
         queryClient.setQueryData(["issues"], (old: IssueType[] | undefined) => {
-          return old?.filter((issue) => issue.key !== deletedIssue.issue_key);
+          return old?.filter((issue) => issue.id !== deletedIssue.issueId);
         });
         // Return a context object with the snapshotted value
         return { previousIssues };
@@ -35,7 +35,7 @@ const useDeleteIssue = () => {
           return;
         }
         toast.error({
-          message: `Something went wrong while deleting the issue ${deletedIssue.issue_key}`,
+          message: `Something went wrong while deleting the issue ${deletedIssue.issueId}`,
           description: "Please try again later.",
         });
         queryClient.setQueryData(["issues"], context?.previousIssues);

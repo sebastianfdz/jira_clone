@@ -31,7 +31,7 @@ const IssueDetailsInfoAccordion: React.FC<{ issue: IssueType }> = ({
     }
 
     updateIssue({
-      issue_key: issue.key,
+      issueId: issue.id,
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       assigneeId: user!.id,
     });

@@ -24,8 +24,8 @@ const useUpdateIssue = () => {
 
         queryClient.setQueryData(["issues"], (old?: IssueType[]) => {
           const newIssues = (old ?? []).map((issue) => {
-            const { issue_key, ...updatedProps } = newIssue;
-            if (issue.key === issue_key) {
+            const { issueId, ...updatedProps } = newIssue;
+            if (issue.id === issueId) {
               // Assign the new prop values to the issue
               return Object.assign(issue, updatedProps);
             }
@@ -47,7 +47,7 @@ const useUpdateIssue = () => {
         }
 
         toast.error({
-          message: `Something went wrong while updating the issue ${newIssue.issue_key}`,
+          message: `Something went wrong while updating the issue ${newIssue.issueId}`,
           description: "Please try again later.",
         });
       },

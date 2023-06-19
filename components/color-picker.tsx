@@ -48,7 +48,7 @@ const ColorPicker: React.FC<{ issue: IssueType }> = ({ issue }) => {
       return;
     }
     setSelected(value);
-    updateIssue({ issue_key: issue.key, sprintColor: value });
+    updateIssue({ issueId: issue.id, sprintColor: value });
   }
 
   return (

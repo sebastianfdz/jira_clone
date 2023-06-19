@@ -43,7 +43,7 @@ const IssueAssigneeSelect: React.FC<{
     setSelected(value);
     updateIssue(
       {
-        issue_key: issue.key,
+        issueId: issue.id,
         assigneeId: value === "unassigned" ? null : value,
       },
       {

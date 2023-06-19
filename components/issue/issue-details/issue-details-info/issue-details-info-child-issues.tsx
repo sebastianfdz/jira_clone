@@ -19,13 +19,13 @@ import { useIsAuthenticated } from "@/hooks/use-is-authed";
 const ChildIssueList: React.FC<{
   issues: IssueType[];
   parentIsEpic: boolean;
-  parentKey: IssueType["key"];
+  parentId: IssueType["id"];
   isAddingChildIssue: boolean;
   setIsAddingChildIssue: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({
   issues,
   parentIsEpic,
-  parentKey,
+  parentId,
   isAddingChildIssue,
   setIsAddingChildIssue,
 }) => {
@@ -36,11 +36,11 @@ const ChildIssueList: React.FC<{
   function handleCreateIssue({
     name,
     type,
-    parentKey,
+    parentId,
   }: {
     name: string;
     type: IssueType["type"];
-    parentKey: IssueType["key"] | null;
+    parentId: IssueType["id"] | null;
   }) {
     if (!isAuthenticated) {
       openAuthModal();
@@ -50,7 +50,7 @@ const ChildIssueList: React.FC<{
       {
         name,
         type,
-        parentKey,
+        parentId,
         sprintId: null,
         reporterId: null,
       },
@@ -83,8 +83,8 @@ const ChildIssueList: React.FC<{
       <EmtpyIssue
         data-state={isEditing || isAddingChildIssue ? "open" : "closed"}
         className="[&[data-state=closed]]:hidden"
-        onCreate={({ name, type, parentKey }) =>
-          handleCreateIssue({ name, type, parentKey })
+        onCreate={({ name, type, parentId }) =>
+          handleCreateIssue({ name, type, parentId })
         }
         onCancel={() => {
           setIsEditing(false);
@@ -92,7 +92,7 @@ const ChildIssueList: React.FC<{
         }}
         isCreating={isCreating}
         isSubtask={!parentIsEpic}
-        parentKey={parentKey}
+        parentId={parentId}
       />
     </Fragment>
   );
@@ -104,7 +104,7 @@ const ChildIssue: React.FC<{ issue: IssueType }> = ({ issue }) => {
   const { setIssueId, issueId } = useSelectedIssueContext();
   return (
     <div
-      key={issue.key}
+      key={issue.id}
       data-state={issueId == issue.key ? "selected" : "not-selected"}
       onClick={() => setIssueId(issue.key)}
       className={clsx(
@@ -124,7 +124,7 @@ const ChildIssue: React.FC<{ issue: IssueType }> = ({ issue }) => {
         </div>
 
         <IssueTitle
-          key={issue.key + issue.name}
+          key={issue.id + issue.name}
           className="truncate py-1.5 text-sm hover:cursor-pointer hover:underline"
           isEditing={isEditing}
           setIsEditing={setIsEditing}
@@ -154,9 +154,9 @@ const ChildIssue: React.FC<{ issue: IssueType }> = ({ issue }) => {
       <div className="relative ml-2 flex min-w-fit items-center justify-end gap-x-2">
         <IssueAssigneeSelect issue={issue} avatarSize={20} avatarOnly />
         <IssueSelectStatus
-          key={issue.key + issue.status}
+          key={issue.id + issue.status}
           currentStatus={issue.status}
-          issueId={issue.key}
+          issueId={issue.id}
         />
       </div>
     </div>

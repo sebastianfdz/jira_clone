@@ -28,7 +28,7 @@ const Description: React.FC<{ issue: IssueType }> = ({ issue }) => {
     }
     setContent(state);
     updateIssue({
-      issue_key: issue.key,
+      issueId: issue.id,
       description: state ? JSON.stringify(state) : undefined,
     });
     setIsEditing(false);

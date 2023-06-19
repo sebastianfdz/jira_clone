@@ -11,14 +11,14 @@ const patchCommentBodyValidator = z.object({
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { issue_key: string; comment_id: string } }
+  { params }: { params: { commentId: string } }
 ) {
   const { userId } = getAuth(req);
   if (!userId) return new Response("Unauthenticated request", { status: 403 });
   const { success } = await ratelimit.limit(userId);
   if (!success) return new Response("Too many requests", { status: 429 });
 
-  const { comment_id } = params;
+  const { commentId } = params;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
 
@@ -34,7 +34,7 @@ export async function PATCH(
 
   const comment = await prisma.comment.update({
     where: {
-      id: comment_id,
+      id: commentId,
     },
     data: {
       content: valid.content,

@@ -14,19 +14,19 @@ const postIssuesBodyValidator = z.object({
   type: z.enum(["BUG", "STORY", "TASK", "EPIC", "SUBTASK"]),
   sprintId: z.string().nullable(),
   reporterId: z.string().nullable(),
-  parentKey: z.string().nullable(),
+  parentId: z.string().nullable(),
   sprintColor: z.string().nullable().optional(),
 });
 
 export type PostIssueBody = z.infer<typeof postIssuesBodyValidator>;
 
 const patchIssuesBodyValidator = z.object({
-  keys: z.array(z.string()),
+  ids: z.array(z.string()),
   type: z.nativeEnum(IssueType).optional(),
   status: z.nativeEnum(IssueStatus).optional(),
   assigneeId: z.string().nullable().optional(),
   reporterId: z.string().optional(),
-  parentKey: z.string().nullable().optional(),
+  parentId: z.string().nullable().optional(),
   sprintId: z.string().nullable().optional(),
   isDeleted: z.boolean().optional(),
 });
@@ -155,7 +155,7 @@ export async function POST(req: NextRequest) {
       sprintId: valid.sprintId ?? undefined,
       sprintPosition: positionToInsert,
       boardPosition,
-      parentKey: valid.parentKey,
+      parentId: valid.parentId,
       sprintColor: valid.sprintColor,
       creatorId: userId,
     },
@@ -184,8 +184,8 @@ export async function PATCH(req: NextRequest) {
 
   const issuesToUpdate = await prisma.issue.findMany({
     where: {
-      key: {
-        in: valid.keys,
+      id: {
+        in: valid.ids,
       },
     },
   });
@@ -203,7 +203,7 @@ export async function PATCH(req: NextRequest) {
           reporterId: valid.reporterId ?? undefined,
           isDeleted: valid.isDeleted ?? undefined,
           sprintId: valid.sprintId === undefined ? undefined : valid.sprintId,
-          parentKey: valid.parentKey ?? undefined,
+          parentId: valid.parentId ?? undefined,
         },
       });
     })

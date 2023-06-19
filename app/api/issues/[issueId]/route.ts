@@ -15,20 +15,20 @@ export type PostIssueResponse = { issue: Issue };
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { issue_key: string } }
+  { params }: { params: { issueId: string } }
 ) {
-  const { issue_key } = params;
+  const { issueId } = params;
   const issue = await prisma.issue.findUnique({
     where: {
-      key: issue_key,
+      id: issueId,
     },
   });
-  if (!issue?.parentKey) {
+  if (!issue?.parentId) {
     return NextResponse.json({ issue: { ...issue, parent: null } });
   }
   const parent = await prisma.issue.findUnique({
     where: {
-      key: issue.parentKey,
+      id: issue.parentId,
     },
   });
   // return NextResponse.json<GetIssueDetailsResponse>({ issue });
@@ -44,7 +44,7 @@ const patchIssueBodyValidator = z.object({
   boardPosition: z.number().optional(),
   assigneeId: z.string().nullable().optional(),
   reporterId: z.string().optional(),
-  parentKey: z.string().nullable().optional(),
+  parentId: z.string().nullable().optional(),
   sprintId: z.string().nullable().optional(),
   isDeleted: z.boolean().optional(),
   sprintColor: z.string().optional(),
@@ -55,7 +55,7 @@ export type PatchIssueResponse = { issue: Issue & { assignee: User | null } };
 
 type ParamsType = {
   params: {
-    issue_key: string;
+    issueId: string;
   };
 };
 
@@ -64,7 +64,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
   if (!userId) return new Response("Unauthenticated request", { status: 403 });
   const { success } = await ratelimit.limit(userId);
   if (!success) return new Response("Too many requests", { status: 429 });
-  const { issue_key } = params;
+  const { issueId } = params;
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
@@ -79,7 +79,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
 
   const currentIssue = await prisma.issue.findUnique({
     where: {
-      key: issue_key,
+      id: issueId,
     },
   });
 
@@ -89,7 +89,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
 
   const issue = await prisma.issue.update({
     where: {
-      key: issue_key,
+      id: issueId,
     },
     data: {
       name: valid.name ?? undefined,
@@ -101,7 +101,7 @@ export async function PATCH(req: NextRequest, { params }: ParamsType) {
       reporterId: valid.reporterId ?? undefined,
       isDeleted: valid.isDeleted ?? undefined,
       sprintId: valid.sprintId === undefined ? undefined : valid.sprintId,
-      parentKey: valid.parentKey === undefined ? undefined : valid.parentKey,
+      parentId: valid.parentId === undefined ? undefined : valid.parentId,
       sprintColor: valid.sprintColor ?? undefined,
       boardPosition: valid.boardPosition ?? undefined,
     },
@@ -127,11 +127,11 @@ export async function DELETE(req: NextRequest, { params }: ParamsType) {
   const { success } = await ratelimit.limit(userId);
   if (!success) return new Response("Too many requests", { status: 429 });
 
-  const { issue_key } = params;
+  const { issueId } = params;
 
   const issue = await prisma.issue.update({
     where: {
-      key: issue_key,
+      id: issueId,
     },
     data: {
       isDeleted: true,

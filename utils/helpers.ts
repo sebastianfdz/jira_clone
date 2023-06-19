@@ -111,7 +111,7 @@ export function epicNotInFilters({
   issue: IssueType;
   epics: string[];
 }) {
-  return epics.length && (!issue.parentKey || !epics.includes(issue.parentKey));
+  return epics.length && (!issue.parentId || !epics.includes(issue.parentId));
 }
 
 export function issueTypeNotInFilters({
@@ -167,14 +167,14 @@ export function generateIssuesForClient(
 ) {
   // Maps are used to make lookups faster
   const userMap = new Map(users.map((user) => [user.id, user]));
-  const parentMap = new Map(issues.map((issue) => [issue.key, issue]));
+  const parentMap = new Map(issues.map((issue) => [issue.id, issue]));
 
   const issuesForClient = issues.map((issue) => {
-    const parent = parentMap.get(issue.parentKey ?? "") ?? null;
+    const parent = parentMap.get(issue.parentId ?? "") ?? null;
     const assignee = userMap.get(issue.assigneeId ?? "") ?? null;
     const reporter = userMap.get(issue.reporterId) ?? null;
     const children = issues
-      .filter((i) => i.parentKey === issue.key)
+      .filter((i) => i.parentId === issue.id)
       .map((issue) => {
         const assignee = userMap.get(issue.assigneeId ?? "") ?? null;
         return Object.assign(issue, { assignee });

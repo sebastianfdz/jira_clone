@@ -24,18 +24,18 @@ const IssueSelectEpic: React.FC<{
   className?: string;
 }> = ({ issue, children, className }) => {
   const { issues, updateIssue } = useIssues();
-  const [selected, setSelected] = useState<string | null>(issue.parentKey);
+  const [selected, setSelected] = useState<string | null>(issue.parentId);
   const [isAuthenticated, openAuthModal] = useIsAuthenticated();
-  function handleSelect(key: string | null) {
+  function handleSelect(id: string | null) {
     if (!isAuthenticated) {
       openAuthModal();
       return;
     }
     updateIssue({
-      issue_key: issue.key,
-      parentKey: key,
+      issueId: issue.id,
+      parentId: id,
     });
-    setSelected(key);
+    setSelected(id);
   }
   return (
     <Select onValueChange={handleSelect}>
@@ -64,8 +64,8 @@ const IssueSelectEpic: React.FC<{
                 ?.filter((issue) => isEpic(issue))
                 .map((issue) => (
                   <SelectItem
-                    key={issue.key}
-                    value={issue.key}
+                    key={issue.id}
+                    value={issue.id}
                     className={clsx(
                       "border-l-[3px] border-transparent py-2 pl-3 text-sm hover:cursor-pointer  hover:bg-gray-50 [&[data-state=checked]]:bg-gray-200"
                     )}

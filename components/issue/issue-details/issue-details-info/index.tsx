@@ -60,7 +60,7 @@ const SmallIssueDetailsInfo = React.forwardRef<
         >
           <IssueTitle
             className="mr-1 py-1"
-            key={issue.key + issue.name}
+            key={issue.id + issue.name}
             isEditing={isEditing}
             setIsEditing={setIsEditing}
             issue={issue}
@@ -74,9 +74,9 @@ const SmallIssueDetailsInfo = React.forwardRef<
       />
       <div className="relative flex items-center gap-x-3">
         <IssueSelectStatus
-          key={issue.key + issue.status}
+          key={issue.id + issue.status}
           currentStatus={issue.status}
-          issueId={issue.key}
+          issueId={issue.id}
           variant="lg"
         />
         <NotImplemented>
@@ -88,12 +88,12 @@ const SmallIssueDetailsInfo = React.forwardRef<
           </Button>
         </NotImplemented>
       </div>
-      <Description issue={issue} key={String(issueId) + issue.key} />
+      <Description issue={issue} key={String(issueId) + issue.id} />
       {hasChildren(issue) || isAddingChildIssue ? (
         <ChildIssueList
           issues={issue.children}
           parentIsEpic={isEpic(issue)}
-          parentKey={issue.key}
+          parentId={issue.id}
           isAddingChildIssue={isAddingChildIssue}
           setIsAddingChildIssue={setIsAddingChildIssue}
         />
@@ -135,7 +135,7 @@ const LargeIssueDetails = React.forwardRef<
           >
             <IssueTitle
               className="mr-1 py-1"
-              key={issue.key + issue.name}
+              key={issue.id + issue.name}
               isEditing={isEditing}
               setIsEditing={setIsEditing}
               issue={issue}
@@ -147,12 +147,12 @@ const LargeIssueDetails = React.forwardRef<
           onAddChildIssue={() => setIsAddingChildIssue(true)}
           variant={"lg"}
         />
-        <Description issue={issue} key={String(issueId) + issue.key} />
+        <Description issue={issue} key={String(issueId) + issue.id} />
         {hasChildren(issue) || isAddingChildIssue ? (
           <ChildIssueList
             issues={issue.children}
             parentIsEpic={isEpic(issue)}
-            parentKey={issue.key}
+            parentId={issue.id}
             isAddingChildIssue={isAddingChildIssue}
             setIsAddingChildIssue={setIsAddingChildIssue}
           />
@@ -163,9 +163,9 @@ const LargeIssueDetails = React.forwardRef<
       <div className="mt-4 bg-white pl-3">
         <div className="relative flex items-center gap-x-3">
           <IssueSelectStatus
-            key={issue.key + issue.status}
+            key={issue.id + issue.status}
             currentStatus={issue.status}
-            issueId={issue.key}
+            issueId={issue.id}
             variant="lg"
           />
           <NotImplemented>

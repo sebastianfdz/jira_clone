@@ -17,13 +17,13 @@ export type GetIssueCommentResponse = {
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { issue_key: string } }
+  { params }: { params: { issueId: string } }
 ) {
-  const { issue_key } = params;
+  const { issueId } = params;
 
   const comments = await prisma.comment.findMany({
     where: {
-      issueKey: issue_key,
+      issueId,
     },
     orderBy: {
       createdAt: "desc",
@@ -56,14 +56,14 @@ export type PostCommentBody = z.infer<typeof postCommentBodyValidator>;
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { issue_key: string } }
+  { params }: { params: { issueId: string } }
 ) {
   const { userId } = getAuth(req);
   if (!userId) return new Response("Unauthenticated request", { status: 403 });
   const { success } = await ratelimit.limit(userId);
   if (!success) return new Response("Too many requests", { status: 429 });
 
-  const { issue_key } = params;
+  const { issueId } = params;
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const body = await req.json();
 
@@ -79,7 +79,7 @@ export async function POST(
 
   const comment = await prisma.comment.create({
     data: {
-      issueKey: issue_key,
+      issueId: issueId,
       content: valid.content,
       authorId: valid.authorId,
     },

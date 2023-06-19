@@ -24,8 +24,8 @@ const useUpdateIssuesBatch = () => {
         // Optimistically updating the issues
         queryClient.setQueryData(["issues"], (old?: IssueType[]) => {
           const newIssues = (old ?? []).map((issue) => {
-            const { keys, ...updatedProps } = newIssue;
-            if (keys.includes(issue.key)) {
+            const { ids, ...updatedProps } = newIssue;
+            if (ids.includes(issue.id)) {
               // Assign the new prop values to the issue
               return Object.assign(issue, updatedProps);
             }

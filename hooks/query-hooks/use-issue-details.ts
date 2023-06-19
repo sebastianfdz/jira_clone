@@ -2,7 +2,7 @@
 import { api } from "@/utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
-import { type GetIssueCommentsResponse } from "@/app/api/issues/[issue_key]/comments/route";
+import { type GetIssueCommentsResponse } from "@/app/api/issues/[issueId]/comments/route";
 import { toast } from "@/components/toast";
 import { type AxiosError } from "axios";
 import { TOO_MANY_REQUESTS } from "./use-issues";
@@ -14,7 +14,7 @@ export const useIssueDetails = () => {
   // GET
   const { data: comments, isLoading: commentsLoading } = useQuery(
     ["issues", "comments", issueId],
-    () => api.issues.getIssueComments({ issue_key: issueId ?? "" }),
+    () => api.issues.getIssueComments({ issueId: issueId ?? "" }),
     {
       enabled: !!issueId,
       refetchOnMount: false,

@@ -43,7 +43,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
       {
         name,
         type,
-        parentKey: null,
+        parentId: null,
         sprintId,
         reporterId: user?.id ?? null,
       },
@@ -67,7 +67,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
               {issues
                 .sort((a, b) => a.sprintPosition - b.sprintPosition)
                 .map((issue, index) => (
-                  <Issue key={issue.key} index={index} issue={issue} />
+                  <Issue key={issue.id} index={index} issue={issue} />
                 ))}
             </Fragment>
             {placeholder}
