@@ -60,13 +60,13 @@ export async function GET(req: NextRequest) {
   const activeIssues = await prisma.issue.findMany({
     where: {
       creatorId: userId ?? "",
-      isDeleted: false,
+      // isDeleted: false,
     },
   });
 
   console.log("ACTIVE ISSUES =======>", activeIssues);
 
-  if (!activeIssues) {
+  if (!activeIssues || activeIssues.length === 0) {
     return NextResponse.json({ issues: [] });
   }
 
