@@ -28,6 +28,7 @@ import {
 } from "@/utils/helpers";
 import { useFiltersContext } from "@/context/useFiltersContext";
 import { ProgressBar } from "@/components/progress-bar";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 type CreateIssueProps = {
   name: string;
@@ -40,6 +41,7 @@ const EpicsTable: React.FC = () => {
   const { createIssue, isCreating } = useIssues();
   const [isCreatingEpic, setIsCreatingEpic] = useState(false);
   const renderContainerRef = useRef<HTMLDivElement>(null);
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
   const { user } = useUser();
 
   useLayoutEffect(() => {
@@ -54,13 +56,18 @@ const EpicsTable: React.FC = () => {
     parentKey = null,
     sprintColor = null,
   }: CreateIssueProps) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     createIssue(
       {
         name,
         type,
         parentKey,
         sprintId: null,
-        reporterId: user?.id ?? null,
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        reporterId: user!.id,
         sprintColor,
       },
       {

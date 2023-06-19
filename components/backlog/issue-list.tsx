@@ -11,6 +11,7 @@ import { type IssueType } from "@/utils/types";
 import clsx from "clsx";
 import { useUser } from "@clerk/clerk-react";
 import { useStrictModeDroppable } from "@/hooks/use-strictmode-droppable";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   sprintId,
@@ -20,6 +21,7 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
   const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [droppableEnabled] = useStrictModeDroppable();
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
 
   if (!droppableEnabled) {
     return null;
@@ -32,6 +34,11 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
     name: string;
     type: IssueType["type"];
   }) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
+
     createIssue(
       {
         name,

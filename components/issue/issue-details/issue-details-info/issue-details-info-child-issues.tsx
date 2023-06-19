@@ -14,6 +14,7 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { EmtpyIssue } from "@/components/issue/issue-empty";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { ProgressBar } from "@/components/progress-bar";
+import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const ChildIssueList: React.FC<{
   issues: IssueType[];
@@ -30,6 +31,7 @@ const ChildIssueList: React.FC<{
 }) => {
   const { createIssue, isCreating } = useIssues();
   const [isEditing, setIsEditing] = useState(isAddingChildIssue);
+  const [isAuthenticated, openAuthModal] = useIsAuthenticated();
 
   function handleCreateIssue({
     name,
@@ -40,6 +42,10 @@ const ChildIssueList: React.FC<{
     type: IssueType["type"];
     parentKey: IssueType["key"] | null;
   }) {
+    if (!isAuthenticated) {
+      openAuthModal();
+      return;
+    }
     createIssue(
       {
         name,
