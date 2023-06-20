@@ -73,6 +73,25 @@ const BoardColumnSkeleton = () => {
   return <div className="h-[550px] w-64 rounded-md bg-gray-100"></div>;
 };
 
+const RoadmapTableSkeleton = () => {
+  return (
+    <div className="relative h-fit rounded-md border-2 border-gray-100">
+      <div className="h-12 border-b-2 border-gray-100 bg-gray-100"></div>
+      <div className="flex flex-col">
+        {[...Array(12).keys()].map((el, index) => (
+          <div
+            key={index}
+            className="flex items-center gap-x-4 border-b px-6 py-2"
+          >
+            <IssueSkeleton size={index % 2 === 0 ? 300 : 400} />
+          </div>
+        ))}
+      </div>
+      <div className="sticky bottom-0 h-12 border-b-2 border-gray-100 bg-gray-100"></div>
+    </div>
+  );
+};
+
 export {
   IssueSkeleton,
   BreadCrumbSkeleton,
@@ -80,4 +99,5 @@ export {
   SprintHeaderSkeleton,
   SprintSearchSkeleton,
   BoardColumnSkeleton,
+  RoadmapTableSkeleton,
 };
