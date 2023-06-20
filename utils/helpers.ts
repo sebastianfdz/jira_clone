@@ -203,3 +203,8 @@ export function insertItemIntoArray<T>(arr: T[], item: T, index: number) {
   arrClone.splice(index, 0, item);
   return arrClone;
 }
+
+export function getPluralEnd<T>(arr: T[]) {
+  if (arr.length == 0) return "s";
+  return arr.length > 1 ? "s" : "";
+}
