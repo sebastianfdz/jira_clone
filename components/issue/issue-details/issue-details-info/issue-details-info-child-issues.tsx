@@ -77,9 +77,14 @@ const ChildIssueList: React.FC<{
       </div>
       {issues.length ? <ProgressBar issues={issues} /> : null}
       <div className="mt-3" />
-      {issues.map((issue) => {
-        return <ChildIssue key={issue.key} issue={issue} />;
-      })}
+      {issues
+        .sort(
+          (a, b) =>
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        )
+        .map((issue) => {
+          return <ChildIssue key={issue.key} issue={issue} />;
+        })}
       <EmtpyIssue
         data-state={isEditing || isAddingChildIssue ? "open" : "closed"}
         className="[&[data-state=closed]]:hidden"
