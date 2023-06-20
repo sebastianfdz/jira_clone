@@ -72,7 +72,7 @@ const IssueSelectEpic: React.FC<{
                   >
                     <div className="flex items-center">
                       <IssueIcon issueType={issue.type} />
-                      <span className="rounded-md bg-opacity-30 pl-4 text-sm">
+                      <span className="rounded-md bg-opacity-30 px-4 text-sm">
                         {issue.name}
                       </span>
                     </div>
