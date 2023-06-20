@@ -54,17 +54,12 @@ export type GetIssuesResponse = {
 export async function GET(req: NextRequest) {
   const { userId } = getAuth(req);
 
-  console.log("USER UD =======>", userId);
-  // if (!userId) return NextResponse.json({ issues: [] });
-  // return NextResponse.json<GetIssuesResponse>({ issues: activeIssues });
   const activeIssues = await prisma.issue.findMany({
     where: {
       creatorId: userId ?? "",
-      // isDeleted: false,
+      isDeleted: false,
     },
   });
-
-  console.log("ACTIVE ISSUES =======>", activeIssues);
 
   if (!activeIssues || activeIssues.length === 0) {
     return NextResponse.json({ issues: [] });
@@ -93,7 +88,6 @@ export async function GET(req: NextRequest) {
     activeSprints.map((sprint) => sprint.id)
   );
 
-  console.log("ISSUES FOR CLIENT =======>", issuesForClient);
   // const issuesForClient = await getIssuesFromServer();
   return NextResponse.json({ issues: issuesForClient });
 }
@@ -118,14 +112,15 @@ export async function POST(req: NextRequest) {
 
   const { data: valid } = validated;
 
-  const issues = await prisma.issue.findMany();
-  const currentSprintIssues = await prisma.issue.findMany({
+  const issues = await prisma.issue.findMany({
     where: {
-      sprintId: valid.sprintId,
       creatorId: userId,
-      isDeleted: false,
     },
   });
+
+  const currentSprintIssues = issues.filter(
+    (issue) => issue.sprintId === valid.sprintId && issue.isDeleted === false
+  );
 
   const sprint = await prisma.sprint.findUnique({
     where: {
@@ -136,6 +131,7 @@ export async function POST(req: NextRequest) {
   let boardPosition = -1;
 
   if (sprint && sprint.status === "ACTIVE") {
+    // If issue is created in active sprint, add it to the bottom of the TODO column in board
     const issuesInColum = currentSprintIssues.filter(
       (issue) => issue.status === "TODO"
     );
