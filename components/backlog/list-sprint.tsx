@@ -22,6 +22,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { toast } from "../toast";
 import { useIsAuthenticated } from "@/hooks/use-is-authed";
+import { getPluralEnd } from "@/utils/helpers";
 
 const SprintList: React.FC<{
   sprint: Sprint;
@@ -131,7 +132,9 @@ const SprintListHeader: React.FC<{ issues: IssueType[]; sprint: Sprint }> = ({
                 <span>
                   {getFormattedDateRange(sprint.startDate, sprint.endDate)}
                 </span>
-                <span>({issues.length} issues)</span>
+                <span>
+                  ({issues.length} issue{getPluralEnd(issues)})
+                </span>
               </div>
             </div>
           </Fragment>

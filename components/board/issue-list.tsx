@@ -5,6 +5,7 @@ import { Issue } from "./issue";
 import clsx from "clsx";
 import { statusMap } from "../issue/issue-select-status";
 import { type IssueStatus } from "@prisma/client";
+import { getPluralEnd } from "@/utils/helpers";
 
 const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
   status,
@@ -25,9 +26,7 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
       <h2 className="sticky top-0 -mx-1.5 -mt-1.5 mb-1.5 rounded-t-md bg-gray-100 px-2 py-3 text-xs text-gray-500">
         {statusMap[status]}{" "}
         {issues.filter((issue) => issue.status == status).length}
-        {issues.filter((issue) => issue.status == status).length > 1
-          ? " ISSUES"
-          : " ISSUE"}
+        {` ISSUE${getPluralEnd(issues).toUpperCase()}`}
       </h2>
 
       <Droppable droppableId={status}>
