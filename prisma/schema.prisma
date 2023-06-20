@@ -90,7 +90,7 @@ enum Duration {
 model Sprint {
     id          String       @id @default(uuid())
     name        String
-    description String?      @default("")
+    description String?      @default("") @db.Text()
     duration    String?
     startDate   DateTime?
     endDate     DateTime?
