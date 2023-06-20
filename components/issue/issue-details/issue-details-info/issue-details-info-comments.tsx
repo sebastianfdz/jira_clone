@@ -77,7 +77,7 @@ const Comments: React.FC<{ issue: IssueType }> = ({ issue }) => {
           />
         )}
       </div>
-      <div ref={ref}>
+      <div ref={ref} className="flex flex-col gap-y-5 pb-5">
         {comments?.map((comment) => (
           <CommentPreview key={comment.id} comment={comment} user={user} />
         ))}
