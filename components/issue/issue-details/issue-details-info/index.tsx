@@ -27,7 +27,7 @@ const IssueDetailsInfo = React.forwardRef<
   if (!issue) return <div />;
   return (
     <div ref={parentRef}>
-      {!parentWidth ? null : parentWidth > 600 ? (
+      {!parentWidth ? null : parentWidth > 800 ? (
         <LargeIssueDetails issue={issue} ref={ref} />
       ) : (
         <SmallIssueDetailsInfo issue={issue} ref={ref} />
