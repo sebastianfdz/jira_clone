@@ -8,19 +8,25 @@ export const useContainerWidth = (): [
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
 
+  const handleResize = () => {
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.offsetWidth);
+    }
+  };
   useEffect(() => {
-    const handleResize = () => {
-      if (containerRef.current) {
-        setContainerWidth(containerRef.current.offsetWidth);
-      }
-    };
-
     handleResize();
-    window.addEventListener("resize", handleResize);
+    if (containerRef.current) {
+      const resizeObserver = new ResizeObserver(handleResize);
+      resizeObserver.observe(containerRef.current);
 
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
+      const curr = containerRef.current;
+
+      return () => {
+        if (curr) {
+          resizeObserver.unobserve(curr);
+        }
+      };
+    }
   }, []);
   return [containerRef, containerWidth];
 };
