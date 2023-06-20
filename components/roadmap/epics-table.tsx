@@ -121,6 +121,7 @@ const EpicsAccordion: React.FC<{
   const { setIssueKey } = useSelectedIssueContext();
   const { issues, isCreating } = useIssues();
   const { search, assignees, issueTypes, epics, sprints } = useFiltersContext();
+  const [openAccordions, setOpenAccordions] = useState<string[]>([]);
 
   const filterIssues = useCallback(
     (issues: IssueType[] | undefined) => {
@@ -150,8 +151,18 @@ const EpicsAccordion: React.FC<{
     [search, assignees, epics, issueTypes, sprints]
   );
 
+  function handleAddIssueToEpic(issueKey: IssueType["key"], index: number) {
+    setCreationParent(index);
+    setOpenAccordions((prev) => [...prev, issueKey]);
+  }
+
   return (
-    <Accordion type="multiple" className="overflow-hidden">
+    <Accordion
+      value={openAccordions}
+      onValueChange={setOpenAccordions}
+      type="multiple"
+      className="overflow-hidden"
+    >
       {issues
         ?.filter((issue) => issue.type == "EPIC")
         .map((issue, index) => (
@@ -196,7 +207,7 @@ const EpicsAccordion: React.FC<{
               <Button
                 customColors
                 className="mr-2  hover:bg-gray-300"
-                onClick={() => setCreationParent(index)}
+                onClick={() => handleAddIssueToEpic(issue.key, index)}
               >
                 <AiOutlinePlus />
               </Button>
