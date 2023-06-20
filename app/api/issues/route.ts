@@ -56,7 +56,7 @@ export async function GET(req: NextRequest) {
 
   const activeIssues = await prisma.issue.findMany({
     where: {
-      creatorId: userId ?? "",
+      creatorId: userId ?? "init",
       isDeleted: false,
     },
   });
