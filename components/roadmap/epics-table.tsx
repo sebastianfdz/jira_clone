@@ -228,7 +228,7 @@ const EpicsAccordion: React.FC<{
                     >
                       {child.key}
                     </div>
-                    <div>{child.name}</div>
+                    <span className="text-sm">{child.name}</span>
                   </div>
                   <div className="flex items-center gap-x-2 pr-2">
                     <IssueSelectStatus
