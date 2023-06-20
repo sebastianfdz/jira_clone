@@ -5,6 +5,11 @@ import { env } from "@/env.mjs";
 import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient, generateIssuesForClient } from "@/utils/helpers";
 import { type UserResource } from "@clerk/types";
+import {
+  generateInitialUserComments,
+  generateInitialUserIssues,
+  generateInitialUserSprints,
+} from "./seed";
 
 export type User = {
   id: string;
@@ -35,9 +40,46 @@ if (env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
 export async function getInitialIssuesFromServer(
   userId: UserResource["id"] | undefined | null
 ) {
-  const activeIssues = await prisma.issue.findMany({
-    where: { isDeleted: false, creatorId: userId ?? "" },
+  let activeIssues = await prisma.issue.findMany({
+    where: { isDeleted: false, creatorId: userId ?? "init" },
   });
+
+  if (userId && (!activeIssues || activeIssues.length === 0)) {
+    // New user, create default issues
+    const initialIssues = generateInitialUserIssues(userId);
+    await Promise.all(
+      initialIssues.map(
+        async (issue) =>
+          await prisma.issue.create({
+            data: {
+              ...issue,
+            },
+          })
+      )
+    );
+
+    // Create comments for default issues
+    const initialComments = generateInitialUserComments(userId);
+    await Promise.all(
+      initialComments.map(
+        async (comment) =>
+          await prisma.comment.create({
+            data: {
+              ...comment,
+            },
+          })
+      )
+    );
+
+    const newActiveIssues = await prisma.issue.findMany({
+      where: {
+        creatorId: userId ?? "init",
+        isDeleted: false,
+      },
+    });
+    activeIssues = newActiveIssues;
+  }
+
   if (!activeIssues || activeIssues.length === 0) {
     return [];
   }
@@ -77,14 +119,36 @@ export async function getInitialProjectFromServer() {
 export async function getInitialSprintsFromServer(
   userId: UserResource["id"] | undefined
 ) {
-  const sprints = await prisma.sprint.findMany({
+  let sprints = await prisma.sprint.findMany({
     where: {
       OR: [{ status: SprintStatus.ACTIVE }, { status: SprintStatus.PENDING }],
-      creatorId: userId ?? "",
+      creatorId: userId ?? "init",
     },
     orderBy: {
       createdAt: "asc",
     },
   });
+
+  if (userId && (!sprints || sprints.length === 0)) {
+    // New user, create default sprints
+    const initialSprints = generateInitialUserSprints(userId);
+    await Promise.all(
+      initialSprints.map(
+        async (sprint) =>
+          await prisma.sprint.create({
+            data: {
+              ...sprint,
+            },
+          })
+      )
+    );
+
+    const newSprints = await prisma.sprint.findMany({
+      where: {
+        creatorId: userId,
+      },
+    });
+    sprints = newSprints;
+  }
   return sprints;
 }
