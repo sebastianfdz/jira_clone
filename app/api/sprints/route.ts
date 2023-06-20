@@ -17,7 +17,12 @@ export async function POST(req: NextRequest) {
   const { success } = await ratelimit.limit(userId);
   if (!success) return new Response("Too many requests", { status: 429 });
 
-  const sprints = await prisma.sprint.findMany();
+  const sprints = await prisma.sprint.findMany({
+    where: {
+      creatorId: userId,
+    },
+  });
+
   const k = sprints.length + 1;
 
   const sprint = await prisma.sprint.create({
@@ -30,10 +35,12 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ sprint });
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const { userId } = getAuth(req);
   const sprints = await prisma.sprint.findMany({
     where: {
       OR: [{ status: SprintStatus.ACTIVE }, { status: SprintStatus.PENDING }],
+      creatorId: userId ?? "",
     },
     orderBy: {
       createdAt: "asc",
