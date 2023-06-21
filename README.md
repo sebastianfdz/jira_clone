@@ -43,7 +43,7 @@ End to end tests are currently in progress as well... The app will be using [Cyp
 
 ## Contributing
 
-Feel free to open pull requests for bugs and/or features. No specific format needed (try to give a brief description of your contribution)
+Contributions to this project are welcome. Feel free to submit bug reports, feature requests, or pull requests to help improve the app.
 
 ## Acknowledgements
 
@@ -52,6 +52,6 @@ Feel free to open pull requests for bugs and/or features. No specific format nee
 
 ## License
 
-[MIT](https://opensource.org/licenses/MIT)
+This project is licensed under the [MIT](https://opensource.org/licenses/MIT) license.
 
 <hr>
