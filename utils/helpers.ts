@@ -1,8 +1,7 @@
 import { type IssueCountType } from "./types";
 import { type IssueType } from "@/utils/types";
 import type { User as ClerkUser } from "@clerk/nextjs/dist/api";
-import { type User } from "@/server/db";
-import { type Issue } from "@prisma/client";
+import { type DefaultUser, type Issue } from "@prisma/client";
 
 export function getBaseUrl() {
   if (typeof window !== "undefined") return ""; // browser should use relative url
@@ -67,7 +66,7 @@ export function isNullish<T>(
 }
 
 export function filterUserForClient(user: ClerkUser) {
-  return <User>{
+  return <DefaultUser>{
     id: user.id,
     name: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
     email: user?.emailAddresses[0]?.emailAddress ?? "",
@@ -162,7 +161,7 @@ export function hexToRgba(hex: string | null, opacity?: number) {
 
 export function generateIssuesForClient(
   issues: Issue[],
-  users: User[],
+  users: DefaultUser[],
   activeSprintIds?: string[]
 ) {
   // Maps are used to make lookups faster
