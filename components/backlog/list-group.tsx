@@ -10,7 +10,7 @@ import {
 } from "react-beautiful-dnd";
 import { type IssueType } from "@/utils/types";
 import { useCallback } from "react";
-import { useFiltersContext } from "@/context/useFiltersContext";
+import { useFiltersContext } from "@/context/use-filters-context";
 import {
   assigneeNotInFilters,
   epicNotInFilters,

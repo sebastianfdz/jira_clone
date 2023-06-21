@@ -10,7 +10,7 @@ import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { isEpic } from "@/utils/helpers";
 import { TooltipWrapper } from "@/components/ui/tooltip";
 import { type IssueType } from "@/utils/types";
-import { useFiltersContext } from "@/context/useFiltersContext";
+import { useFiltersContext } from "@/context/use-filters-context";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SearchBar } from "./filter-search-bar";

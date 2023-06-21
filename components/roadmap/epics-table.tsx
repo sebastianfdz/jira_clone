@@ -26,7 +26,7 @@ import {
   issueSprintNotInFilters,
   issueTypeNotInFilters,
 } from "@/utils/helpers";
-import { useFiltersContext } from "@/context/useFiltersContext";
+import { useFiltersContext } from "@/context/use-filters-context";
 import { ProgressBar } from "@/components/progress-bar";
 import { useIsAuthenticated } from "@/hooks/use-is-authed";
 

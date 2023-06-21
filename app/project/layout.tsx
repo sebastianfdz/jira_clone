@@ -1,7 +1,7 @@
 "use client";
 import { Sidebar } from "@/components/sidebar";
 import { TopNavbar } from "@/components/top-navbar";
-import { FiltersProvider } from "@/context/useFiltersContext";
+import { FiltersProvider } from "@/context/use-filters-context";
 import { Fragment } from "react";
 
 const ProjectLayout = ({ children }: { children: React.ReactNode }) => {

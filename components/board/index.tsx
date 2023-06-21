@@ -26,7 +26,7 @@ import { IssueList } from "./issue-list";
 import { IssueDetailsModal } from "../modals/board-issue-details";
 import { useSprints } from "@/hooks/query-hooks/use-sprints";
 import { useProject } from "@/hooks/query-hooks/use-project";
-import { useFiltersContext } from "@/context/useFiltersContext";
+import { useFiltersContext } from "@/context/use-filters-context";
 import { useIsAuthenticated } from "@/hooks/use-is-authed";
 
 const STATUSES: IssueStatus[] = ["TODO", "IN_PROGRESS", "DONE"];

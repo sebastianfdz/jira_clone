@@ -1,4 +1,4 @@
-import { useFiltersContext } from "@/context/useFiltersContext";
+import { useFiltersContext } from "@/context/use-filters-context";
 import { Button } from "@/components/ui/button";
 
 const ClearFilters: React.FC = () => {

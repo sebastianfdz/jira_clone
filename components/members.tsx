@@ -1,4 +1,4 @@
-import { useFiltersContext } from "@/context/useFiltersContext";
+import { useFiltersContext } from "@/context/use-filters-context";
 import { useProject } from "@/hooks/query-hooks/use-project";
 import { Button } from "./ui/button";
 import { Avatar } from "./avatar";
