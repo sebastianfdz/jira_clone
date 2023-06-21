@@ -47,7 +47,7 @@ Feel free to open pull requests for bugs and/or features. No specific format nee
 ## Acknowledgements
 
 - Inspired by @oldboyxx's https://github.com/oldboyxx/jira_clone
-- App was initially bootstrapped with T3 create-t3-app
+- App was initially bootstrapped with T3's create-t3-app
 
 ## License
 
