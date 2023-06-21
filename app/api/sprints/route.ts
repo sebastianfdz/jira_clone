@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
   const sprint = await prisma.sprint.create({
     data: {
       name: `SPRINT-${k}`,
+      description: "",
       creatorId: userId,
     },
   });
