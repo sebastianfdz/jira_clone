@@ -2,21 +2,15 @@ import { PrismaClient, SprintStatus } from "@prisma/client";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
 import { env } from "@/env.mjs";
-import { clerkClient } from "@clerk/nextjs";
 import { filterUserForClient, generateIssuesForClient } from "@/utils/helpers";
 import { type UserResource } from "@clerk/types";
 import {
+  defaultUsers,
   generateInitialUserComments,
   generateInitialUserIssues,
   generateInitialUserSprints,
 } from "./seed";
-
-export type User = {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-};
+import { clerkClient } from "@clerk/nextjs";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -50,9 +44,34 @@ export async function getInitialIssuesFromServer(
     await Promise.all(
       initialIssues.map(
         async (issue) =>
-          await prisma.issue.create({
-            data: {
+          await prisma.issue.upsert({
+            where: {
+              id: issue.id,
+            },
+            update: {},
+            create: {
               ...issue,
+            },
+          })
+      )
+    );
+
+    // Create default users
+    await Promise.all(
+      defaultUsers.map(
+        async (user) =>
+          await prisma.defaultUser.upsert({
+            where: {
+              id: user.id,
+            },
+            update: {
+              avatar: user.avatar,
+            },
+            create: {
+              id: user.id,
+              email: user.email,
+              name: user.name,
+              avatar: user.avatar,
             },
           })
       )
@@ -63,8 +82,12 @@ export async function getInitialIssuesFromServer(
     await Promise.all(
       initialComments.map(
         async (comment) =>
-          await prisma.comment.create({
-            data: {
+          await prisma.comment.upsert({
+            where: {
+              id: comment.id,
+            },
+            update: {},
+            create: {
               ...comment,
             },
           })
@@ -94,12 +117,24 @@ export async function getInitialIssuesFromServer(
     .flatMap((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .filter(Boolean);
 
+  // USE THIS IF RUNNING LOCALLY ----------------------
+  // const users = await prisma.defaultUser.findMany({
+  //   where: {
+  //     id: {
+  //       in: userIds,
+  //     },
+  //   },
+  // });
+  // --------------------------------------------------
+
+  // COMMENT THIS IF RUNNING LOCALLY ------------------
   const users = (
     await clerkClient.users.getUserList({
       userId: userIds,
       limit: 20,
     })
   ).map(filterUserForClient);
+  // --------------------------------------------------
 
   const issues = generateIssuesForClient(
     activeIssues,
@@ -135,8 +170,12 @@ export async function getInitialSprintsFromServer(
     await Promise.all(
       initialSprints.map(
         async (sprint) =>
-          await prisma.sprint.create({
-            data: {
+          await prisma.sprint.upsert({
+            where: {
+              id: sprint.id,
+            },
+            update: {},
+            create: {
               ...sprint,
             },
           })
