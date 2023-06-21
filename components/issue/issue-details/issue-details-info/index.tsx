@@ -3,7 +3,7 @@ import { NotImplemented } from "@/components/not-implemented";
 import { LightningIcon } from "@/components/svgs";
 import { IssueTitle } from "../../issue-title";
 import { IssueSelectStatus } from "../../issue-select-status";
-import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+import { useSelectedIssueContext } from "@/context/use-selected-issue-context";
 import { type IssueType } from "@/utils/types";
 import { Button } from "@/components/ui/button";
 import { Comments } from "./issue-details-info-comments";

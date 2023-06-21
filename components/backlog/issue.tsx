@@ -12,7 +12,7 @@ import { IssueContextMenu, IssueDropdownMenu } from "../issue/issue-menu";
 import { IssueSelectStatus } from "../issue/issue-select-status";
 import { MdEdit } from "react-icons/md";
 import { IssueTitle } from "../issue/issue-title";
-import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+import { useSelectedIssueContext } from "@/context/use-selected-issue-context";
 import { type IssueType } from "@/utils/types";
 import { hasChildren, isEpic, hexToRgba } from "@/utils/helpers";
 import { IssueAssigneeSelect } from "../issue/issue-select-assignee";

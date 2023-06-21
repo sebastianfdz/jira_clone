@@ -5,7 +5,7 @@ import {
   ModalOverlay,
   ModalPortal,
 } from "@/components/ui/modal";
-import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+import { useSelectedIssueContext } from "@/context/use-selected-issue-context";
 import { useEffect, useState } from "react";
 
 const IssueDetailsModal: React.FC = () => {

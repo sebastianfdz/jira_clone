@@ -1,7 +1,7 @@
 "use client";
 import { api } from "@/utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+import { useSelectedIssueContext } from "@/context/use-selected-issue-context";
 import { type GetIssueCommentsResponse } from "@/app/api/issues/[issueId]/comments/route";
 import { toast } from "@/components/toast";
 import { type AxiosError } from "axios";

@@ -3,7 +3,7 @@ import React, { Fragment, useLayoutEffect } from "react";
 import Split from "react-split";
 import { ListGroup } from "./list-group";
 import { IssueDetails } from "../issue/issue-details";
-import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+import { useSelectedIssueContext } from "@/context/use-selected-issue-context";
 import "@/styles/split.css";
 import clsx from "clsx";
 import { BacklogHeader } from "./header";

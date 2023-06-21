@@ -6,7 +6,7 @@ import { MdEdit } from "react-icons/md";
 import { IssueSelectStatus } from "../../issue-select-status";
 import { IssueAssigneeSelect } from "../../issue-select-assignee";
 import clsx from "clsx";
-import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+import { useSelectedIssueContext } from "@/context/use-selected-issue-context";
 import { Fragment, useRef, useState } from "react";
 import { ContextTrigger } from "@/components/ui/context-menu";
 import { type IssueType } from "@/utils/types";

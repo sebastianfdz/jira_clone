@@ -1,5 +1,5 @@
 import { Container } from "@/components/ui/container";
-import { SelectedIssueProvider } from "@/context/useSelectedIssueContext";
+import { SelectedIssueProvider } from "@/context/use-selected-issue-context";
 
 const BacklogLayout = ({ children }: { children: React.ReactNode }) => {
   return (

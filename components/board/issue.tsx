@@ -9,7 +9,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { isEpic } from "@/utils/helpers";
 import { EpicName } from "../backlog/issue";
 
-import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+import { useSelectedIssueContext } from "@/context/use-selected-issue-context";
 
 const Issue: React.FC<{ issue: IssueType; index: number }> = ({
   issue,

@@ -13,7 +13,7 @@ import { IssueSelectStatus } from "../issue/issue-select-status";
 import { IssueAssigneeSelect } from "../issue/issue-select-assignee";
 import { AiOutlinePlus } from "react-icons/ai";
 import { Button } from "../ui/button";
-import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
+import { useSelectedIssueContext } from "@/context/use-selected-issue-context";
 import { EmtpyIssue } from "../issue/issue-empty";
 import { type IssueType } from "@/utils/types";
 import { useUser } from "@clerk/clerk-react";
