@@ -1,12 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import {
-  QueryClient,
-  QueryClientProvider,
-  //  QueryClient
-} from "@tanstack/react-query";
-// import { getQueryClient } from "./get-query-client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function Providers({ children }: React.PropsWithChildren) {
@@ -16,12 +11,7 @@ function Providers({ children }: React.PropsWithChildren) {
     if (typeof window !== "undefined") setIsBrowser(true);
   }, []);
 
-  const [client] = useState(
-    () => new QueryClient()
-    // getQueryClient()
-    // new QueryClient()
-    // { defaultOptions: { queries: { staleTime: 1000 } } }
-  );
+  const [client] = useState(() => new QueryClient());
 
   if (!isBrowser) return null;
   return (
