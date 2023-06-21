@@ -1,7 +1,6 @@
 "use client";
 import React, { Fragment, useCallback, useLayoutEffect, useRef } from "react";
 import { type IssueStatus } from "@prisma/client";
-// import { useSelectedIssueContext } from "@/context/useSelectedIssueContext";
 import "@/styles/split.css";
 import { BoardHeader } from "./header";
 import {
