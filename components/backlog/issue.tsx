@@ -37,8 +37,10 @@ const Issue: React.FC<{
           {...draggableProps}
           {...dragHandleProps}
           className={clsx(
-            isDragging ? "bg-blue-100" : "bg-white",
-            "group flex w-full max-w-full items-center justify-between border-[0.3px] border-gray-300 px-3 py-1.5 text-sm hover:bg-gray-50 [&[data-state=selected]]:bg-blue-100"
+            isDragging
+              ? "border-[0.3px] border-gray-300 bg-blue-100"
+              : "bg-white",
+            "group flex w-full max-w-full items-center justify-between  px-3 py-1.5 text-sm hover:bg-gray-50 [&[data-state=selected]]:bg-blue-100"
           )}
         >
           <div

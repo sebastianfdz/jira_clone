@@ -1,5 +1,5 @@
 "use client";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { Droppable } from "react-beautiful-dnd";
 import { AccordionContent } from "../ui/accordion";
@@ -63,13 +63,15 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
             ref={innerRef}
             className={clsx(issues.length == 0 && "min-h-[1px]")}
           >
-            <Fragment>
+            <div
+              className={clsx(issues.length && "border-[0.3px]", "divide-y ")}
+            >
               {issues
                 .sort((a, b) => a.sprintPosition - b.sprintPosition)
                 .map((issue, index) => (
                   <Issue key={issue.id} index={index} issue={issue} />
                 ))}
-            </Fragment>
+            </div>
             {placeholder}
           </div>
         )}
