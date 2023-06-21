@@ -194,8 +194,13 @@ const AddComment: React.FC<{
         }
       />
       <div className="w-full">
+        <label htmlFor="add-comment" className="sr-only">
+          Add Comment
+        </label>
         <input
           onMouseDown={handleAddComment}
+          type="text"
+          id="add-comment"
           placeholder="Add a comment..."
           className="w-full rounded-[3px] border border-gray-300 px-4 py-2 placeholder:text-sm"
         />

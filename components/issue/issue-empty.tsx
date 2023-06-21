@@ -82,10 +82,14 @@ const EmtpyIssue: React.FC<{
           onSelect={handleSelect}
         />
       )}
+      <label htmlFor="empty-issue-input" className="sr-only">
+        Empty issue input
+      </label>
       <input
         ref={inputRef}
         autoFocus
         type="text"
+        id="empty-issue-input"
         placeholder="What needs to be done?"
         className=" w-full pl-2 pr-20 text-sm focus:outline-none"
         value={name}

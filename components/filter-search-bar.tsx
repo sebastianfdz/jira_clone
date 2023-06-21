@@ -44,8 +44,12 @@ const SearchBar: React.FC<{
         "relative flex items-center"
       )}
     >
+      <label htmlFor="issue-search" className="sr-only">
+        Issue search filter
+      </label>
       <input
         type="text"
+        id="issue-search"
         ref={ref}
         data-state={isFocused ? "focused" : "not-focused"}
         className={clsx(

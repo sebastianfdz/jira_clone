@@ -43,9 +43,13 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
       <Fragment>
         {isEditing ? (
           <div className="relative flex w-full">
+            <label htmlFor="issue-title" className="sr-only">
+              Issue title
+            </label>
             <input
               type="text"
               ref={ref}
+              id="issue-title"
               value={currentTitle}
               onChange={(e) => setCurrentTitle(e.target.value)}
               className="w-full min-w-max whitespace-pre-wrap px-1 py-1.5 outline-2 outline-blue-400"

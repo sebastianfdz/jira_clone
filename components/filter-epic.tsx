@@ -76,8 +76,12 @@ const EpicFilter: React.FC = () => {
               }
             >
               <div className="flex items-center gap-x-2 hover:cursor-default">
+                <label htmlFor="epic-filter" className="sr-only">
+                  Epic filter checkbox
+                </label>
                 <input
                   type="checkbox"
+                  id="epic-filter"
                   className="form-checkbox h-3 w-3 rounded-sm text-inprogress"
                   checked={epics.includes(issue.id)}
                 />

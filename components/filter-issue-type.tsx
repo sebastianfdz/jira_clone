@@ -60,8 +60,12 @@ const IssueTypeFilter: React.FC = () => {
               }
             >
               <div className="flex items-center gap-x-2 hover:cursor-default">
+                <label htmlFor="issue-type-filter" className="sr-only">
+                  Issue type filter checkbox
+                </label>
                 <input
                   type="checkbox"
+                  id="issue-type-filter"
                   className="form-checkbox h-3 w-3 rounded-sm text-inprogress"
                   checked={issueTypes.includes(type)}
                 />
