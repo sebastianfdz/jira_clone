@@ -40,7 +40,7 @@ const CountBall: React.FC<{
   return (
     <span
       className={clsx(
-        "flex h-5 items-center justify-center rounded-full px-1.5 py-0.5 text-sm font-semibold",
+        "flex h-4 w-fit items-center justify-center rounded-full px-2 text-xs font-semibold",
         className
       )}
     >
