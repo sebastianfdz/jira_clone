@@ -20,7 +20,7 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
   return (
     <div
       className={clsx(
-        "mb-5 h-max min-h-full w-[300px] rounded-md bg-gray-100 px-1.5 pb-1.5"
+        "mb-5 h-max min-h-fit w-[350px] rounded-md bg-gray-100 px-1.5  pb-3"
       )}
     >
       <h2 className="sticky top-0 -mx-1.5 -mt-1.5 mb-1.5 rounded-t-md bg-gray-100 px-2 py-3 text-xs text-gray-500">
@@ -34,7 +34,7 @@ const IssueList: React.FC<{ status: IssueStatus; issues: IssueType[] }> = ({
           <div
             {...droppableProps}
             ref={innerRef}
-            className="h-max min-h-[550px]"
+            className=" h-fit min-h-[10px]"
           >
             {issues
               .sort((a, b) => a.boardPosition - b.boardPosition)

@@ -78,7 +78,7 @@ const Board: React.FC = () => {
 
   useLayoutEffect(() => {
     if (!renderContainerRef.current) return;
-    const calculatedHeight = renderContainerRef.current.offsetTop;
+    const calculatedHeight = renderContainerRef.current.offsetTop + 20;
     renderContainerRef.current.style.height = `calc(100vh - ${calculatedHeight}px)`;
   }, []);
 
@@ -113,7 +113,7 @@ const Board: React.FC = () => {
       <DragDropContext onDragEnd={onDragEnd}>
         <div
           ref={renderContainerRef}
-          className="flex min-h-max w-full max-w-full gap-x-4 overflow-y-auto"
+          className="relative flex w-full max-w-full gap-x-4 overflow-y-auto"
         >
           {STATUSES.map((status) => (
             <IssueList
