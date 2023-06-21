@@ -4,6 +4,9 @@ This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3
 
 ## What's next? How do I make an app with this?
 
+![Tech logos](./assets/readme/tech-stack.png)
+
+
 <div>
   <img src="./assets/readme/tech-stack.png" alt="tech-stack"/>
 </div>
