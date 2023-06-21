@@ -1,6 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { type User, prisma, ratelimit } from "@/server/db";
-import { IssueStatus, type Issue, IssueType } from "@prisma/client";
+import { prisma, ratelimit } from "@/server/db";
+import {
+  IssueStatus,
+  type Issue,
+  IssueType,
+  type DefaultUser,
+} from "@prisma/client";
 import { z } from "zod";
 import { type GetIssuesResponse } from "../route";
 import { clerkClient } from "@clerk/nextjs";
@@ -51,7 +56,9 @@ const patchIssueBodyValidator = z.object({
 });
 
 export type PatchIssueBody = z.infer<typeof patchIssueBodyValidator>;
-export type PatchIssueResponse = { issue: Issue & { assignee: User | null } };
+export type PatchIssueResponse = {
+  issue: Issue & { assignee: DefaultUser | null };
+};
 
 type ParamsType = {
   params: {

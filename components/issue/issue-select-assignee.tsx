@@ -10,13 +10,13 @@ import {
 } from "@/components/ui/select";
 import clsx from "clsx";
 import { useProject } from "@/hooks/query-hooks/use-project";
-import { type User } from "@/server/db";
 import { type IssueType } from "@/utils/types";
 import { Fragment, useState } from "react";
 import { useIssues } from "@/hooks/query-hooks/use-issues";
 import { Avatar } from "../avatar";
 import { toast } from "../toast";
 import { useIsAuthenticated } from "@/hooks/use-is-authed";
+import { type DefaultUser } from "@prisma/client";
 
 const IssueAssigneeSelect: React.FC<{
   issue: IssueType;
@@ -32,10 +32,10 @@ const IssueAssigneeSelect: React.FC<{
     avatar: undefined,
     email: "",
   };
-  const [selected, setSelected] = useState<User["id"] | null>(
+  const [selected, setSelected] = useState<DefaultUser["id"] | null>(
     issue.assignee?.id ?? null
   );
-  function handleSelectChange(value: User["id"]) {
+  function handleSelectChange(value: DefaultUser["id"]) {
     if (!isAuthenticated) {
       openAuthModal();
       return;
