@@ -1,41 +1,56 @@
-# Modern Jira Clone
+<h1 align="center">Modern Jira clone built with React and Nextjs (app directory)</h1>
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+![Tech stack](./assets/readme/tech-stack.png)
 
-## What's next? How do I make an app with this?
+![App screenshot](./assets/readme/backlog-screenshot.png)
 
-![Tech logos](./assets/readme/tech-stack.png)
+## Features
 
+- Written in modern React
+- Uses Next js 13.4 app directory structure
+- Explores basic React Server Components
+- Full user authentication lifecycle with Clerk
+- Rate limiting with upstash to avoid spamming
+- Modern data fetching using React-Query
+- Simple local React state management, without redux, mobx, or similar
+- Uses Radix UI library for unstyled components and Tailwind for styling
+- Uses Prisma ORM for database modeling
+- Entire app written with typescript
+- End to end type safety with Zod
 
-<div>
-  <img src="./assets/readme/tech-stack.png" alt="tech-stack"/>
-</div>
+## Setting up development environment 🛠
 
+- Project uses Prisma, you can decide which database to use. \*By default it uses the 'mysql' provider
+- `git clone https://github.com/sebastianfdz/jira_clone`
+- Create an empty `.env` file inside the root dir `/`, copy `/.env.example` contents into it, and fill in the variables needed.
+- `npm run install`
+- `npx prisma db seed`
+- `npm run dev`
+- App should now be running on `http://localhost:3000/`
 
-<div>
-  <img src="./assets/readme/backlog-screenshot.png" alt="demo"/>
-</div>
+## What's Pending?
 
+There are features pending from this showcase product which should exist in a real product:
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+### Unit/Integration tests
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+Unit and integration tests are currently in progress... The app will be using [Vitest](https://vitest.dev/) and [React Testing Library](https://testing-library.com/docs/react-testing-library/intro/).
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### End to end tests
 
-## Learn More
+End to end tests are currently in progress as well... The app will be using [Cypress](https://www.cypress.io/).
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Contributing
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Feel free to open pull requests for bugs and/or features. No specific format needed (try to give a brief description of your contribution)
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Acknowledgements
 
-## How do I deploy this?
+- Inspired by @oldboyxx's https://github.com/oldboyxx/jira_clone
+- App was initially bootstrapped with T3 create-t3-app
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+## License
+
+[MIT](https://opensource.org/licenses/MIT)
+
+<hr>
