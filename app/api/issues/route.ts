@@ -1,13 +1,19 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { type User, prisma, ratelimit } from "@/server/db";
-import { IssueType, type Issue, IssueStatus } from "@prisma/client";
+import { prisma, ratelimit } from "@/server/db";
+import {
+  IssueType,
+  type Issue,
+  IssueStatus,
+  type DefaultUser,
+} from "@prisma/client";
 import { z } from "zod";
-import { clerkClient, getAuth } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
 import {
   calculateInsertPosition,
   filterUserForClient,
   generateIssuesForClient,
 } from "@/utils/helpers";
+import { clerkClient } from "@clerk/nextjs";
 
 const postIssuesBodyValidator = z.object({
   name: z.string(),
@@ -40,11 +46,11 @@ type IssueT = Issue & {
     sprintIsActive: boolean;
     children: IssueT[];
     parent: null;
-    assignee: User | null;
-    reporter: User | null;
+    assignee: DefaultUser | null;
+    reporter: DefaultUser | null;
   };
-  assignee: User | null;
-  reporter: User | null;
+  assignee: DefaultUser | null;
+  reporter: DefaultUser | null;
 };
 
 export type GetIssuesResponse = {
@@ -75,12 +81,24 @@ export async function GET(req: NextRequest) {
     .flatMap((issue) => [issue.assigneeId, issue.reporterId] as string[])
     .filter(Boolean);
 
+  // USE THIS IF RUNNING LOCALLY -----------------------
+  // const users = await prisma.defaultUser.findMany({
+  //   where: {
+  //     id: {
+  //       in: userIds,
+  //     },
+  //   },
+  // });
+  // --------------------------------------------------
+
+  // COMMENT THIS IF RUNNING LOCALLY ------------------
   const users = (
     await clerkClient.users.getUserList({
       userId: userIds,
       limit: 10,
     })
   ).map(filterUserForClient);
+  // --------------------------------------------------
 
   const issuesForClient = generateIssuesForClient(
     activeIssues,
