@@ -4,13 +4,13 @@ import { Redis } from "@upstash/redis";
 import { env } from "@/env.mjs";
 import { filterUserForClient, generateIssuesForClient } from "@/utils/helpers";
 import { type UserResource } from "@clerk/types";
-import {
-  defaultUsers,
-  generateInitialUserComments,
-  generateInitialUserIssues,
-  generateInitialUserSprints,
-} from "./seed";
 import { clerkClient } from "@clerk/nextjs";
+import {
+  initDefaultIssueComments,
+  initDefaultIssues,
+  initDefaultSprints,
+  initDefaultUsers,
+} from "@/prisma/seed";
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
@@ -40,59 +40,11 @@ export async function getInitialIssuesFromServer(
 
   if (userId && (!activeIssues || activeIssues.length === 0)) {
     // New user, create default issues
-    const initialIssues = generateInitialUserIssues(userId);
-    await Promise.all(
-      initialIssues.map(
-        async (issue) =>
-          await prisma.issue.upsert({
-            where: {
-              id: issue.id,
-            },
-            update: {},
-            create: {
-              ...issue,
-            },
-          })
-      )
-    );
-
+    await initDefaultIssues(userId);
     // Create default users
-    await Promise.all(
-      defaultUsers.map(
-        async (user) =>
-          await prisma.defaultUser.upsert({
-            where: {
-              id: user.id,
-            },
-            update: {
-              avatar: user.avatar,
-            },
-            create: {
-              id: user.id,
-              email: user.email,
-              name: user.name,
-              avatar: user.avatar,
-            },
-          })
-      )
-    );
-
+    await initDefaultUsers();
     // Create comments for default issues
-    const initialComments = generateInitialUserComments(userId);
-    await Promise.all(
-      initialComments.map(
-        async (comment) =>
-          await prisma.comment.upsert({
-            where: {
-              id: comment.id,
-            },
-            update: {},
-            create: {
-              ...comment,
-            },
-          })
-      )
-    );
+    await initDefaultIssueComments(userId);
 
     const newActiveIssues = await prisma.issue.findMany({
       where: {
@@ -166,21 +118,7 @@ export async function getInitialSprintsFromServer(
 
   if (userId && (!sprints || sprints.length === 0)) {
     // New user, create default sprints
-    const initialSprints = generateInitialUserSprints(userId);
-    await Promise.all(
-      initialSprints.map(
-        async (sprint) =>
-          await prisma.sprint.upsert({
-            where: {
-              id: sprint.id,
-            },
-            update: {},
-            create: {
-              ...sprint,
-            },
-          })
-      )
-    );
+    await initDefaultSprints(userId);
 
     const newSprints = await prisma.sprint.findMany({
       where: {
