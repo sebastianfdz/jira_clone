@@ -333,8 +333,6 @@ export const defaultUsers = [
     id: "user_2PwZmH2xP5aE0svR6hDH4AwDlcu",
     name: "Joe Rogan",
     email: "joe.rogan@jira.com",
-    // avatar:
-    //   "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvdXBsb2FkZWQvaW1nXzJQd1pzbE9pNDkzdGpkdUhpQkFEZ0R4aEhsZy5wbmcifQ",
     avatar:
       "https://images.clerk.dev/uploaded/img_2PwZslOi493tjduHiBADgDxhHlg.png",
   },
@@ -342,8 +340,6 @@ export const defaultUsers = [
     id: "user_2PwYvTgm6kvgJIbWwN0xsei8izu",
     name: "Steve Jobs",
     email: "steve.jobs@jira.com",
-    // avatar:
-    //   "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvdXBsb2FkZWQvaW1nXzJQd2pHU3NSOW5HcUVoQXl0NW55ZGdYaEJJMS53ZWJwIn0",
     avatar:
       "https://images.clerk.dev/uploaded/img_2PwjGSsR9nGqEhAyt5nydgXhBI1.webp",
   },
@@ -351,8 +347,6 @@ export const defaultUsers = [
     id: "user_2PvBRngdvenUlFvQNAWbXIvYVy5",
     name: "Sheldon Cooper",
     email: "sheldon.cooper@jira.com",
-    // avatar:
-    //   "https://img.clerk.com/eyJ0eXBlIjoicHJveHkiLCJzcmMiOiJodHRwczovL2ltYWdlcy5jbGVyay5kZXYvdXBsb2FkZWQvaW1nXzJQd2luZWU3RWc2cW9TZ3FhaWxDWlNKdDN1Uy53ZWJwIn0",
     avatar:
       "https://images.clerk.dev/uploaded/img_2Pwinee7Eg6qoSgqailCZSJt3uS.webp",
   },
