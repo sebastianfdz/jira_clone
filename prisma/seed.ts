@@ -1,50 +1,132 @@
 /* eslint-disable */
 import {
+  defaultUsers,
   generateInitialUserComments,
   generateInitialUserIssues,
   generateInitialUserSprints,
-} from "@/server/seed";
+} from "./seed-data";
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-async function main() {
-  // Create default issues
-  const initialIssues = generateInitialUserIssues("");
+
+export async function initProject() {
+  await prisma.project.upsert({
+    where: {
+      id: "init-project-id-dq8yh-d0as89hjd",
+    },
+    update: {},
+    create: {
+      id: "init-project-id-dq8yh-d0as89hjd",
+      name: "Jira Clone Project",
+      key: "JIRA-CLONE",
+    },
+  });
+}
+export async function initDefaultUsers() {
+  await Promise.all(
+    defaultUsers.map(
+      async (user) =>
+        await prisma.defaultUser.upsert({
+          where: {
+            id: user.id,
+          },
+          update: {
+            avatar: user.avatar,
+          },
+          create: {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            avatar: user.avatar,
+          },
+        })
+    )
+  );
+}
+export async function initDefaultProjectMembers() {
+  await Promise.all(
+    defaultUsers.map(
+      async (user) =>
+        await prisma.member.upsert({
+          where: {
+            id: user.id,
+          },
+          update: {},
+          create: {
+            id: user.id,
+            projectId: "init-project-id-dq8yh-d0as89hjd",
+          },
+        })
+    )
+  );
+}
+
+export async function initDefaultIssues(userId: string) {
+  const initialIssues = generateInitialUserIssues(userId);
   await Promise.all(
     initialIssues.map(
       async (issue) =>
-        await prisma.issue.create({
-          data: {
+        await prisma.issue.upsert({
+          where: {
+            id: issue.id,
+          },
+          update: {},
+          create: {
             ...issue,
           },
         })
     )
   );
+}
 
-  // Create comments for default issues
-  const initialComments = generateInitialUserComments("");
+export async function initDefaultIssueComments(userId: string) {
+  const initialComments = generateInitialUserComments(userId);
   await Promise.all(
     initialComments.map(
       async (comment) =>
-        await prisma.comment.create({
-          data: {
+        await prisma.comment.upsert({
+          where: {
+            id: comment.id,
+          },
+          update: {},
+          create: {
             ...comment,
           },
         })
     )
   );
+}
 
-  // Create default sprints
-  const initialSprints = generateInitialUserSprints("");
+export async function initDefaultSprints(userId: string) {
+  const initialSprints = generateInitialUserSprints(userId);
   await Promise.all(
     initialSprints.map(
       async (sprint) =>
-        await prisma.sprint.create({
-          data: {
+        await prisma.sprint.upsert({
+          where: {
+            id: sprint.id,
+          },
+          update: {},
+          create: {
             ...sprint,
           },
         })
     )
   );
+}
+
+async function main() {
+  // Create default project
+  await initProject();
+  // Create default users
+  await initDefaultUsers();
+  // Create default project members
+  await initDefaultProjectMembers();
+  // Create default issues
+  await initDefaultIssues("");
+  // Create comments for default issues
+  await initDefaultIssueComments("");
+  // Create default sprints
+  await initDefaultSprints("");
 }
 main()
   .then(async () => {
