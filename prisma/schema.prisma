@@ -15,10 +15,8 @@ model Project {
     id              String    @id @default(uuid())
     key             String    @unique
     name            String
-    projectLead     String
     defaultAssignee String?
     imageUrl        String?
-    admin           String
     createdAt       DateTime  @default(now())
     updatedAt       DateTime? @updatedAt
     deletedAt       DateTime?
@@ -90,7 +88,7 @@ enum Duration {
 model Sprint {
     id          String       @id @default(uuid())
     name        String
-    description String?      @default("") @db.Text()
+    description String?      @db.Text()
     duration    String?
     startDate   DateTime?
     endDate     DateTime?
@@ -115,4 +113,11 @@ model Comment {
     Issue     Issue?    @relation(fields: [issueId], references: [id])
 
     @@index([issueId])
+}
+
+model DefaultUser {
+    id     String  @id
+    name   String
+    email  String
+    avatar String?
 }
