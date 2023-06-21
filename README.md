@@ -25,6 +25,7 @@
 - Create an empty `.env` file inside the root dir `/`, copy `/.env.example` contents into it, and fill in the variables needed.
 - `npm install`
 - `npx prisma db seed`
+- Lookup 'USE THIS IF RUNNING LOCALLY' inside the project and follow the instructions.
 - `npm run dev`
 - App should now be running on `http://localhost:3000/`
 
