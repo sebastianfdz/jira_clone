@@ -1,4 +1,4 @@
-<h1 align="center">Modern Jira clone built with React and Nextjs (app directory)</h1>
+<h1 align="center">Jira Clone built with React and Nextjs 13.4</h1>
 
 ![Tech stack](./assets/readme/tech-stack.png)
 
@@ -18,12 +18,12 @@
 - Entire app written with typescript
 - End to end type safety with Zod
 
-## Setting up development environment 🛠
+## Setting up development environment
 
 - Project uses Prisma, you can decide which database to use. \*By default it uses the 'mysql' provider
 - `git clone https://github.com/sebastianfdz/jira_clone`
 - Create an empty `.env` file inside the root dir `/`, copy `/.env.example` contents into it, and fill in the variables needed.
-- `npm run install`
+- `npm install`
 - `npx prisma db seed`
 - `npm run dev`
 - App should now be running on `http://localhost:3000/`
