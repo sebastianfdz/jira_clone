@@ -9,7 +9,6 @@ import {
   initDefaultIssueComments,
   initDefaultIssues,
   initDefaultSprints,
-  initDefaultUsers,
 } from "@/prisma/seed";
 
 const globalForPrisma = globalThis as unknown as {
@@ -41,8 +40,6 @@ export async function getInitialIssuesFromServer(
   if (userId && (!activeIssues || activeIssues.length === 0)) {
     // New user, create default issues
     await initDefaultIssues(userId);
-    // Create default users
-    await initDefaultUsers();
     // Create comments for default issues
     await initDefaultIssueComments(userId);
 
