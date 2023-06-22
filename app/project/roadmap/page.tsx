@@ -7,7 +7,7 @@ import {
   getInitialIssuesFromServer,
   getInitialProjectFromServer,
   getInitialSprintsFromServer,
-} from "@/server/db";
+} from "@/server/functions";
 import { currentUser } from "@clerk/nextjs";
 
 export const metadata: Metadata = {

@@ -8,7 +8,7 @@ import {
   getInitialIssuesFromServer,
   getInitialProjectFromServer,
   getInitialSprintsFromServer,
-} from "@/server/db";
+} from "@/server/functions";
 
 export const metadata: Metadata = {
   title: "Board",
