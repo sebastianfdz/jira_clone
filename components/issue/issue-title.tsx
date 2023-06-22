@@ -28,6 +28,7 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
 
     function handleNameChange(e: React.SyntheticEvent) {
       e.stopPropagation();
+      e.preventDefault();
       if (!isAuthenticated) {
         openAuthModal();
         return;
@@ -65,7 +66,10 @@ const IssueTitle = React.forwardRef<HTMLInputElement, IssueTitleProps>(
             <div className="absolute -bottom-10 right-0 z-10 flex gap-x-1">
               <Button
                 className="mt-2 aspect-square bg-gray-50 p-2.5 shadow-md transition-all hover:bg-gray-100"
-                onClick={handleNameChange}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsEditing(false);
+                }}
                 customColors
                 customPadding
               >
