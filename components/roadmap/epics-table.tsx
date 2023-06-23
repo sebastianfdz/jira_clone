@@ -60,6 +60,9 @@ const EpicsTable: React.FC = () => {
       openAuthModal();
       return;
     }
+    if (!name) {
+      return;
+    }
     createIssue(
       {
         name,

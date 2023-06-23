@@ -39,6 +39,10 @@ const IssueList: React.FC<{ sprintId: string | null; issues: IssueType[] }> = ({
       return;
     }
 
+    if (!name) {
+      return;
+    }
+
     createIssue(
       {
         name,

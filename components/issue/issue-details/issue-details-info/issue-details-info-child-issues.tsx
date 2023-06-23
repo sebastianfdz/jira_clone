@@ -46,6 +46,9 @@ const ChildIssueList: React.FC<{
       openAuthModal();
       return;
     }
+    if (!name) {
+      return;
+    }
     createIssue(
       {
         name,
