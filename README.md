@@ -48,7 +48,7 @@ Contributions to this project are welcome. Feel free to submit bug reports, feat
 ## Acknowledgements
 
 - Inspired by @oldboyxx's https://github.com/oldboyxx/jira_clone
-- App was initially bootstrapped with T3's create-t3-app
+- App was initially bootstrapped with T3's [create-t3-app](https://create.t3.gg/)
 
 ## License
 
