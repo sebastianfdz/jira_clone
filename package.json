@@ -45,6 +45,7 @@
     "react-icons": "^4.8.0",
     "react-split": "^2.0.14",
     "superjson": "1.12.2",
+    "tailwindcss-animate": "^1.0.7",
     "zod": "^3.21.4"
   },
   "devDependencies": {
