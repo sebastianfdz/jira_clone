@@ -1,7 +1,9 @@
 import { type IssueCountType } from "./types";
 import { type IssueType } from "@/utils/types";
-import { type UserResource as ClerkUser } from "@clerk/types";
+import { type clerkClient } from "@clerk/nextjs";
 import { type DefaultUser, type Issue } from "@prisma/client";
+
+type Value<T> = T extends Promise<infer U> ? U : T;
 
 export function getBaseUrl() {
   if (typeof window !== "undefined") return ""; // browser should use relative url
@@ -65,7 +67,9 @@ export function isNullish<T>(
   return value == null || value == undefined;
 }
 
-export function filterUserForClient(user: ClerkUser) {
+export function filterUserForClient(
+  user: Value<ReturnType<Awaited<typeof clerkClient.users.getUser>>>
+) {
   return <DefaultUser>{
     id: user.id,
     name: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
