@@ -1,6 +1,6 @@
 import { type IssueCountType } from "./types";
 import { type IssueType } from "@/utils/types";
-import type { User as ClerkUser } from "@clerk/nextjs/dist/api";
+import { type UserResource as ClerkUser } from "@clerk/types";
 import { type DefaultUser, type Issue } from "@prisma/client";
 
 export function getBaseUrl() {
