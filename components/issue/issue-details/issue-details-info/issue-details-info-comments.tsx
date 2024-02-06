@@ -188,7 +188,7 @@ const AddComment: React.FC<{
       className="flex w-full gap-x-2 border-t-2 border-transparent py-3 [&[data-state=notInViewport]]:border-gray-200"
     >
       <Avatar
-        src={user?.profileImageUrl}
+        src={user?.imageUrl}
         alt={
           user ? `${user?.firstName ?? ""} ${user?.lastName ?? ""}` : "Guest"
         }
