@@ -35,7 +35,7 @@ const IssuePath: React.FC<{
   if (issue.parent && isEpic(issue.parent))
     return (
       <ParentContainer issue={issue} setIssueKey={setIssueKey}>
-        <IssueSelectEpic issue={issue}>
+        <IssueSelectEpic issue={issue} key={issue.id}>
           <IssueIcon issueType={issue.parent.type} />
         </IssueSelectEpic>
       </ParentContainer>
