@@ -28,6 +28,7 @@ const config = {
       "www.gravatar.com",
       "images.unsplash.com",
       "avatars.githubusercontent.com",
+      "img.clerk.com",
     ],
   },
   /**
