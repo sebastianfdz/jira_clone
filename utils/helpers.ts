@@ -74,7 +74,7 @@ export function filterUserForClient(
     id: user.id,
     name: `${user.firstName ?? ""} ${user.lastName ?? ""}`,
     email: user?.emailAddresses[0]?.emailAddress ?? "",
-    avatar: user.profileImageUrl,
+    avatar: user.imageUrl,
   };
 }
 
