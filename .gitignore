@@ -40,3 +40,7 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# files to ignore
+/prisma/un-seed.ts
+config.load
