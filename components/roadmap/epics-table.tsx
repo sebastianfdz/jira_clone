@@ -237,7 +237,7 @@ const EpicsAccordion: React.FC<{
                     <IssueSelectStatus
                       key={child.key + child.status}
                       currentStatus={child.status}
-                      issueId={child.key}
+                      issueId={child.id}
                     />
                     <IssueAssigneeSelect
                       issue={child}
